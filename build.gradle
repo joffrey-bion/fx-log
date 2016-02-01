@@ -1,0 +1,70 @@
+// bintray plugin is used to upload artifacts to a bintray repo
+plugins { id "com.jfrog.bintray" version "1.0" }
+
+apply plugin: 'java'
+apply from: 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group = 'org.hildan'
+version = '0.1'
+sourceCompatibility = '1.8'
+
+repositories { mavenCentral() }
+
+dependencies {
+    testCompile 'junit:junit:4.+'
+}
+
+javafx {
+
+    profiles {
+        windows {
+            category = 'Utils'
+        }
+    }
+
+    // Application name and ID presented by target OS
+    appID 'FX-Log'
+    appName 'FX Log'
+    vendor = "Hildan Software"
+
+    // Main class of application
+    mainClass 'org.hildan.fxlog.Main'
+
+    // JVM arguments, system properties, application command line arguments
+    jvmArgs = ['-XX:+AggressiveOpts', '-XX:CompileThreshold=1']
+    systemProperties = ['prism.disableRegionCaching': 'true']
+    arguments = ['-l', '--fast']
+
+    // deploy/info attributes
+    copyright = 'Copyright (c) 2016 Joffrey Bion'
+    description = 'A JavaFX program to view log files in a beautiful way.'
+    licenseType = 'MIT'
+    installSystemWide = true
+    menu = true
+    shortcut = true
+}
+
+bintray {
+    user = project.bintrayUsername // taken from gradle.properties
+    key = project.bintrayApiKey // taken from gradle.properties
+    configurations = ['archives']
+
+    publish = true // the version should be auto published after an upload
+
+    pkg {
+        repo = project.bintrayRepoApps // taken from gradle.properties
+        name = project.name
+        desc = 'A JavaFX program to view log files in a beautiful way.'
+        labels = ['log', 'viewer']
+
+        String githubRepoName = project.name
+        websiteUrl = 'https://github.com/joffrey-bion/' + githubRepoName
+        issueTrackerUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '/issues'
+        vcsUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '.git'
+
+        licenses = ['MIT']
+        version { gpg { sign = true } }
+    }
+}
