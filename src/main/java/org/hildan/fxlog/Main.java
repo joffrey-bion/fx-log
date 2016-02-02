@@ -14,10 +14,10 @@ public class Main extends Application {
     public void start(Stage stage) {
         URL url = null;
         try {
-            url = getClass().getResource("/org.hildan.fxlog/view/main.fxml");
+            url = getClass().getResource("view/main.fxml");
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/org.hildan.fxlog/application.css").toExternalForm());
+            //scene.getStylesheets().add(getClass().getResource("/org.hildan.fxlog/application.css").toExternalForm());
             stage.setTitle("FX Log");
             stage.setScene(scene);
             stage.show();
