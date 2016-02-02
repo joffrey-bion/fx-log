@@ -42,7 +42,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                                <MenuItem mnemonicParsing="false" text="About FX Log" />
                             </items>
                         </Menu>
                     </menus>
@@ -51,7 +51,7 @@
                     <items>
                         <ToggleButton fx:id="autoScrollToggleButton" mnemonicParsing="false" onAction="#toggleAutoscroll" text="Auto-scroll" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <TextField promptText="filter regexp" />
+                        <TextField fx:id="filterField" onAction="#filterLogs" promptText="filter regexp" />
                     </items>
                 </ToolBar>
             </children>

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -15,6 +16,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.filtering.RawFilter;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,6 +82,9 @@ public class MainController implements Initializable {
     @FXML
     private ToggleButton autoScrollToggleButton;
 
+    @FXML
+    private TextField filterField;
+
     private Columnizer columnizer;
 
     private Predicate<LogEntry> filter;
@@ -90,13 +95,23 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // TODO make it customizable
         columnizer = AMADEUS_BE_COLUMNIZER;
-        filter = log -> true;
         configureLogsTable();
+        refreshFilter();
+        refreshLogsTable();
     }
 
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         logsTable.getColumns().addAll(columnizer.getColumns());
+    }
+
+    private void refreshFilter() {
+        String filterText = filterField.getText();
+        if (!filterText.isEmpty()) {
+            filter = new RawFilter(".*?" + filterText + ".*");
+        } else {
+            filter = log -> true;
+        }
     }
 
     private void refreshLogsTable() {
@@ -168,5 +183,10 @@ public class MainController implements Initializable {
 
     public void toggleAutoscroll(@SuppressWarnings("unused") ActionEvent event) {
         // TODO handle auto-scroll
+    }
+
+    public void filterLogs(@SuppressWarnings("unused") ActionEvent event) {
+        refreshFilter();
+        refreshLogsTable();
     }
 }
