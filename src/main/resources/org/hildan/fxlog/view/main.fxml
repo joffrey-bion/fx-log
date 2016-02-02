@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.MainController">
@@ -12,31 +14,30 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#openFile" text="Open…" />
+                                <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#openFile" text="Open…">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
                                 <Menu mnemonicParsing="false" text="Open Recent" />
+                                <MenuItem mnemonicParsing="false" onAction="#closeFile" text="Close" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Close" />
-                                <MenuItem mnemonicParsing="false" text="Save" />
-                                <MenuItem mnemonicParsing="false" text="Save As…" />
-                                <MenuItem mnemonicParsing="false" text="Revert" />
+                                <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences…" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Preferences…" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Quit" />
+                                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Undo" />
-                                <MenuItem mnemonicParsing="false" text="Redo" />
+                                <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log" />
+                                <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Cut" />
-                                <MenuItem mnemonicParsing="false" text="Copy" />
-                                <MenuItem mnemonicParsing="false" text="Paste" />
-                                <MenuItem mnemonicParsing="false" text="Delete" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Select All" />
-                                <MenuItem mnemonicParsing="false" text="Unselect All" />
+                                <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All" />
+                                <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
@@ -48,7 +49,7 @@
                 </MenuBar>
                 <ToolBar VBox.vgrow="ALWAYS">
                     <items>
-                        <ToggleButton mnemonicParsing="false" text="Auto-scroll" />
+                        <ToggleButton fx:id="autoScrollToggleButton" mnemonicParsing="false" onAction="#toggleAutoscroll" text="Auto-scroll" />
                         <Region HBox.hgrow="ALWAYS" />
                         <TextField promptText="filter regexp" />
                     </items>
@@ -61,7 +62,7 @@
             <content>
                 <AnchorPane>
                     <children>
-                        <TableView fx:id="logsTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TableView fx:id="logsTable" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
             </content>

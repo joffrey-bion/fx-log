@@ -23,4 +23,8 @@ public class LogEntry {
     public String getInitialLog() {
         return initialLog;
     }
+
+    public String toColumnizedString() {
+        return String.join("\t", columnValues.values());
+    }
 }
