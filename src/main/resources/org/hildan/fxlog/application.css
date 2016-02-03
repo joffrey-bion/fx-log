@@ -1,0 +1,23 @@
+.log-text {
+	-fx-font-size: 12px;	
+	-fx-font-weight: bold;
+}
+
+.section-title {
+	-fx-font-size: 14px;	
+}
+
+.subsection-title, .section-title {
+	-fx-font-weight: bold;
+}
+
+.pasted-save-text {
+	-fx-font-family: monospace;
+	-fx-font-size: 10px;	
+}
+
+/*.root {*/
+	/*-fx-base: rgb(50, 50, 50);*/
+	/*-fx-background: rgb(50, 50, 50);*/
+	/*-fx-control-inner-background:  rgb(50, 50, 50);*/
+/*}*/

@@ -17,7 +17,7 @@ public class Main extends Application {
             url = getClass().getResource("view/main.fxml");
             Parent root = FXMLLoader.load(url);
             Scene scene = new Scene(root);
-            //scene.getStylesheets().add(getClass().getResource("/org.hildan.fxlog/application.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             stage.setTitle("FX Log");
             stage.setScene(scene);
             stage.show();
