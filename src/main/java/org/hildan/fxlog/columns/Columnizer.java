@@ -6,6 +6,7 @@ import javafx.scene.control.TableView;
 import org.hildan.fxlog.core.LogEntry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,39 @@ import java.util.stream.Collectors;
  */
 public class Columnizer {
 
+    public static final Columnizer WEBLOGIC;
+
+    static {
+        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        columnDefinitions.add(new ColumnDefinition("Date", "date"));
+        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
+        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
+        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine"));
+        columnDefinitions.add(new ColumnDefinition("Server Name", "server"));
+        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread"));
+        columnDefinitions.add(new ColumnDefinition("User ID", "user"));
+        columnDefinitions.add(new ColumnDefinition("Transaction ID", "transaction"));
+        columnDefinitions.add(new ColumnDefinition("Diagnostic Context ID", "context"));
+        columnDefinitions.add(new ColumnDefinition("Timestamp", "timestamp"));
+        columnDefinitions.add(new ColumnDefinition("Message ID", "msgId"));
+        columnDefinitions.add(new ColumnDefinition("Class", "class"));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sid"));
+        String weblogicLogStart =
+                "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
+        List<String> regexps = Arrays.asList(//
+                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // with session ID
+                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
+                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
+                weblogicLogStart + " <(?<msg>.*?)>", // without class
+                weblogicLogStart + " <(?<msg>.*?)", // without class and continued on next line
+                "(?<msg>.*)>", // end of log message on new line
+                "(?<msg>.*)"); // middle of log message on new line
+        WEBLOGIC = new Columnizer("Weblogic", columnDefinitions, regexps);
+    }
+
+    private final String name;
+
     private final List<Pattern> patterns;
 
     private final List<ColumnDefinition> columnDefinitions;
@@ -26,6 +60,8 @@ public class Columnizer {
     /**
      * Creates a new Columnizer with the given definitions.
      *
+     * @param name
+     *         a name for this columnizer
      * @param columnDefinitions
      *         the column definitions to use
      * @param regexps
@@ -33,12 +69,21 @@ public class Columnizer {
      * @throws PatternSyntaxException
      *         if one of the regexps' syntax is invalid
      */
-    public Columnizer(List<ColumnDefinition> columnDefinitions, List<String> regexps) throws PatternSyntaxException {
+    public Columnizer(String name, List<ColumnDefinition> columnDefinitions, List<String> regexps) throws
+            PatternSyntaxException {
         if (columnDefinitions.isEmpty()) {
             throw new IllegalArgumentException("There must be at least one column definition");
         }
+        this.name = name;
         this.columnDefinitions = columnDefinitions;
         this.patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
+    }
+
+    /**
+     * @return the name of this columnizer
+     */
+    public String getName() {
+        return name;
     }
 
     /**
