@@ -44,8 +44,10 @@ public class Columnizer {
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // with session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
+                weblogicLogStart + " <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // without class but with session ID
                 weblogicLogStart + " <(?<msg>.*?)>", // without class
                 weblogicLogStart + " <(?<msg>.*?)", // without class and continued on next line
+                "(?<msg>.*);jsessionid=(?<sid>.*?)>", // end of log message on new line with session ID
                 "(?<msg>.*)>", // end of log message on new line
                 "(?<msg>.*)"); // middle of log message on new line
         WEBLOGIC = new Columnizer("Weblogic", columnDefinitions, regexps);
