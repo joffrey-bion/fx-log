@@ -51,7 +51,7 @@
                     <items>
                         <ToggleButton fx:id="autoScrollToggleButton" mnemonicParsing="false" onAction="#toggleAutoscroll" text="Auto-scroll" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="filterField" onAction="#filterLogs" promptText="filter regexp" />
+                        <TextField fx:id="filterField" onAction="#updateFilter" promptText="filter regexp" />
                     </items>
                 </ToolBar>
             </children>

@@ -1,6 +1,9 @@
 package org.hildan.fxlog.controllers;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,22 +17,19 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.core.LogTailListener;
 import org.hildan.fxlog.filtering.RawFilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MainController implements Initializable {
 
@@ -47,56 +47,39 @@ public class MainController implements Initializable {
 
     private Columnizer columnizer;
 
-    private Predicate<LogEntry> filter;
-
     private Colorizer colorizer;
 
-    private Path currentFilePath;
+    private ObservableList<LogEntry> columnizedLogs;
+
+    private FilteredList<LogEntry> filteredLogs;
+
+    private Tailer tailer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO make it customizable
         columnizer = Columnizer.WEBLOGIC;
         colorizer = Colorizer.WEBLOGIC;
+        columnizedLogs = FXCollections.observableArrayList();
         configureLogsTable();
-        refreshFilter();
-        refreshLogsTable();
+        updateFilter(null);
     }
 
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         logsTable.getColumns().addAll(columnizer.getColumns());
-    }
-
-    private void refreshFilter() {
-        String filterText = filterField.getText();
-        if (!filterText.isEmpty()) {
-            filter = new RawFilter(".*?" + filterText + ".*");
-        } else {
-            filter = log -> true;
-        }
-    }
-
-    private void refreshLogsTable() {
-        logsTable.getItems().clear();
-        if (currentFilePath == null) {
-            return;
-        }
-        try (Stream<String> lines = Files.lines(currentFilePath)) {
-            lines.map(columnizer::parse).filter(filter).forEach(logsTable.getItems()::add);
-        } catch (IOException e) {
-            System.err.println("Error while reading the file " + currentFilePath);
-        }
+        filteredLogs = new FilteredList<>(columnizedLogs);
+        filteredLogs.setPredicate(null);
+        logsTable.setItems(filteredLogs);
         logsTable.setRowFactory(table -> {
             final TableRow<LogEntry> row = new TableRow<LogEntry>() {
                 @Override
                 protected void updateItem(LogEntry log, boolean empty) {
                     super.updateItem(log, empty);
                     if (log != null && !empty) {
-                        System.out.println("coloring!");
                         colorizer.setStyle(this, log);
                     } else {
-                        System.out.println("empty again");
+                        setStyle(null);
                     }
                 }
             };
@@ -111,17 +94,15 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Other files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (file != null) {
-            // a file has indeed been chosen
-            currentFilePath = Paths.get(file.toURI());
-            refreshLogsTable();
+            closeFile(null);
+            LogTailListener listener = new LogTailListener(columnizer, columnizedLogs);
+            tailer = Tailer.create(file, listener, 500);
         }
     }
 
     public void closeFile(@SuppressWarnings("unused") ActionEvent event) {
-        if (currentFilePath != null) {
-            currentFilePath = null;
-            refreshLogsTable();
-        }
+        tailer.stop();
+        columnizedLogs.clear();
     }
 
     public void openPreferences(@SuppressWarnings("unused") ActionEvent event) {
@@ -163,8 +144,12 @@ public class MainController implements Initializable {
         // TODO handle auto-scroll
     }
 
-    public void filterLogs(@SuppressWarnings("unused") ActionEvent event) {
-        refreshFilter();
-        refreshLogsTable();
+    public void updateFilter(@SuppressWarnings("unused") ActionEvent event) {
+        String filterText = filterField.getText();
+        Predicate<LogEntry> filter = null;
+        if (!filterText.isEmpty()) {
+            filter = new RawFilter(".*?" + filterText + ".*");
+        }
+        filteredLogs.setPredicate(filter);
     }
 }
