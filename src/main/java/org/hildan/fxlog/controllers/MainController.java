@@ -1,17 +1,23 @@
 package org.hildan.fxlog.controllers;
 
+import java.io.File;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
@@ -19,19 +25,14 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
 import org.apache.commons.io.input.Tailer;
+import org.hildan.fxlog.coloring.ColorizedRowFactory;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
 import org.hildan.fxlog.filtering.RawFilter;
-
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class MainController implements Initializable {
 
@@ -77,14 +78,12 @@ public class MainController implements Initializable {
 
     private void configureColorizerSelector() {
         colorizerSelector.setItems(FXCollections.observableArrayList(Colorizer.WEBLOGIC));
-//        colorizerSelector.getSelectionModel().selectFirst();
         colorizer.bindBidirectional(colorizerSelector.valueProperty());
         colorizer.setValue(Colorizer.WEBLOGIC);
     }
 
     private void configureColumnizerSelector() {
         columnizerSelector.setItems(FXCollections.observableArrayList(Columnizer.WEBLOGIC, Columnizer.TEST));
-//        colorizerSelector.getSelectionModel().selectFirst();
         columnizer.bindBidirectional(columnizerSelector.valueProperty());
         columnizer.setValue(Columnizer.WEBLOGIC);
     }
@@ -108,23 +107,12 @@ public class MainController implements Initializable {
             logsTable.getColumns().addAll(newValue.getColumns());
         });
         logsTable.setItems(filteredLogs);
-        logsTable.setRowFactory(table -> {
-            final TableRow<LogEntry> row = new TableRow<LogEntry>() {
-                @Override
-                protected void updateItem(LogEntry log, boolean empty) {
-                    super.updateItem(log, empty);
-                    if (log != null && !empty) {
-                        colorizer.getValue().setStyle(this, log);
-                    } else {
-                        setStyle(null);
-                    }
-                }
-            };
-            return row;
-        });
+        ColorizedRowFactory colorizedRowFactory = new ColorizedRowFactory();
+        colorizedRowFactory.colorizerProperty().bind(colorizer);
+        logsTable.setRowFactory(colorizedRowFactory);
     }
 
-    public void openFile(@SuppressWarnings("unused") ActionEvent event) {
+    public void openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Log files (*.txt, *.log)", "*.txt", "*.log"));
@@ -144,19 +132,19 @@ public class MainController implements Initializable {
         columnizedLogs.clear();
     }
 
-    public void openPreferences(@SuppressWarnings("unused") ActionEvent event) {
+    public void openPreferences() {
         // TODO handle preferences
     }
 
-    public void quit(@SuppressWarnings("unused") ActionEvent event) {
+    public void quit() {
         Platform.exit();
     }
 
-    public void copyRaw(@SuppressWarnings("unused") ActionEvent event) {
+    public void copyRaw() {
         copySelectedLogsToClipboard(LogEntry::getInitialLog);
     }
 
-    public void copyPretty(@SuppressWarnings("unused") ActionEvent event) {
+    public void copyPretty() {
         copySelectedLogsToClipboard(LogEntry::toColumnizedString);
     }
 
@@ -171,11 +159,23 @@ public class MainController implements Initializable {
         Clipboard.getSystemClipboard().setContent(content);
     }
 
-    public void selectAll(@SuppressWarnings("unused") ActionEvent event) {
+    public void selectAll() {
         logsTable.getSelectionModel().selectAll();
     }
 
-    public void unselectAll(@SuppressWarnings("unused") ActionEvent event) {
+    public void unselectAll() {
         logsTable.getSelectionModel().clearSelection();
+    }
+
+    public void selectDarkTheme() {
+        List<String> styles = mainPane.getScene().getStylesheets();
+        styles.clear();
+        styles.add(getClass().getResource("/org/hildan/fxlog/dark_theme.css").toExternalForm());
+    }
+
+    public void selectLightTheme() {
+        List<String> styles = mainPane.getScene().getStylesheets();
+        styles.clear();
+        styles.add(getClass().getResource("/org/hildan/fxlog/light_theme.css").toExternalForm());
     }
 }

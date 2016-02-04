@@ -1,14 +1,11 @@
 package org.hildan.fxlog.coloring;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.TableRow;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import org.hildan.fxlog.core.LogEntry;
-
 import java.util.function.Predicate;
+
+import javafx.scene.control.TableRow;
+import javafx.scene.paint.Color;
+
+import org.hildan.fxlog.core.LogEntry;
 
 /**
  * Colors a log line based on a predicate.
@@ -42,17 +39,18 @@ public class StyleRule {
     }
 
     void setStyle(TableRow row) {
-        System.out.println("setting style");
+        String style = "";
         if (foreground != null) {
-            row.setTextFill(foreground);
+            style += "-fx-text-background-color: " + colorString(foreground) + "; ";
         }
         if (background != null) {
-            row.setBackground(getBackground());
+            style += "-fx-background-color: " + colorString(background) + "; ";
         }
+        row.setStyle(style);
     }
 
-    private Background getBackground() {
-        return new Background(new BackgroundFill(background, CornerRadii.EMPTY, Insets.EMPTY));
+    private static String colorString(Color color) {
+        return "#" + color.toString().substring(2);
     }
 
     @Override
