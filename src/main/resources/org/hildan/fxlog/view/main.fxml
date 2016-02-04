@@ -31,14 +31,24 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log" />
-                                <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All" />
-                                <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All" />
-                            </items>
+                  <Menu mnemonicParsing="false" text="Edit">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log" />
+                        <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All" />
+                        <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All" />
+                     </items>
+                  </Menu>
+                        <Menu mnemonicParsing="false" text="View">
+                     <items>
+                        <Menu mnemonicParsing="false" text="Theme">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#selectDarkTheme" text="Dark Theme" />
+                              <MenuItem mnemonicParsing="false" onAction="#selectLightTheme" text="Light Theme" />
+                          </items>
+                        </Menu>
+                     </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
