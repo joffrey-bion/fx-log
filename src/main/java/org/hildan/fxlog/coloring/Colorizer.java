@@ -1,13 +1,13 @@
 package org.hildan.fxlog.coloring;
 
-import javafx.scene.control.TableRow;
-import javafx.scene.paint.Color;
-import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.filtering.ColumnFilter;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
+
+import javafx.scene.control.TableRow;
+import javafx.scene.paint.Color;
+
+import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.filtering.Filter;
 
 /**
  * Colors a log entry based on a list of coloring rules.
@@ -17,11 +17,11 @@ public class Colorizer {
     public static final Colorizer WEBLOGIC;
 
     static {
-        Predicate<LogEntry> errorFilter = new ColumnFilter("severity", "[Ee]rror");
-        Predicate<LogEntry> warnFilter = new ColumnFilter("severity", "[Ww]arn(ing)?");
-        Predicate<LogEntry> infoFilter = new ColumnFilter("severity", "[Ii]nfo");
-        Predicate<LogEntry> debugFilter = new ColumnFilter("severity", "[Dd]ebug");
-        Predicate<LogEntry> noticeFilter = new ColumnFilter("severity", "[Nn]otice");
+        Filter errorFilter = Filter.matchColumn("severity", "[Ee]rror");
+        Filter warnFilter = Filter.matchColumn("severity", "[Ww]arn(ing)?");
+        Filter infoFilter = Filter.matchColumn("severity", "[Ii]nfo");
+        Filter debugFilter = Filter.matchColumn("severity", "[Dd]ebug");
+        Filter noticeFilter = Filter.matchColumn("severity", "[Nn]otice");
         StyleRule errorRule = new StyleRule("Error", errorFilter, Color.web("#AA0000"), null);
         StyleRule warnRule = new StyleRule("Warn", warnFilter, Color.web("#AA8800"), null);
         StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00AA00"), null);

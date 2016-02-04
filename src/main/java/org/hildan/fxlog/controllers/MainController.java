@@ -30,11 +30,14 @@ import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.coloring.ColorizedRowFactory;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
-import org.hildan.fxlog.filtering.RawFilter;
+import org.hildan.fxlog.filtering.Filter;
 
 public class MainController implements Initializable {
+
+    private Config config;
 
     @FXML
     private BorderPane mainPane;
@@ -65,11 +68,12 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        config = Config.getInstance();
         columnizedLogs = FXCollections.observableArrayList();
         filteredLogs = new FilteredList<>(columnizedLogs);
         filter = new SimpleObjectProperty<>(log -> true);
-        colorizer = new SimpleObjectProperty<>(Colorizer.WEBLOGIC);
-        columnizer = new SimpleObjectProperty<>(Columnizer.WEBLOGIC);
+        colorizer = new SimpleObjectProperty<>();
+        columnizer = new SimpleObjectProperty<>();
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
@@ -77,22 +81,28 @@ public class MainController implements Initializable {
     }
 
     private void configureColorizerSelector() {
-        colorizerSelector.setItems(FXCollections.observableArrayList(Colorizer.WEBLOGIC));
+        ObservableList<Colorizer> colorizers = config.getColorizers();
+        colorizerSelector.setItems(colorizers);
         colorizer.bindBidirectional(colorizerSelector.valueProperty());
-        colorizer.setValue(Colorizer.WEBLOGIC);
+        if (!colorizers.isEmpty()) {
+            colorizer.setValue(colorizers.get(0));
+        }
     }
 
     private void configureColumnizerSelector() {
-        columnizerSelector.setItems(FXCollections.observableArrayList(Columnizer.WEBLOGIC, Columnizer.TEST));
+        ObservableList<Columnizer> columnizers = config.getColumnizers();
+        columnizerSelector.setItems(columnizers);
         columnizer.bindBidirectional(columnizerSelector.valueProperty());
-        columnizer.setValue(Columnizer.WEBLOGIC);
+        if (!columnizers.isEmpty()) {
+            columnizer.setValue(columnizers.get(0));
+        }
     }
 
     private void configureFiltering() {
         filteredLogs.predicateProperty().bind(filter);
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
-                filter.setValue(new RawFilter(".*?" + newValue + ".*"));
+                filter.setValue(Filter.matchRawLog(".*?" + newValue + ".*"));
             } else {
                 filter.setValue(log -> true);
             }
@@ -101,7 +111,9 @@ public class MainController implements Initializable {
 
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        logsTable.getColumns().addAll(columnizer.getValue().getColumns());
+        if (columnizer.getValue() != null) {
+            logsTable.getColumns().addAll(columnizer.getValue().getColumns());
+        }
         columnizer.addListener((observable, oldValue, newValue) -> {
             logsTable.getColumns().clear();
             logsTable.getColumns().addAll(newValue.getColumns());

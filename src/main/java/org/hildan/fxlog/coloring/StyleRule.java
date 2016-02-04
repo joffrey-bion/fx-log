@@ -1,11 +1,10 @@
 package org.hildan.fxlog.coloring;
 
-import java.util.function.Predicate;
-
 import javafx.scene.control.TableRow;
 import javafx.scene.paint.Color;
 
 import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.filtering.Filter;
 
 /**
  * Colors a log line based on a predicate.
@@ -14,15 +13,15 @@ public class StyleRule {
 
     private final String name;
 
-    private final Predicate<LogEntry> predicate;
+    private final Filter filter;
 
     private final Color foreground;
 
     private final Color background;
 
-    public StyleRule(String name, Predicate<LogEntry> predicate, Color foreground, Color background) {
+    public StyleRule(String name, Filter filter, Color foreground, Color background) {
         this.name = name;
-        this.predicate = predicate;
+        this.filter = filter;
         this.foreground = foreground;
         this.background = background;
     }
@@ -35,7 +34,7 @@ public class StyleRule {
     }
 
     boolean appliesFor(LogEntry log) {
-        return predicate.test(log);
+        return filter.test(log);
     }
 
     void setStyle(TableRow row) {
