@@ -47,11 +47,13 @@
                         </Menu>
                     </menus>
                 </MenuBar>
-                <ToolBar VBox.vgrow="ALWAYS">
+                <ToolBar VBox.vgrow="NEVER">
                     <items>
-                        <ToggleButton fx:id="autoScrollToggleButton" mnemonicParsing="false" onAction="#toggleAutoscroll" text="Auto-scroll" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="filterField" onAction="#updateFilter" promptText="filter regexp" />
+                  <Label text="Columns" />
+                  <ChoiceBox fx:id="columnizerSelector" />
+                  <Label text="Colors" />
+                  <ChoiceBox fx:id="colorizerSelector" />
+                        <TextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS" />
                     </items>
                 </ToolBar>
             </children>

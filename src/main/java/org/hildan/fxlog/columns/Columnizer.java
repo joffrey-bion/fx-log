@@ -20,6 +20,21 @@ import java.util.stream.Collectors;
  */
 public class Columnizer {
 
+    public static final Columnizer TEST;
+
+    static {
+        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        columnDefinitions.add(new ColumnDefinition("Date", "date"));
+        columnDefinitions.add(new ColumnDefinition("Level", "level"));
+        columnDefinitions.add(new ColumnDefinition("Class", "class"));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sid"));
+        List<String> regexps =
+                Arrays.asList("<(?<date>.*?)> <(?<level>.*?)> <(?<class>.*?)> <> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
+                        "(?<msg>.*)");
+        TEST = new Columnizer("Test", columnDefinitions, regexps);
+    }
+
     public static final Columnizer WEBLOGIC;
 
     static {
@@ -161,5 +176,10 @@ public class Columnizer {
             // case where the group name does not exist in the parent pattern
             return "";
         }
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

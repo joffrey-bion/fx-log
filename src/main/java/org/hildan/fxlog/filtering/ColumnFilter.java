@@ -23,6 +23,9 @@ public class ColumnFilter implements Predicate<LogEntry> {
     @Override
     public boolean test(LogEntry logEntry) {
         String columnValue = logEntry.getColumnValues().get(column);
+        if (columnValue == null) {
+            return false;
+        }
         return pattern.matcher(columnValue).matches();
     }
 }

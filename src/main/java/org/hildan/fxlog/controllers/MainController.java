@@ -1,17 +1,19 @@
 package org.hildan.fxlog.controllers;
 
 import javafx.application.Platform;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
@@ -40,36 +42,71 @@ public class MainController implements Initializable {
     private TableView<LogEntry> logsTable;
 
     @FXML
-    private ToggleButton autoScrollToggleButton;
+    private ChoiceBox<Columnizer> columnizerSelector;
+
+    @FXML
+    private ChoiceBox<Colorizer> colorizerSelector;
 
     @FXML
     private TextField filterField;
 
-    private Columnizer columnizer;
+    private Property<Columnizer> columnizer;
 
-    private Colorizer colorizer;
+    private Property<Colorizer> colorizer;
 
     private ObservableList<LogEntry> columnizedLogs;
 
     private FilteredList<LogEntry> filteredLogs;
 
+    private Property<Predicate<LogEntry>> filter;
+
     private Tailer tailer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO make it customizable
-        columnizer = Columnizer.WEBLOGIC;
-        colorizer = Colorizer.WEBLOGIC;
         columnizedLogs = FXCollections.observableArrayList();
+        filteredLogs = new FilteredList<>(columnizedLogs);
+        filter = new SimpleObjectProperty<>(log -> true);
+        colorizer = new SimpleObjectProperty<>(Colorizer.WEBLOGIC);
+        columnizer = new SimpleObjectProperty<>(Columnizer.WEBLOGIC);
+        configureColumnizerSelector();
+        configureColorizerSelector();
+        configureFiltering();
         configureLogsTable();
-        updateFilter(null);
+    }
+
+    private void configureColorizerSelector() {
+        colorizerSelector.setItems(FXCollections.observableArrayList(Colorizer.WEBLOGIC));
+//        colorizerSelector.getSelectionModel().selectFirst();
+        colorizer.bindBidirectional(colorizerSelector.valueProperty());
+        colorizer.setValue(Colorizer.WEBLOGIC);
+    }
+
+    private void configureColumnizerSelector() {
+        columnizerSelector.setItems(FXCollections.observableArrayList(Columnizer.WEBLOGIC, Columnizer.TEST));
+//        colorizerSelector.getSelectionModel().selectFirst();
+        columnizer.bindBidirectional(columnizerSelector.valueProperty());
+        columnizer.setValue(Columnizer.WEBLOGIC);
+    }
+
+    private void configureFiltering() {
+        filteredLogs.predicateProperty().bind(filter);
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                filter.setValue(new RawFilter(".*?" + newValue + ".*"));
+            } else {
+                filter.setValue(log -> true);
+            }
+        });
     }
 
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        logsTable.getColumns().addAll(columnizer.getColumns());
-        filteredLogs = new FilteredList<>(columnizedLogs);
-        filteredLogs.setPredicate(null);
+        logsTable.getColumns().addAll(columnizer.getValue().getColumns());
+        columnizer.addListener((observable, oldValue, newValue) -> {
+            logsTable.getColumns().clear();
+            logsTable.getColumns().addAll(newValue.getColumns());
+        });
         logsTable.setItems(filteredLogs);
         logsTable.setRowFactory(table -> {
             final TableRow<LogEntry> row = new TableRow<LogEntry>() {
@@ -77,7 +114,7 @@ public class MainController implements Initializable {
                 protected void updateItem(LogEntry log, boolean empty) {
                     super.updateItem(log, empty);
                     if (log != null && !empty) {
-                        colorizer.setStyle(this, log);
+                        colorizer.getValue().setStyle(this, log);
                     } else {
                         setStyle(null);
                     }
@@ -94,14 +131,16 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Other files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (file != null) {
-            closeFile(null);
-            LogTailListener listener = new LogTailListener(columnizer, columnizedLogs);
+            closeFile();
+            LogTailListener listener = new LogTailListener(columnizer.getValue(), columnizedLogs);
             tailer = Tailer.create(file, listener, 500);
         }
     }
 
-    public void closeFile(@SuppressWarnings("unused") ActionEvent event) {
-        tailer.stop();
+    public void closeFile() {
+        if (tailer != null) {
+            tailer.stop();
+        }
         columnizedLogs.clear();
     }
 
@@ -138,18 +177,5 @@ public class MainController implements Initializable {
 
     public void unselectAll(@SuppressWarnings("unused") ActionEvent event) {
         logsTable.getSelectionModel().clearSelection();
-    }
-
-    public void toggleAutoscroll(@SuppressWarnings("unused") ActionEvent event) {
-        // TODO handle auto-scroll
-    }
-
-    public void updateFilter(@SuppressWarnings("unused") ActionEvent event) {
-        String filterText = filterField.getText();
-        Predicate<LogEntry> filter = null;
-        if (!filterText.isEmpty()) {
-            filter = new RawFilter(".*?" + filterText + ".*");
-        }
-        filteredLogs.setPredicate(filter);
     }
 }

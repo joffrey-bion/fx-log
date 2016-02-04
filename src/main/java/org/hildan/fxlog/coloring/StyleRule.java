@@ -54,4 +54,9 @@ public class StyleRule {
     private Background getBackground() {
         return new Background(new BackgroundFill(background, CornerRadii.EMPTY, Insets.EMPTY));
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

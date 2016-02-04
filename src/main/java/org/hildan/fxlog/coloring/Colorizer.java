@@ -27,7 +27,7 @@ public class Colorizer {
         StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00DD00"), Color.web("#00DD00"));
         StyleRule debugRule = new StyleRule("Debug", debugFilter, Color.web("#0000DD"), null);
         StyleRule noticeRule = new StyleRule("Notice", noticeFilter, Color.web("#0000DD"), null);
-        WEBLOGIC = new Colorizer("Weblogic", Arrays.asList(errorRule, warnRule, infoRule, debugRule, noticeRule));
+        WEBLOGIC = new Colorizer("Severity-based", Arrays.asList(errorRule, warnRule, infoRule, debugRule, noticeRule));
     }
 
     private final String name;
@@ -52,5 +52,10 @@ public class Colorizer {
                 rule.setStyle(row);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
