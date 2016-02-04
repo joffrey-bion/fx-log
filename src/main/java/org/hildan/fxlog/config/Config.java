@@ -37,9 +37,12 @@ public class Config {
 
     private ObservableList<Colorizer> colorizers;
 
+    private ObservableList<String> recentFiles;
+
     Config() {
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
+        this.recentFiles = FXCollections.observableArrayList();
     }
 
     public ObservableList<Columnizer> getColumnizers() {
@@ -48,6 +51,10 @@ public class Config {
 
     public ObservableList<Colorizer> getColorizers() {
         return colorizers;
+    }
+
+    public ObservableList<String> getRecentFiles() {
+        return recentFiles;
     }
 
     static Config readFrom(String sourceFilename) throws FileNotFoundException, JsonIOException, JsonSyntaxException {

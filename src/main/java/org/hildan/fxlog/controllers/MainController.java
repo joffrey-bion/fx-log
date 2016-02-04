@@ -2,6 +2,7 @@ package org.hildan.fxlog.controllers;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Function;
@@ -12,11 +13,14 @@ import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -54,6 +58,9 @@ public class MainController implements Initializable {
     @FXML
     private TextField filterField;
 
+    @FXML
+    private Menu recentFilesMenu;
+
     private Property<Columnizer> columnizer;
 
     private Property<Colorizer> colorizer;
@@ -78,6 +85,7 @@ public class MainController implements Initializable {
         configureColorizerSelector();
         configureFiltering();
         configureLogsTable();
+        configureRecentFilesMenu();
     }
 
     private void configureColorizerSelector() {
@@ -124,16 +132,57 @@ public class MainController implements Initializable {
         logsTable.setRowFactory(colorizedRowFactory);
     }
 
+    private void configureRecentFilesMenu() {
+        ListChangeListener<String> updateRecentFilesMenu = change -> {
+            ObservableList<MenuItem> items = recentFilesMenu.getItems();
+            items.clear();
+            if (config.getRecentFiles().isEmpty()) {
+                MenuItem noItem = new MenuItem("No recent file");
+                noItem.setDisable(true);
+                items.add(noItem);
+            } else {
+                config.getRecentFiles().stream().map(path -> {
+                    MenuItem menuItem = new MenuItem(path);
+                    menuItem.setOnAction(event -> openFile(path));
+                    return menuItem;
+                }).forEach(items::add);
+            }
+        };
+        config.getRecentFiles().addListener(updateRecentFilesMenu);
+        // manual trigger the first time for initialization
+        updateRecentFilesMenu.onChanged(null);
+    }
+
     public void openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Log files (*.txt, *.log)", "*.txt", "*.log"));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Other files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
-        if (file != null) {
+        openFile(file);
+    }
+
+    private void openFile(String path) {
+        File file = new File(path);
+        openFile(file);
+    }
+
+    private void openFile(File file) {
+        if (file != null && file.exists()) {
             closeFile();
-            LogTailListener listener = new LogTailListener(columnizer.getValue(), columnizedLogs);
-            tailer = Tailer.create(file, listener, 500);
+            addToRecentFiles(file.getAbsolutePath());
+            LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+            tailer = Tailer.create(file, logTailListener, 500);
+        }
+    }
+
+    private void addToRecentFiles(String path) {
+        String normalizedPath = Paths.get(path).toString();
+        List<String> recentFiles = config.getRecentFiles();
+        recentFiles.removeIf(p -> p.equals(normalizedPath));
+        recentFiles.add(0, normalizedPath);
+        if (recentFiles.size() > 5) {
+            recentFiles.remove(recentFiles.size() - 1);
         }
     }
 
