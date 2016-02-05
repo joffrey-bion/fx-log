@@ -2,7 +2,6 @@ package org.hildan.fxlog.controllers;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Function;
@@ -170,19 +169,9 @@ public class MainController implements Initializable {
     private void openFile(File file) {
         if (file != null && file.exists()) {
             closeFile();
-            addToRecentFiles(file.getAbsolutePath());
+            config.addToRecentFiles(file.getAbsolutePath());
             LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
             tailer = Tailer.create(file, logTailListener, 500);
-        }
-    }
-
-    private void addToRecentFiles(String path) {
-        String normalizedPath = Paths.get(path).toString();
-        List<String> recentFiles = config.getRecentFiles();
-        recentFiles.removeIf(p -> p.equals(normalizedPath));
-        recentFiles.add(0, normalizedPath);
-        if (recentFiles.size() > 5) {
-            recentFiles.remove(recentFiles.size() - 1);
         }
     }
 

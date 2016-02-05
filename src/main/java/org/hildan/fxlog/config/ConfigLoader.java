@@ -1,7 +1,9 @@
 package org.hildan.fxlog.config;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 
 import javafx.scene.control.Alert;
@@ -9,8 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
-import static org.hildan.fxlog.Main.createExceptionDialog;
+import org.hildan.fxlog.Main;
 
 class ConfigLoader {
 
@@ -27,7 +28,7 @@ class ConfigLoader {
      */
     static Config getUserConfig() throws JsonSyntaxException {
         try {
-            return Config.readFrom(USER_CONFIG_PATH);
+            return Config.readFrom(new FileReader(USER_CONFIG_PATH));
         } catch (FileNotFoundException e) {
             System.out.println("User config not found, falling back to built-in config");
         } catch (JsonIOException e) {
@@ -45,7 +46,7 @@ class ConfigLoader {
             return DefaultConfig.generate();
         }
         try {
-            return Config.readFrom(jsonConfigStream);
+            return Config.readFrom(new InputStreamReader(jsonConfigStream));
         } catch (JsonSyntaxException e) {
             System.err.println("Syntax error in built-in config. SHAME.");
         } catch (JsonIOException e) {
@@ -62,7 +63,7 @@ class ConfigLoader {
         String content = String.format("There is a JSON syntax error in your config file '%s'.\n\n"
                         + "The built-in config was used instead. Unfortunately, your dirty work will be erased.",
                 Paths.get(USER_CONFIG_PATH));
-        Alert alert = createExceptionDialog(AlertType.WARNING, title, header, content, e);
+        Alert alert = Main.createExceptionDialog(AlertType.WARNING, title, header, content, e);
         alert.showAndWait();
     }
 }
