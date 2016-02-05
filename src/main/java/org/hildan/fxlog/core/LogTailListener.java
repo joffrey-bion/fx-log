@@ -5,6 +5,8 @@ import org.hildan.fxlog.columns.Columnizer;
 
 import java.util.List;
 
+import javafx.application.Platform;
+
 public class LogTailListener extends TailerListenerAdapter {
 
     private Columnizer columnizer;
@@ -18,16 +20,20 @@ public class LogTailListener extends TailerListenerAdapter {
 
     @Override
     public void fileRotated() {
-        logs.clear();
+        // needs to run on the main thread to avoid concurrent modifications
+        Platform.runLater(logs::clear);
     }
 
     @Override
     public void handle(String line) {
-        logs.add(columnizer.parse(line));
+        LogEntry log =  columnizer.parse(line);
+        // needs to run on the main thread to avoid concurrent modifications
+        Platform.runLater(() -> logs.add(log));
     }
 
     @Override
     public void handle(Exception ex) {
-        System.err.println("Exception while reading the file: " + ex);
+        // will be handled as a dialog at top level
+        throw new RuntimeException("Exception while reading the log file", ex);
     }
 }

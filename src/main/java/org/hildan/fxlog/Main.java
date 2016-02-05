@@ -24,6 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        // fail gracefully on any thread with a dialog
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showUncaughtExceptionDialog(e)));
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> showUncaughtExceptionDialog(e));
         try {
