@@ -20,9 +20,9 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class FxGson {
+class FxGson {
 
-    public static GsonBuilder builder() {
+    static GsonBuilder builder() {
         return new GsonBuilder().registerTypeAdapter(ObservableList.class, new ObservableListCreator())
                                 .registerTypeAdapter(DoubleProperty.class, new DoublePropertySerializer())
                                 .registerTypeAdapter(DoubleProperty.class, new DoublePropertyDeserializer())
