@@ -1,7 +1,6 @@
 package org.hildan.fxlog.columns;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,54 +19,6 @@ import org.hildan.fxlog.core.LogEntry;
  * Uses columns definitions to split log lines into columns.
  */
 public class Columnizer {
-
-    public static final Columnizer TEST;
-
-    static {
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
-        columnDefinitions.add(new ColumnDefinition("Date", "date"));
-        columnDefinitions.add(new ColumnDefinition("Level", "level"));
-        columnDefinitions.add(new ColumnDefinition("Class", "class"));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sid"));
-        List<String> regexps =
-                Arrays.asList("<(?<date>.*?)> <(?<level>.*?)> <(?<class>.*?)> <> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
-                        "(?<msg>.*)");
-        TEST = new Columnizer("Test", columnDefinitions, regexps);
-    }
-
-    public static final Columnizer WEBLOGIC;
-
-    static {
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
-        columnDefinitions.add(new ColumnDefinition("Date", "date"));
-        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
-        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
-        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine"));
-        columnDefinitions.add(new ColumnDefinition("Server Name", "server"));
-        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread"));
-        columnDefinitions.add(new ColumnDefinition("User ID", "user"));
-        columnDefinitions.add(new ColumnDefinition("Transaction ID", "transaction"));
-        columnDefinitions.add(new ColumnDefinition("Diagnostic Context ID", "context"));
-        columnDefinitions.add(new ColumnDefinition("Timestamp", "timestamp"));
-        columnDefinitions.add(new ColumnDefinition("Message ID", "msgId"));
-        columnDefinitions.add(new ColumnDefinition("Class", "class"));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sid"));
-        String weblogicLogStart =
-                "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
-        List<String> regexps = Arrays.asList(//
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // with session ID
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
-                weblogicLogStart + " <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // without class but with session ID
-                weblogicLogStart + " <(?<msg>.*?)>", // without class
-                weblogicLogStart + " <(?<msg>.*?)", // without class and continued on next line
-                "(?<msg>.*);jsessionid=(?<sid>.*?)>", // end of log message on new line with session ID
-                "(?<msg>.*)>", // end of log message on new line
-                "(?<msg>.*)"); // middle of log message on new line
-        WEBLOGIC = new Columnizer("Weblogic", columnDefinitions, regexps);
-    }
 
     private final String name;
 
@@ -95,13 +46,6 @@ public class Columnizer {
         this.name = name;
         this.columnDefinitions = columnDefinitions;
         this.patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
-    }
-
-    /**
-     * @return the name of this columnizer
-     */
-    public String getName() {
-        return name;
     }
 
     /**

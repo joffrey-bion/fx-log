@@ -26,13 +26,6 @@ public class StyleRule {
         this.background = background;
     }
 
-    /**
-     * @return the name of this style rule
-     */
-    public String getName() {
-        return name;
-    }
-
     boolean appliesFor(LogEntry log) {
         return filter.test(log);
     }

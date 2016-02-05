@@ -1,0 +1,235 @@
+{
+  "columnizers": [
+    {
+      "name": "Weblogic",
+      "patterns": [
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)>",
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)",
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)>",
+        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)",
+        "(?<msg>.*);jsessionid=(?<sid>.*?)>",
+        "(?<msg>.*)>",
+        "(?<msg>.*)"
+      ],
+      "columnDefinitions": [
+        {
+          "headerLabel": "Date",
+          "capturingGroupName": "date",
+          "width": 176.8046875,
+          "visible": true
+        },
+        {
+          "headerLabel": "Severity",
+          "capturingGroupName": "severity",
+          "width": 69.52734375,
+          "visible": true
+        },
+        {
+          "headerLabel": "Subsystem",
+          "capturingGroupName": "subsystem",
+          "width": 84.59765625,
+          "visible": true
+        },
+        {
+          "headerLabel": "Machine Name",
+          "capturingGroupName": "machine",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Server Name",
+          "capturingGroupName": "server",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Thread ID",
+          "capturingGroupName": "thread",
+          "width": 91.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "User ID",
+          "capturingGroupName": "user",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Transaction ID",
+          "capturingGroupName": "transaction",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Diagnostic Context ID",
+          "capturingGroupName": "context",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Timestamp",
+          "capturingGroupName": "timestamp",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Message ID",
+          "capturingGroupName": "msgId",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Class",
+          "capturingGroupName": "class",
+          "width": 213.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "Message",
+          "capturingGroupName": "msg",
+          "width": 580.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "JSessionID",
+          "capturingGroupName": "sid",
+          "width": 458.6875,
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "colorizers": [
+    {
+      "name": "Severity (dark)",
+      "styleRules": [
+        {
+          "name": "Error",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ee]rror"
+          },
+          "foreground": {
+            "red": 0.6666667,
+            "green": 0.0,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Warn",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ww]arn(ing)?"
+          },
+          "foreground": {
+            "red": 0.6666667,
+            "green": 0.53333336,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Info",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ii]nfo"
+          },
+          "foreground": {
+            "red": 0.0,
+            "green": 0.6666667,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Debug",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Dd]ebug"
+          },
+          "foreground": {
+            "red": 0.0,
+            "green": 0.0,
+            "blue": 0.73333335,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Notice",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Nn]otice"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Severity (light)",
+      "styleRules": [
+        {
+          "name": "Error",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ee]rror"
+          },
+          "foreground": {
+            "red": 0.6666667,
+            "green": 0.0,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Warn",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ww]arn(ing)?"
+          },
+          "foreground": {
+            "red": 0.6666667,
+            "green": 0.53333336,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Info",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Ii]nfo"
+          },
+          "foreground": {
+            "red": 0.0,
+            "green": 0.6666667,
+            "blue": 0.0,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Debug",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Dd]ebug"
+          },
+          "foreground": {
+            "red": 0.0,
+            "green": 0.0,
+            "blue": 0.73333335,
+            "opacity": 1.0
+          }
+        },
+        {
+          "name": "Notice",
+          "filter": {
+            "column": "severity",
+            "pattern": "[Nn]otice"
+          }
+        }
+      ]
+    }
+  ],
+  "recentFiles": []
+}

@@ -3,6 +3,8 @@ package org.hildan.fxlog.config;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,16 +32,20 @@ public class Config {
         return Holder.INSTANCE;
     }
 
+    private ObservableList<String> recentFiles;
+
     private ObservableList<Columnizer> columnizers;
 
     private ObservableList<Colorizer> colorizers;
 
-    private ObservableList<String> recentFiles;
-
     Config() {
+        this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
-        this.recentFiles = FXCollections.observableArrayList();
+    }
+
+    public ObservableList<String> getRecentFiles() {
+        return recentFiles;
     }
 
     public ObservableList<Columnizer> getColumnizers() {
@@ -50,8 +56,9 @@ public class Config {
         return colorizers;
     }
 
-    public ObservableList<String> getRecentFiles() {
-        return recentFiles;
+    static Config readFrom(InputStream source) throws JsonIOException, JsonSyntaxException {
+        Gson gson = FxGson.builder().create();
+        return gson.fromJson(new InputStreamReader(source), Config.class);
     }
 
     static Config readFrom(String sourceFilename) throws FileNotFoundException, JsonIOException, JsonSyntaxException {

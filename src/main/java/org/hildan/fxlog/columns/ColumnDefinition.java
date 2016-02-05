@@ -26,7 +26,7 @@ public class ColumnDefinition {
      * @param capturingGroupName
      *         the name of the capturing group of the regexp to put inside this column
      */
-    ColumnDefinition(String headerLabel, String capturingGroupName) {
+    public ColumnDefinition(String headerLabel, String capturingGroupName) {
         this.capturingGroupName = capturingGroupName;
         this.headerLabel = headerLabel;
         this.width = new SimpleDoubleProperty(80d);

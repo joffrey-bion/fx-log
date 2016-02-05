@@ -1,7 +1,7 @@
 package org.hildan.fxlog.config;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Paths;
 
 import javafx.scene.control.Alert;
@@ -9,8 +9,6 @@ import javafx.scene.control.Alert.AlertType;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import org.hildan.fxlog.coloring.Colorizer;
-import org.hildan.fxlog.columns.Columnizer;
 
 import static org.hildan.fxlog.Main.createExceptionDialog;
 
@@ -41,29 +39,20 @@ class ConfigLoader {
     }
 
     private static Config getBuiltinConfig() {
-        URL builtInConfigUrl = ConfigLoader.class.getResource(BUILTIN_RESOURCE);
-        if (builtInConfigUrl == null) {
+        InputStream jsonConfigStream = ConfigLoader.class.getResourceAsStream(BUILTIN_RESOURCE);
+        if (jsonConfigStream == null) {
             System.err.println("Something's wrong: built-in config not found!");
-            return getDefaultConfig();
+            return DefaultConfig.generate();
         }
         try {
-            return Config.readFrom(builtInConfigUrl.toString());
-        } catch (FileNotFoundException e) {
-            System.err.println("Impossible error: built-in config URL was not null, but the file was not found");
+            return Config.readFrom(jsonConfigStream);
         } catch (JsonSyntaxException e) {
-            System.err.println("Syntax error in built-in config");
+            System.err.println("Syntax error in built-in config. SHAME.");
         } catch (JsonIOException e) {
             System.err.println("IO error while reading built-in config");
         }
         System.err.println("Falling back to default config");
-        return getDefaultConfig();
-    }
-
-    private static Config getDefaultConfig() {
-        Config config = new Config();
-        config.getColorizers().add(Colorizer.WEBLOGIC);
-        config.getColumnizers().add(Columnizer.WEBLOGIC);
-        return config;
+        return DefaultConfig.generate();
     }
 
     private static void showConfigErrorDialog(JsonSyntaxException e) {
