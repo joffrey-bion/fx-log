@@ -7,7 +7,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'org.hildan'
-version = '0.1'
+version = '0.9'
 sourceCompatibility = '1.8'
 
 def mainClassName = "org.hildan.fxlog.Main"
