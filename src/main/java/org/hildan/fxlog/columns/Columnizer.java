@@ -1,10 +1,5 @@
 package org.hildan.fxlog.columns;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import org.hildan.fxlog.core.LogEntry;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
+import org.hildan.fxlog.core.LogEntry;
 
 /**
  * Uses columns definitions to split log lines into columns.
@@ -112,6 +113,10 @@ public class Columnizer {
         List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             TableColumn<LogEntry, String> col = new TableColumn<>(columnDefinition.getHeaderLabel());
+            col.setVisible(columnDefinition.isVisible());
+            col.setPrefWidth(columnDefinition.getWidth());
+            columnDefinition.visibleProperty().bind(col.visibleProperty());
+            columnDefinition.widthProperty().bind(col.widthProperty());
             col.setCellValueFactory(data -> {
                 LogEntry log = data.getValue();
                 String cellValue = log.getColumnValues().get(columnDefinition.getCapturingGroupName());
