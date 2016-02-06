@@ -31,13 +31,6 @@ jar {
 }
 
 javafx {
-
-    profiles {
-        windows {
-            category = 'Utils'
-        }
-    }
-
     // Application name and ID presented by target OS
     appID 'FX-Log'
     appName 'FX Log'
@@ -46,10 +39,11 @@ javafx {
     // Main class of application
     mainClass mainClassName
 
-    // JVM arguments, system properties, application command line arguments
-    jvmArgs = ['-XX:+AggressiveOpts', '-XX:CompileThreshold=1']
-    systemProperties = ['prism.disableRegionCaching': 'true']
-    arguments = ['-l', '--fast']
+    profiles {
+        windows {
+            category = 'Utils'
+        }
+    }
 
     // deploy/info attributes
     copyright = 'Copyright (c) 2016 Joffrey Bion'
