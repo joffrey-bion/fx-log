@@ -179,6 +179,11 @@ public class MainController implements Initializable {
                     menuItem.setOnAction(event -> openRecentFile(path));
                     return menuItem;
                 }).forEach(items::add);
+                MenuItem sep = new SeparatorMenuItem();
+                items.add(sep);
+                MenuItem clearItem = new MenuItem("Clear recent files");
+                clearItem.setOnAction(event -> config.getRecentFiles().clear());
+                items.add(clearItem);
             }
         };
         config.getRecentFiles().addListener(updateRecentFilesMenu);
