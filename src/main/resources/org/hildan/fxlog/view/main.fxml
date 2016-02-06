@@ -22,56 +22,54 @@
             <children>
                 <MenuBar VBox.vgrow="NEVER">
                     <menus>
-                        <Menu mnemonicParsing="false" text="File">
+                        <Menu text="_File">
                             <items>
-                                <MenuItem fx:id="menuOpen" mnemonicParsing="false" onAction="#openFile" text="Open…">
+                                <MenuItem fx:id="menuOpen" onAction="#openFile" text="_Open…">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <Menu fx:id="recentFilesMenu" mnemonicParsing="false" text="Open Recent" />
-                                <MenuItem mnemonicParsing="false" onAction="#closeCurrentFile" text="Close" />
+                                <Menu fx:id="recentFilesMenu" text="Open _Recent" />
+                                <MenuItem onAction="#closeCurrentFile" text="_Close" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences…" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit">
+                                <MenuItem onAction="#quit" text="_Quit">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
                             </items>
                         </Menu>
-                  <Menu mnemonicParsing="false" text="Edit">
+                  <Menu text="_Edit">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log">
+                        <MenuItem onAction="#copyRaw" text="Copy _raw log">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns">
+                        <MenuItem onAction="#copyPretty" text="Copy with _columns">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                            </accelerator></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All">
+                        <MenuItem onAction="#selectAll" text="Select _All">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All" />
                      </items>
                   </Menu>
-                        <Menu mnemonicParsing="false" text="View">
+                        <Menu text="_View">
                      <items>
-                        <Menu mnemonicParsing="false" text="Theme">
+                        <Menu text="_Theme">
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#selectDarkTheme" text="Dark Theme" />
-                              <MenuItem mnemonicParsing="false" onAction="#selectLightTheme" text="Light Theme" />
+                            <MenuItem mnemonicParsing="false" onAction="#selectDarkTheme" text="_Dark Theme" />
+                              <MenuItem mnemonicParsing="false" onAction="#selectLightTheme" text="_Bright Theme" />
                           </items>
                         </Menu>
                      </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
+                        <Menu text="_Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="About FX Log" />
+                                <MenuItem text="User _manual" />
                             </items>
                         </Menu>
                     </menus>
