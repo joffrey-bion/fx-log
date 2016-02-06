@@ -11,7 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import org.hildan.fxlog.Main;
+import org.hildan.fxlog.errors.ErrorDialog;
 
 class ConfigLoader {
 
@@ -63,7 +63,7 @@ class ConfigLoader {
         String content = String.format("There is a JSON syntax error in your config file '%s'.\n\n"
                         + "The built-in config was used instead. Unfortunately, your dirty work will be erased.",
                 Paths.get(USER_CONFIG_PATH));
-        Alert alert = Main.createExceptionDialog(AlertType.WARNING, title, header, content, e);
+        Alert alert = ErrorDialog.createExceptionDialog(AlertType.WARNING, title, header, content, e);
         alert.showAndWait();
     }
 }

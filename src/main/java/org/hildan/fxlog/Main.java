@@ -1,42 +1,52 @@
 package org.hildan.fxlog;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
+import java.util.Arrays;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 import org.hildan.fxlog.config.Config;
+import org.hildan.fxlog.controllers.MainController;
+import org.hildan.fxlog.errors.ErrorDialog;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
         // fail gracefully on any thread with a dialog
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showUncaughtExceptionDialog(e)));
-        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> showUncaughtExceptionDialog(e));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> ErrorDialog.uncaughtException(e)));
+        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> ErrorDialog.uncaughtException(e));
         try {
             URL url = getClass().getResource("view/main.fxml");
-            Parent root = FXMLLoader.load(url);
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("dark_theme.css").toExternalForm());
             stage.setTitle("FX Log");
             stage.setScene(scene);
             stage.show();
+            MainController controller = loader.getController();
+            autoOpenFile(controller);
         } catch (Exception e) {
-            showUncaughtExceptionDialog(e);
+            ErrorDialog.uncaughtException(e);
+        }
+    }
+
+    private void autoOpenFile(MainController controller) {
+        String filename = getParameters().getRaw().stream().findFirst().orElse(null);
+        if (filename != null) {
+            try {
+                controller.openFile(filename);
+            } catch (FileNotFoundException e) {
+                ErrorDialog.fileNotFound(filename);
+            }
         }
     }
 
@@ -46,64 +56,14 @@ public class Main extends Application {
             Config.getInstance().persist();
             System.out.println("Configuration saved");
         } catch (IOException e) {
-            showConfigWriteExceptionDialog(e);
+            ErrorDialog.configWriteException(e);
         } catch (Exception e) {
-            showUncaughtExceptionDialog(e);
+            ErrorDialog.uncaughtException(e);
         }
-    }
-
-    private static void showConfigWriteExceptionDialog(Throwable e) {
-        e.printStackTrace();
-        String title = "Config Save Error";
-        String header = "Error when saving your configuration";
-        String content = "The next time your start FX Log, you might not find all your settings as you left them.";
-        Alert alert = createExceptionDialog(AlertType.ERROR, title, header, content, e);
-        alert.showAndWait();
-    }
-
-    private static void showUncaughtExceptionDialog(Throwable e) {
-        e.printStackTrace();
-        String title = "Uncaught Exception";
-        String header = "Oops! We have a bug here...";
-        String content = "An uncaught exception occurred. To help solve the problem, "
-                + "please take a look a the stacktrace below.";
-        Alert alert = createExceptionDialog(AlertType.ERROR, title, header, content, e);
-        alert.showAndWait();
-    }
-
-    public static Alert createExceptionDialog(AlertType type, String title, String header, String content, Throwable e) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        if (content != null) {
-            alert.setContentText(content);
-        }
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        String exceptionText = sw.toString();
-
-        Label label = new Label("The exception stacktrace was:");
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        // Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-        return alert;
     }
 
     public static void main(String[] args) {
+        System.out.println("Args:" + Arrays.toString(args));
         launch(args);
     }
 }

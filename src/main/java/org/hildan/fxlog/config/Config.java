@@ -56,12 +56,17 @@ public class Config {
     }
 
     public void addToRecentFiles(String path) {
-        String normalizedPath = Paths.get(path).toString();
-        recentFiles.removeIf(p -> p.equals(normalizedPath));
-        recentFiles.add(0, normalizedPath);
+        String absolutePath = Paths.get(path).toAbsolutePath().toString();
+        recentFiles.removeIf(p -> p.equals(absolutePath));
+        recentFiles.add(0, absolutePath);
         if (recentFiles.size() > MAX_RECENT_FILES) {
             recentFiles.remove(recentFiles.size() - 1);
         }
+    }
+
+    public void removeFromRecentFiles(String path) {
+        String absolutePath = Paths.get(path).toAbsolutePath().toString();
+        recentFiles.remove(absolutePath);
     }
 
     static Config readFrom(Reader source) throws JsonIOException, JsonSyntaxException {

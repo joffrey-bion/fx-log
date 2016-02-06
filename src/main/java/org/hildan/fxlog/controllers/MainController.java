@@ -1,6 +1,7 @@
 package org.hildan.fxlog.controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -36,6 +37,7 @@ import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
+import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
 
 public class MainController implements Initializable {
@@ -142,7 +144,14 @@ public class MainController implements Initializable {
             } else {
                 config.getRecentFiles().stream().map(path -> {
                     MenuItem menuItem = new MenuItem(path);
-                    menuItem.setOnAction(event -> openFile(path));
+                    menuItem.setOnAction(event -> {
+                        try {
+                            openFile(path);
+                        } catch (FileNotFoundException e) {
+                            config.removeFromRecentFiles(path);
+                            ErrorDialog.recentFileNotFound(path);
+                        }
+                    });
                     return menuItem;
                 }).forEach(items::add);
             }
@@ -156,26 +165,34 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Log files (*.txt, *.log)", "*.txt", "*.log"));
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Other files", "*.*"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("All files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
-        openFile(file);
-    }
-
-    private void openFile(String path) {
-        File file = new File(path);
-        openFile(file);
-    }
-
-    private void openFile(File file) {
-        if (file != null && file.exists()) {
-            closeFile();
-            config.addToRecentFiles(file.getAbsolutePath());
-            LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
-            tailer = Tailer.create(file, logTailListener, 500);
+        if (file != null) {
+            try {
+                startTailingFile(file);
+            } catch (FileNotFoundException e) {
+                ErrorDialog.selectedFileNotFound(file.getPath());
+            }
         }
     }
 
-    public void closeFile() {
+    public void openFile(String filename) throws FileNotFoundException {
+        File file = new File(filename);
+        startTailingFile(file);
+    }
+
+    private void startTailingFile(File file) throws FileNotFoundException {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+            closeCurrentFile();
+            config.addToRecentFiles(file.getAbsolutePath());
+            LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+            tailer = Tailer.create(file, logTailListener, 500);
+
+    }
+
+    public void closeCurrentFile() {
         if (tailer != null) {
             tailer.stop();
         }
