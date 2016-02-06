@@ -14,7 +14,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -26,6 +28,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
@@ -66,6 +69,9 @@ public class MainController implements Initializable {
     @FXML
     private Menu recentFilesMenu;
 
+    @FXML
+    private MenuItem closeMenu;
+
     private Property<Columnizer> columnizer;
 
     private Property<Colorizer> colorizer;
@@ -75,6 +81,8 @@ public class MainController implements Initializable {
     private FilteredList<LogEntry> filteredLogs;
 
     private Property<Predicate<LogEntry>> filter;
+
+    private BooleanProperty tailing;
 
     private Tailer tailer;
 
@@ -88,6 +96,8 @@ public class MainController implements Initializable {
         filter = new SimpleObjectProperty<>();
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
+        tailing = new SimpleBooleanProperty(false);
+        closeMenu.disableProperty().bind(tailing.not());
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
@@ -235,6 +245,7 @@ public class MainController implements Initializable {
         config.addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         tailer = Tailer.create(file, logTailListener, 500);
+        tailing.set(true);
     }
 
     /**
@@ -246,6 +257,7 @@ public class MainController implements Initializable {
             tailer.stop();
         }
         columnizedLogs.clear();
+        tailing.set(false);
     }
 
     /**

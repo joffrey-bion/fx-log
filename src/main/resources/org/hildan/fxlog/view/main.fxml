@@ -30,7 +30,7 @@
                                     </accelerator>
                                 </MenuItem>
                                 <Menu fx:id="recentFilesMenu" text="Open _Recent" />
-                                <MenuItem onAction="#closeCurrentFile" text="_Close" />
+                                <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem onAction="#quit" text="_Quit">
                                     <accelerator>
