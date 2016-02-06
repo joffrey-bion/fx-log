@@ -187,7 +187,7 @@ public class MainController implements Initializable {
 
     private void startTailingFile(File file) throws FileNotFoundException {
         if (!file.exists()) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(file.getAbsolutePath());
         }
         closeCurrentFile();
         config.addToRecentFiles(file.getAbsolutePath());
