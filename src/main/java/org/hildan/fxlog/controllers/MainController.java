@@ -148,14 +148,7 @@ public class MainController implements Initializable {
             } else {
                 config.getRecentFiles().stream().map(path -> {
                     MenuItem menuItem = new MenuItem(path);
-                    menuItem.setOnAction(event -> {
-                        try {
-                            openFile(path);
-                        } catch (FileNotFoundException e) {
-                            config.removeFromRecentFiles(path);
-                            ErrorDialog.recentFileNotFound(path);
-                        }
-                    });
+                    menuItem.setOnAction(event -> openRecentFile(path));
                     return menuItem;
                 }).forEach(items::add);
             }
@@ -177,6 +170,15 @@ public class MainController implements Initializable {
             } catch (FileNotFoundException e) {
                 ErrorDialog.selectedFileNotFound(file.getPath());
             }
+        }
+    }
+
+    public void openRecentFile(String filename) {
+        try {
+            openFile(filename);
+        } catch (FileNotFoundException e) {
+            config.removeFromRecentFiles(filename);
+            ErrorDialog.recentFileNotFound(filename);
         }
     }
 

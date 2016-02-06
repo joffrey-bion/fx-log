@@ -3,7 +3,7 @@ package org.hildan.fxlog;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,12 +40,18 @@ public class Main extends Application {
     }
 
     private void autoOpenFile(MainController controller) {
-        String filename = getParameters().getRaw().stream().findFirst().orElse(null);
-        if (filename != null) {
+        List<String> params = getParameters().getRaw();
+        if (!params.isEmpty()) {
+            String filename = params.get(0);
             try {
                 controller.openFile(filename);
             } catch (FileNotFoundException e) {
                 ErrorDialog.fileNotFound(filename);
+            }
+        } else {
+            List<String> recentFiles = Config.getInstance().getRecentFiles();
+            if (!recentFiles.isEmpty()) {
+                controller.openRecentFile(recentFiles.get(0));
             }
         }
     }
@@ -54,7 +60,6 @@ public class Main extends Application {
     public void stop() {
         try {
             Config.getInstance().persist();
-            System.out.println("Configuration saved");
         } catch (IOException e) {
             ErrorDialog.configWriteException(e);
         } catch (Exception e) {
@@ -63,7 +68,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Args:" + Arrays.toString(args));
         launch(args);
     }
 }
