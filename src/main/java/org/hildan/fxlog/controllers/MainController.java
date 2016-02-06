@@ -189,11 +189,10 @@ public class MainController implements Initializable {
         if (!file.exists()) {
             throw new FileNotFoundException();
         }
-            closeCurrentFile();
-            config.addToRecentFiles(file.getAbsolutePath());
-            LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
-            tailer = Tailer.create(file, logTailListener, 500);
-
+        closeCurrentFile();
+        config.addToRecentFiles(file.getAbsolutePath());
+        LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+        tailer = Tailer.create(file, logTailListener, 500);
     }
 
     public void closeCurrentFile() {
