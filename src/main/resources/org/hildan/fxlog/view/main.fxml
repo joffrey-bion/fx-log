@@ -24,7 +24,7 @@
                     <menus>
                         <Menu text="_File">
                             <items>
-                                <MenuItem fx:id="menuOpen" onAction="#openFile" text="_Open…">
+                                <MenuItem onAction="#openFile" text="_Open…">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
@@ -61,8 +61,8 @@
                      <items>
                         <Menu text="_Theme">
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#selectDarkTheme" text="_Dark Theme" />
-                              <MenuItem mnemonicParsing="false" onAction="#selectBrightTheme" text="_Bright Theme" />
+                            <MenuItem onAction="#selectDarkTheme" text="_Dark Theme" />
+                              <MenuItem onAction="#selectBrightTheme" text="_Bright Theme" />
                           </items>
                         </Menu>
                      </items>
