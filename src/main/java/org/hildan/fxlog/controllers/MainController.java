@@ -1,7 +1,11 @@
 package org.hildan.fxlog.controllers;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -244,5 +248,13 @@ public class MainController implements Initializable {
         List<String> styles = mainPane.getScene().getStylesheets();
         styles.clear();
         styles.add(getClass().getResource("/org/hildan/fxlog/light_theme.css").toExternalForm());
+    }
+
+    public void openUserManual() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/joffrey-bion/fx-log"));
+        } catch (IOException | URISyntaxException e) {
+            ErrorDialog.uncaughtException(e);
+        }
     }
 }

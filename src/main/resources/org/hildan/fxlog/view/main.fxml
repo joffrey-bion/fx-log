@@ -69,7 +69,7 @@
                         </Menu>
                         <Menu text="_Help">
                             <items>
-                                <MenuItem text="User _manual" />
+                                <MenuItem onAction="#openUserManual" text="User _manual" />
                             </items>
                         </Menu>
                     </menus>
