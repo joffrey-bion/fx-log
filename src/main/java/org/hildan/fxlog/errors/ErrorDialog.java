@@ -10,8 +10,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-import com.google.gson.JsonSyntaxException;
-
 /**
  * Contains handy methods to create a show error dialogs.
  */
@@ -53,11 +51,11 @@ public class ErrorDialog {
         return alert;
     }
 
-    public static void configReadException(String filename, JsonSyntaxException e) {
+    public static void configReadException(String filename, Throwable e) {
         e.printStackTrace();
         String title = "Config Load Error";
-        String header = "Messing up much?";
-        String content = String.format("There is a JSON syntax error in your config file '%s'.\n\n"
+        String header = "Messing up much with the config?";
+        String content = String.format("There is an error in your config file '%s'.\n\n"
                 + "The built-in config was used instead. Unfortunately, your dirty work will be erased.", filename);
         Alert alert = createExceptionDialog(AlertType.WARNING, title, header, content, e);
         alert.showAndWait();
@@ -92,8 +90,9 @@ public class ErrorDialog {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("File Not Found");
         alert.setHeaderText("Your file has disappeared!");
-        alert.setContentText(String.format("The file you selected ('%s') was somehow deleted right before I opened it."
-                + "Unlucky you.", path));
+        String pathMention = path != null ? String.format("('%s') ", path) : "";
+        alert.setContentText(String.format("The file you selected %swas somehow deleted right before I opened it."
+                + "Unlucky you.", pathMention));
         alert.showAndWait();
     }
 

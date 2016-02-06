@@ -19,17 +19,26 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import org.hildan.fxlog.errors.ErrorDialog;
 
+/**
+ * The ConfigLoader is responsible for reading and writing configuration files.
+ */
 class ConfigLoader {
 
-    static final String USER_CONFIG_PATH =
+    /**
+     * The default location of the user's config.
+     */
+    private static final String USER_CONFIG_PATH =
             Paths.get(System.getProperty("user.home") + "/.fxlog/config.json").toAbsolutePath().toString();
 
+    /**
+     * The resource path of the default config.
+     */
     private static final String BUILTIN_RESOURCE = "default_config.json";
 
     /**
-     * Retrieves the user config, or creates it based on the built-in config if it does not exist.
+     * Retrieves the user config, or the built-in config if the user config does not exist.
      *
-     * @return the Config object corresponding to the current user config
+     * @return the Config object corresponding to the current user config (or the default config)
      * @throws JsonSyntaxException
      *         if there is a JSON syntax error in the user config file
      */
@@ -40,7 +49,7 @@ class ConfigLoader {
             System.out.println("User config not found, falling back to built-in config");
         } catch (JsonIOException e) {
             System.out.println("IO error while reading user config, falling back to built-in config");
-        } catch (JsonSyntaxException e) {
+        } catch (Exception e) {
             ErrorDialog.configReadException(USER_CONFIG_PATH, e);
         }
         return getBuiltinConfig();

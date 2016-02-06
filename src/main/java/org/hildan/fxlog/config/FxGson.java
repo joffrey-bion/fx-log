@@ -20,8 +20,19 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+/**
+ * Creates a pre-configured {@link GsonBuilder} that handles properly JavaFX properties.
+ * <p>
+ * Basically, this class contains custom serializers for properties. These custom serializers make sure the serialized
+ * version of the property simply contains the value of the property.
+ */
 class FxGson {
 
+    /**
+     * Creates a pre-configured {@link GsonBuilder} that handles properly JavaFX properties.
+     *
+     * @return a pre-configured {@link GsonBuilder} that handles properly JavaFX properties.
+     */
     static GsonBuilder builder() {
         return new GsonBuilder().registerTypeAdapter(ObservableList.class, new ObservableListCreator())
                                 .registerTypeAdapter(DoubleProperty.class, new DoublePropertySerializer())

@@ -14,9 +14,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import org.hildan.fxlog.core.LogEntry;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Uses columns definitions to split log lines into columns.
+ * Uses regexps to split log lines into columns.
  */
 public class Columnizer {
 
@@ -34,12 +35,13 @@ public class Columnizer {
      * @param columnDefinitions
      *         the column definitions to use
      * @param regexps
-     *         the regexp to try and match when parsing logs
+     *         the regexps to try and match when parsing logs. The order matters: the first matched regexp determines
+     *         the capturing groups used to put parts of the log into the columns.
      * @throws PatternSyntaxException
      *         if one of the regexps' syntax is invalid
      */
-    public Columnizer(String name, List<ColumnDefinition> columnDefinitions, List<String> regexps) throws
-            PatternSyntaxException {
+    public Columnizer(@NotNull String name, @NotNull List<ColumnDefinition> columnDefinitions,
+                      @NotNull List<String> regexps) throws PatternSyntaxException {
         if (columnDefinitions.isEmpty()) {
             throw new IllegalArgumentException("There must be at least one column definition");
         }
@@ -50,9 +52,13 @@ public class Columnizer {
 
     /**
      * Returns the columns associated to this columnizer. They can directly be added to a {@link TableView}.
+     * <p>
+     * The visibility and width of the returned columns are bound to the column definitions of this Columnizer, so that
+     * they are stored in the config.
      *
      * @return the columns associated to this columnizer
      */
+    @NotNull
     public List<TableColumn<LogEntry, String>> getColumns() {
         List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
@@ -84,7 +90,8 @@ public class Columnizer {
      *         the raw log string to parse
      * @return the parsed {@code LogEntry}
      */
-    public LogEntry parse(String inputLogLine) {
+    @NotNull
+    public LogEntry parse(@NotNull String inputLogLine) {
         for (Pattern pattern : patterns) {
             Matcher matcher = pattern.matcher(inputLogLine.trim());
             if (matcher.matches()) {
@@ -109,18 +116,21 @@ public class Columnizer {
     }
 
     /**
-     * Safely tries to get the value for a capturing group. If the group does not exist in the given matcher, this
-     * method simply returns the empty string for display purposes.
+     * Safely tries to get the input subsequence captured by the given capturing group. If the group does not exist in
+     * the given matcher, this method simply returns the empty string for display purposes.
      *
      * @param matcher
      *         the matcher to get the group value from
      * @param groupName
      *         the name of the capturing group for which to get the value
-     * @return the value of the given capturing group, or the empty string if the group is missing
+     * @return the input subsequence captured by the given capturing group during the previous match, or the empty
+     * string if the group is missing
      */
-    private static String getGroupValueOrEmptyString(Matcher matcher, String groupName) {
+    @NotNull
+    private static String getGroupValueOrEmptyString(@NotNull Matcher matcher, @NotNull String groupName) {
         try {
-            return matcher.group(groupName);
+            String capturedValue = matcher.group(groupName);
+            return capturedValue != null ? capturedValue : "";
         } catch (IllegalArgumentException e) {
             // case where the group name does not exist in the parent pattern
             return "";

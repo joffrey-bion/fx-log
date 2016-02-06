@@ -14,13 +14,12 @@ description = 'A JavaFX program to view log files in a beautiful way.'
 
 def mainClassName = "org.hildan.fxlog.Main"
 
-
-
 repositories { mavenCentral() }
 
 dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.code.gson:gson:2.5'
+    compile 'org.jetbrains:annotations:13.0'
     testCompile 'junit:junit:4.+'
 }
 

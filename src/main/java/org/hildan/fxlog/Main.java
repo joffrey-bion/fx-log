@@ -44,7 +44,7 @@ public class Main extends Application {
         if (!params.isEmpty()) {
             String filename = params.get(0);
             try {
-                controller.openFile(filename);
+                controller.startTailingFile(filename);
             } catch (FileNotFoundException e) {
                 ErrorDialog.fileNotFound(filename);
             }

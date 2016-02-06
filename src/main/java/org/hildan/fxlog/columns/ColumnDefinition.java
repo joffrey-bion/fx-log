@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 /**
- * Defines a column to hold part of log line.
+ * Defines a column to hold part of a log line.
  */
 public class ColumnDefinition {
 
@@ -61,12 +61,15 @@ public class ColumnDefinition {
         return width;
     }
 
+    /**
+     * @return whether this column is visible
+     */
     boolean isVisible() {
         return visible.get();
     }
 
     /**
-     * @return the preferred width for this column (property)
+     * @return whether this column is visible (property)
      */
     BooleanProperty visibleProperty() {
         return visible;

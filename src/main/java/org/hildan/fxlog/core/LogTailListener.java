@@ -5,17 +5,29 @@ import java.util.List;
 import javafx.application.Platform;
 
 import org.apache.commons.io.input.Tailer;
-import org.apache.commons.io.input.TailerListenerAdapter;
+import org.apache.commons.io.input.TailerListener;
 import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.errors.ErrorDialog;
 
-public class LogTailListener extends TailerListenerAdapter {
+/**
+ * An implementation of {@link TailerListener} that columnizes logs and adds them to a list as they arrive.
+ */
+public class LogTailListener implements TailerListener {
 
-    private Columnizer columnizer;
+    private final Columnizer columnizer;
 
-    private List<LogEntry> logs;
+    private final List<LogEntry> logs;
 
     private volatile boolean running;
 
+    /**
+     * Creates a new LogTailListener adding to the given log list using the given columnizer.
+     *
+     * @param columnizer
+     *         the columnizer to use to columnized the raw logs
+     * @param logs
+     *         the list of logs to add to
+     */
     public LogTailListener(Columnizer columnizer, List<LogEntry> logs) {
         this.columnizer = columnizer;
         this.logs = logs;
@@ -26,6 +38,14 @@ public class LogTailListener extends TailerListenerAdapter {
         running = true;
     }
 
+    @Override
+    public void fileNotFound() {
+        Platform.runLater(() -> ErrorDialog.selectedFileNotFound(null));
+    }
+
+    /**
+     * Prevents this listener from modifying the logs list.
+     */
     public void stop() {
         running = false;
     }

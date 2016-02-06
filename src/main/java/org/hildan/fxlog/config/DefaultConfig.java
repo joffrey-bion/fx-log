@@ -12,8 +12,20 @@ import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.filtering.Filter;
 
+/**
+ * A generator for the default configuration. It is used as fallback when the built-in config is not available as a
+ * resource.
+ * <p>
+ * It makes it possible for a developer to generate a config programmatically with elements that are not customizable
+ * yet via the UI. This is definitely easier than editing the JSON directly.
+ */
 class DefaultConfig {
 
+    /**
+     * Generates the default config programmatically.
+     *
+     * @return the default config
+     */
     static Config generate() {
         Config config = new Config();
         config.getColorizers().add(severityBasedColorizerDark());

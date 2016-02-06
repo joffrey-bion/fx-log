@@ -62,7 +62,7 @@
                         <Menu text="_Theme">
                           <items>
                             <MenuItem mnemonicParsing="false" onAction="#selectDarkTheme" text="_Dark Theme" />
-                              <MenuItem mnemonicParsing="false" onAction="#selectLightTheme" text="_Bright Theme" />
+                              <MenuItem mnemonicParsing="false" onAction="#selectBrightTheme" text="_Bright Theme" />
                           </items>
                         </Menu>
                      </items>
