@@ -203,10 +203,6 @@ public class MainController implements Initializable {
         columnizedLogs.clear();
     }
 
-    public void openPreferences() {
-        // TODO handle preferences
-    }
-
     public void quit() {
         Platform.exit();
     }
