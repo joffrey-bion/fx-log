@@ -2,20 +2,27 @@ package org.hildan.fxlog.config;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.List;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
+import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import org.hildan.fxlog.errors.ErrorDialog;
 
 class ConfigLoader {
 
-    static final String USER_CONFIG_PATH = System.getProperty("user.home") + "/.fxlog/config.json";
+    static final String USER_CONFIG_PATH =
+            Paths.get(System.getProperty("user.home") + "/.fxlog/config.json").toAbsolutePath().toString();
 
     private static final String BUILTIN_RESOURCE = "default_config.json";
 
@@ -28,13 +35,13 @@ class ConfigLoader {
      */
     static Config getUserConfig() throws JsonSyntaxException {
         try {
-            return Config.readFrom(new FileReader(USER_CONFIG_PATH));
+            return readConfigFrom(new FileReader(USER_CONFIG_PATH));
         } catch (FileNotFoundException e) {
             System.out.println("User config not found, falling back to built-in config");
         } catch (JsonIOException e) {
             System.out.println("IO error while reading user config, falling back to built-in config");
         } catch (JsonSyntaxException e) {
-            showConfigErrorDialog(e);
+            ErrorDialog.configReadException(USER_CONFIG_PATH, e);
         }
         return getBuiltinConfig();
     }
@@ -46,7 +53,7 @@ class ConfigLoader {
             return DefaultConfig.generate();
         }
         try {
-            return Config.readFrom(new InputStreamReader(jsonConfigStream));
+            return readConfigFrom(new InputStreamReader(jsonConfigStream));
         } catch (JsonSyntaxException e) {
             System.err.println("Syntax error in built-in config. SHAME.");
         } catch (JsonIOException e) {
@@ -56,14 +63,24 @@ class ConfigLoader {
         return DefaultConfig.generate();
     }
 
-    private static void showConfigErrorDialog(JsonSyntaxException e) {
-        e.printStackTrace();
-        String title = "Config Load Error";
-        String header = "Messing up much?";
-        String content = String.format("There is a JSON syntax error in your config file '%s'.\n\n"
-                        + "The built-in config was used instead. Unfortunately, your dirty work will be erased.",
-                Paths.get(USER_CONFIG_PATH));
-        Alert alert = ErrorDialog.createExceptionDialog(AlertType.WARNING, title, header, content, e);
-        alert.showAndWait();
+    static void writeUserConfig(Config config) throws IOException {
+        writeConfigTo(USER_CONFIG_PATH, config);
+    }
+
+    private static Config readConfigFrom(Reader source) throws JsonIOException, JsonSyntaxException {
+        return FxGson.builder().create().fromJson(source, Config.class);
+    }
+
+    private static void writeConfigTo(String filename, Config config) throws IOException {
+        Path filePath = Paths.get(filename);
+        Path parentDir = filePath.getParent();
+        if (parentDir != null) {
+            Files.createDirectories(parentDir);
+        }
+        // html escaping disabled to see <> in regexps in the JSON
+        Gson gson = FxGson.builder().disableHtmlEscaping().setPrettyPrinting().create();
+        List<String> lines = Collections.singletonList(gson.toJson(config));
+        Files.write(filePath, lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING);
     }
 }

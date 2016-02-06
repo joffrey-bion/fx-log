@@ -10,10 +10,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
+import com.google.gson.JsonSyntaxException;
+
+/**
+ * Contains handy methods to create a show error dialogs.
+ */
 public class ErrorDialog {
 
-    public static Alert createExceptionDialog(AlertType type, String title, String header, String content,
+    private static Alert createExceptionDialog(AlertType type, String title, String header, String content,
                                               Throwable e) {
+        // useful to have it in the console output for debugging
+        e.printStackTrace();
+
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -45,8 +53,17 @@ public class ErrorDialog {
         return alert;
     }
 
-    public static void configWriteException(Throwable e) {
+    public static void configReadException(String filename, JsonSyntaxException e) {
         e.printStackTrace();
+        String title = "Config Load Error";
+        String header = "Messing up much?";
+        String content = String.format("There is a JSON syntax error in your config file '%s'.\n\n"
+                + "The built-in config was used instead. Unfortunately, your dirty work will be erased.", filename);
+        Alert alert = createExceptionDialog(AlertType.WARNING, title, header, content, e);
+        alert.showAndWait();
+    }
+
+    public static void configWriteException(Throwable e) {
         String title = "Config Save Error";
         String header = "Error when saving your configuration";
         String content = "The next time your start FX Log, you might not find all your settings as you left them.";
