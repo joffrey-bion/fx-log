@@ -43,10 +43,19 @@
                         </Menu>
                   <Menu mnemonicParsing="false" text="Edit">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log" />
-                        <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns" />
+                        <MenuItem mnemonicParsing="false" onAction="#copyRaw" text="Copy raw log">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#copyPretty" text="Copy with columns">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All" />
+                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Select All">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All" />
                      </items>
                   </Menu>
