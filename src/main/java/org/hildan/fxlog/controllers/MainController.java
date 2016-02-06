@@ -78,6 +78,8 @@ public class MainController implements Initializable {
 
     private Tailer tailer;
 
+    private LogTailListener logTailListener;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
@@ -193,12 +195,13 @@ public class MainController implements Initializable {
         }
         closeCurrentFile();
         config.addToRecentFiles(file.getAbsolutePath());
-        LogTailListener logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+        logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         tailer = Tailer.create(file, logTailListener, 500);
     }
 
     public void closeCurrentFile() {
         if (tailer != null) {
+            logTailListener.stop();
             tailer.stop();
         }
         columnizedLogs.clear();
