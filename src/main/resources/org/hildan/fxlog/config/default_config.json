@@ -1,101 +1,204 @@
 {
+  "recentFiles": [
+    "C:\\Users\\Joffrey\\Downloads\\apache-access.log",
+    "C:\\Users\\Joffrey\\Downloads\\weblogic (1).log",
+    "C:\\Users\\Joffrey\\Downloads\\apache-error.log"
+  ],
   "columnizers": [
     {
       "name": "Weblogic",
       "patterns": [
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)>",
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)",
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)>",
-        "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sessionid>.*?)>",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)>",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)>",
+        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)",
         "(?<msg>.*);jsessionid=(?<sid>.*?)>",
         "(?<msg>.*)>",
         "(?<msg>.*)"
       ],
       "columnDefinitions": [
         {
-          "headerLabel": "Date",
-          "capturingGroupName": "date",
-          "width": 176.8046875,
+          "headerLabel": "Date/Time",
+          "capturingGroupName": "datetime",
+          "width": 75.341796875,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 69.52734375,
+          "width": 61.625,
           "visible": true
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
-          "width": 84.59765625,
+          "width": 76.888671875,
           "visible": true
         },
         {
           "headerLabel": "Machine Name",
           "capturingGroupName": "machine",
-          "width": 80.0,
-          "visible": false
+          "width": 100.16796875,
+          "visible": true
         },
         {
           "headerLabel": "Server Name",
           "capturingGroupName": "server",
-          "width": 80.0,
-          "visible": false
+          "width": 87.998046875,
+          "visible": true
         },
         {
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
-          "width": 91.0,
+          "width": 71.591796875,
           "visible": true
         },
         {
           "headerLabel": "User ID",
           "capturingGroupName": "user",
-          "width": 80.0,
-          "visible": false
+          "width": 58.677734375,
+          "visible": true
         },
         {
           "headerLabel": "Transaction ID",
           "capturingGroupName": "transaction",
-          "width": 80.0,
-          "visible": false
+          "width": 95.78515625,
+          "visible": true
         },
         {
           "headerLabel": "Diagnostic Context ID",
           "capturingGroupName": "context",
-          "width": 80.0,
-          "visible": false
+          "width": 135.271484375,
+          "visible": true
         },
         {
           "headerLabel": "Timestamp",
           "capturingGroupName": "timestamp",
-          "width": 80.0,
-          "visible": false
+          "width": 78.458984375,
+          "visible": true
         },
         {
           "headerLabel": "Message ID",
           "capturingGroupName": "msgId",
-          "width": 80.0,
-          "visible": false
+          "width": 81.576171875,
+          "visible": true
         },
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 213.0,
+          "width": 46.625,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 580.0,
+          "width": 759.173828125,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
-          "capturingGroupName": "sid",
-          "width": 458.6875,
+          "capturingGroupName": "sessionid",
+          "width": 75.453125,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Apache Access Log",
+      "patterns": [
+        "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\] \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+) \"(?<referer>.*?)\" \"(?<useragent>.*?)\"",
+        "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\] \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+)"
+      ],
+      "columnDefinitions": [
+        {
+          "headerLabel": "Client",
+          "capturingGroupName": "client",
+          "width": 135.1171875,
+          "visible": true
+        },
+        {
+          "headerLabel": "User",
+          "capturingGroupName": "user",
+          "width": 43.783203125,
+          "visible": false
+        },
+        {
+          "headerLabel": "Username",
+          "capturingGroupName": "username",
+          "width": 73.291015625,
+          "visible": false
+        },
+        {
+          "headerLabel": "Date/Time",
+          "capturingGroupName": "datetime",
+          "width": 165.341796875,
+          "visible": true
+        },
+        {
+          "headerLabel": "Request",
+          "capturingGroupName": "request",
+          "width": 557.744140625,
+          "visible": true
+        },
+        {
+          "headerLabel": "Resp. Code",
+          "capturingGroupName": "rstatus",
+          "width": 79.291015625,
+          "visible": true
+        },
+        {
+          "headerLabel": "Resp. Size (bytes)",
+          "capturingGroupName": "rsize",
+          "width": 111.294921875,
+          "visible": true
+        },
+        {
+          "headerLabel": "Referer",
+          "capturingGroupName": "referer",
+          "width": 58.103515625,
+          "visible": true
+        },
+        {
+          "headerLabel": "User-Agent",
+          "capturingGroupName": "useragent",
+          "width": 80.521484375,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Apache Error Log",
+      "patterns": [
+        "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] \\[(?<client>.*?)\\] (?<msg>.*)",
+        "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] (?<msg>.*)",
+        "\\[(?<datetime>.*?)\\] (?<msg>.*)",
+        "(?<msg>.*)"
+      ],
+      "columnDefinitions": [
+        {
+          "headerLabel": "Date/Time",
+          "capturingGroupName": "datetime",
+          "width": 175.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "Severity",
+          "capturingGroupName": "severity",
+          "width": 122.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "Client",
+          "capturingGroupName": "client",
+          "width": 200.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "Message",
+          "capturingGroupName": "msg",
+          "width": 632.0,
           "visible": true
         }
       ]
@@ -230,6 +333,5 @@
         }
       ]
     }
-  ],
-  "recentFiles": []
+  ]
 }

@@ -31,12 +31,14 @@ class DefaultConfig {
         config.getColorizers().add(severityBasedColorizerDark());
         config.getColorizers().add(severityBasedColorizerLight());
         config.getColumnizers().add(weblogicColumnizer());
+        config.getColumnizers().add(apacheAccessColumnizer());
+        config.getColumnizers().add(apacheErrorColumnizer());
         return config;
     }
 
     private static Columnizer weblogicColumnizer() {
         List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
-        columnDefinitions.add(new ColumnDefinition("Date", "date"));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
         columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
         columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
         columnDefinitions.add(new ColumnDefinition("Machine Name", "machine"));
@@ -49,11 +51,12 @@ class DefaultConfig {
         columnDefinitions.add(new ColumnDefinition("Message ID", "msgId"));
         columnDefinitions.add(new ColumnDefinition("Class", "class"));
         columnDefinitions.add(new ColumnDefinition("Message", "msg"));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sid"));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid"));
         String weblogicLogStart =
-                "####<(?<date>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
+                "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
+
         List<String> regexps = Arrays.asList(//
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // with session ID
+                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sessionid>.*?)>", // with session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
                 weblogicLogStart + " <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // without class but with session ID
@@ -63,6 +66,38 @@ class DefaultConfig {
                 "(?<msg>.*)>", // end of log message on new line
                 "(?<msg>.*)"); // middle of log message on new line
         return new Columnizer("Weblogic", columnDefinitions, regexps);
+    }
+
+    private static Columnizer apacheAccessColumnizer() {
+        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        columnDefinitions.add(new ColumnDefinition("Client", "client"));
+        columnDefinitions.add(new ColumnDefinition("User", "user"));
+        columnDefinitions.add(new ColumnDefinition("Username", "username"));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
+        columnDefinitions.add(new ColumnDefinition("Request", "request"));
+        columnDefinitions.add(new ColumnDefinition("Resp. Code", "rstatus"));
+        columnDefinitions.add(new ColumnDefinition("Resp. Size (bytes)", "rsize"));
+        columnDefinitions.add(new ColumnDefinition("Referer", "referer"));
+        columnDefinitions.add(new ColumnDefinition("User-Agent", "useragent"));
+        String apacheCommon = "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\]"
+                + " \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+)";
+        String apacheCombined = apacheCommon + " \"(?<referer>.*?)\" \"(?<useragent>.*?)\"";
+        List<String> regexps = Arrays.asList(apacheCombined, apacheCommon);
+        return new Columnizer("Apache Access Log", columnDefinitions, regexps);
+    }
+
+    private static Columnizer apacheErrorColumnizer() {
+        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
+        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
+        columnDefinitions.add(new ColumnDefinition("Client", "client"));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
+        String full = "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] \\[(?<client>.*?)\\] (?<msg>.*)";
+        String noClient = "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] (?<msg>.*)";
+        String noClientNoSev = "\\[(?<datetime>.*?)\\] (?<msg>.*)";
+        String defaultToMsg = "(?<msg>.*)";
+        List<String> regexps = Arrays.asList(full, noClient, noClientNoSev, defaultToMsg);
+        return new Columnizer("Apache Error Log", columnDefinitions, regexps);
     }
 
     private static Colorizer severityBasedColorizerLight() {
