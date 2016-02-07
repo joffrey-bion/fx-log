@@ -9,12 +9,16 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -46,6 +50,7 @@ import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
 import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
+import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
 
@@ -109,28 +114,49 @@ public class MainController implements Initializable {
      * Binds the colorizer selector to the current colorizer property and the colorizers of the config.
      */
     private void configureColorizerSelector() {
-        ObservableList<Colorizer> colorizers = config.getColorizers();
-        colorizerSelector.setItems(colorizers);
-        colorizer.bindBidirectional(colorizerSelector.valueProperty());
-        if (!colorizers.isEmpty()) {
-            colorizer.setValue(colorizers.get(0));
-        }
+        bindSelector(colorizerSelector, config.getColorizers(), colorizer, config.selectedColorizerIndexProperty());
     }
 
     /**
      * Binds the columnizer selector to the current columnizer property and the columnizers of the config.
      */
     private void configureColumnizerSelector() {
-        ObservableList<Columnizer> columnizers = config.getColumnizers();
-        columnizerSelector.setItems(columnizers);
-        columnizer.bindBidirectional(columnizerSelector.valueProperty());
-        if (!columnizers.isEmpty()) {
-            columnizer.setValue(columnizers.get(0));
-        }
+        bindSelector(columnizerSelector, config.getColumnizers(), columnizer, config.selectedColumnizerIndexProperty());
         columnizer.addListener(change -> {
             // re-columnizes the logs
             restartTailing();
         });
+    }
+
+    /**
+     * Configures the given selector with the given {@code items}, and binds it to the given properties.
+     * <p>
+     * The initial values for the selector and the selectedItem are set based on {@code selectedItemIndexProperty}.
+     *
+     * @param selector
+     *         the selector to configure
+     * @param items
+     *         the items to put in the selector
+     * @param selectedItemProperty
+     *         the property to bind for the selected item
+     * @param selectedItemIndexProperty
+     *         the property to bind for the index of the selected item
+     * @param <T>
+     *         the type of items in the selector
+     */
+    private <T> void bindSelector(@NotNull ChoiceBox<T> selector, @NotNull ObservableList<T> items,
+                                  @NotNull Property<T> selectedItemProperty,
+                                  @NotNull IntegerProperty selectedItemIndexProperty) {
+        selector.setItems(items);
+        if (!items.isEmpty()) {
+            int selectedIndex = selectedItemIndexProperty.get();
+            selectedItemProperty.setValue(items.get(selectedIndex));
+            selector.getSelectionModel().select(selectedIndex);
+        }
+        selectedItemProperty.bindBidirectional(selector.valueProperty());
+        Callable<Integer> getSelectedIndex = () -> items.indexOf(selectedItemProperty.getValue());
+        IntegerBinding indexBinding = Bindings.createIntegerBinding(getSelectedIndex, selectedItemProperty);
+        selectedItemIndexProperty.bind(indexBinding);
     }
 
     /**

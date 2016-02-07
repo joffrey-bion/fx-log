@@ -3,6 +3,8 @@ package org.hildan.fxlog.config;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,6 +38,10 @@ public class Config {
 
     private static final int MAX_RECENT_FILES = 10;
 
+    private final IntegerProperty selectedColumnizerIndex;
+
+    private final IntegerProperty selectedColorizerIndex;
+
     private final ObservableList<String> recentFiles;
 
     private final ObservableList<Columnizer> columnizers;
@@ -46,9 +52,19 @@ public class Config {
      * Creates an empty configuration.
      */
     Config() {
+        this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
+        this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
+    }
+
+    public IntegerProperty selectedColorizerIndexProperty() {
+        return selectedColorizerIndex;
+    }
+
+    public IntegerProperty selectedColumnizerIndexProperty() {
+        return selectedColumnizerIndex;
     }
 
     /**
