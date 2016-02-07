@@ -1,12 +1,17 @@
 package org.hildan.fxlog.config;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.regex.Pattern;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -39,6 +44,10 @@ class FxGson {
                                 .registerTypeAdapter(DoubleProperty.class, new DoublePropertyDeserializer())
                                 .registerTypeAdapter(BooleanProperty.class, new BooleanPropertySerializer())
                                 .registerTypeAdapter(BooleanProperty.class, new BooleanPropertyDeserializer())
+                                .registerTypeAdapter(IntegerProperty.class, new IntegerPropertySerializer())
+                                .registerTypeAdapter(IntegerProperty.class, new IntegerPropertyDeserializer())
+                                .registerTypeAdapter(Property.class, new PropertySerializer())
+                                .registerTypeAdapter(Property.class, new PropertyDeserializer())
                                 .registerTypeAdapter(Pattern.class, new PatternSerializer())
                                 .registerTypeAdapter(Pattern.class, new PatternDeserializer());
     }
@@ -78,6 +87,38 @@ class FxGson {
         public BooleanProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
             return new SimpleBooleanProperty(json.getAsBoolean());
+        }
+    }
+
+    private static class IntegerPropertySerializer implements JsonSerializer<IntegerProperty> {
+        @Override
+        public JsonElement serialize(IntegerProperty intProp, Type type, JsonSerializationContext context) {
+            return new JsonPrimitive(intProp.get());
+        }
+    }
+
+    private static class IntegerPropertyDeserializer implements JsonDeserializer<IntegerProperty> {
+        @Override
+        public IntegerProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+                JsonParseException {
+            return new SimpleIntegerProperty(json.getAsInt());
+        }
+    }
+
+    private static class PropertySerializer implements JsonSerializer<Property<?>> {
+        @Override
+        public JsonElement serialize(Property<?> doubleProp, Type type, JsonSerializationContext context) {
+            return context.serialize(doubleProp.getValue());
+        }
+    }
+
+    private static class PropertyDeserializer implements JsonDeserializer<Property<?>> {
+        @Override
+        public Property<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+                JsonParseException {
+            Type typeParam = ((ParameterizedType)typeOfT).getActualTypeArguments()[0];
+            Object obj = context.deserialize(json, typeParam);
+            return new SimpleObjectProperty<>(obj);
         }
     }
 
