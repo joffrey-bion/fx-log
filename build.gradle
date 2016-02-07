@@ -7,7 +7,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'org.hildan'
-version = '0.9'
+version = '1.0'
 sourceCompatibility = '1.8'
 
 description = 'A JavaFX program to view log files in a beautiful way.'
