@@ -127,6 +127,10 @@ public class MainController implements Initializable {
         if (!columnizers.isEmpty()) {
             columnizer.setValue(columnizers.get(0));
         }
+        columnizer.addListener(change -> {
+            // re-columnizes the logs
+            restartTailing();
+        });
     }
 
     /**
@@ -251,6 +255,23 @@ public class MainController implements Initializable {
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         tailer = Tailer.create(file, logTailListener, 500);
         tailing.set(true);
+    }
+
+    /**
+     * Closes and re-opens the file being tailed. Useful to update the columnization for instance.
+     */
+    private void restartTailing() {
+        if (!tailing.getValue()) {
+            System.err.println("Can't RE-start if we're not tailing");
+            return;
+        }
+        File file = tailer.getFile();
+        closeCurrentFile();
+        try {
+            startTailingFile(file);
+        } catch (FileNotFoundException e) {
+            ErrorDialog.recentFileNotFound(file.getAbsolutePath());
+        }
     }
 
     /**
