@@ -64,10 +64,12 @@ public class LogTailListener implements TailerListener {
 
     @Override
     public void handle(String line) {
-        if (running) {
+        // avoid polluting vertical space with empty lines
+        if (running && !line.isEmpty()) {
             LogEntry log = columnizer.parse(line);
             // needs to run on the main thread to avoid concurrent modifications
             Platform.runLater(() -> {
+                // we need to check again here because the listener may have been stopped in the meantime
                 if (running) {
                     logs.add(log);
                 }
