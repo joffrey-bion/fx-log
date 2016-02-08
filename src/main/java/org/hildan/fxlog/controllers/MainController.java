@@ -49,6 +49,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import org.apache.commons.io.input.Tailer;
+import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.ColorizedRowFactory;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
@@ -243,14 +244,14 @@ public class MainController implements Initializable {
     private void configureColorizersStage() {
         colorizersStage = new Stage();
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/colorizers.fxml"));
+            Parent root = FXLog.loadView("colorizers.fxml");
             Scene scene = new Scene(root);
             colorizersStage.setTitle("Customize Colorizers");
             colorizersStage.setScene(scene);
             editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
             List<String> styles = scene.getStylesheets();
             styles.clear();
-            styles.add(getClass().getResource("../light_theme.css").toExternalForm());
+            styles.add(FXLog.getCss("light_theme.css"));
         } catch (IOException e) {
             ErrorDialog.uncaughtException(e);
         }
@@ -421,7 +422,7 @@ public class MainController implements Initializable {
                 Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
         for (List<String> style : styles) {
             style.clear();
-            style.add(getClass().getResource("../dark_theme.css").toExternalForm());
+            style.add(FXLog.getCss("dark_theme.css"));
         }
     }
 
@@ -433,7 +434,7 @@ public class MainController implements Initializable {
                 Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
         for (List<String> style : styles) {
             style.clear();
-            style.add(getClass().getResource("../light_theme.css").toExternalForm());
+            style.add(FXLog.getCss("light_theme.css"));
         }
     }
 

@@ -16,7 +16,13 @@ import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.controllers.MainController;
 import org.hildan.fxlog.errors.ErrorDialog;
 
-public class Main extends Application {
+public class FXLog extends Application {
+
+    private static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
+
+    private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
+
+    private static final String CSS_PATH = BASE_PACKAGE;
 
     @Override
     public void start(Stage stage) {
@@ -24,11 +30,11 @@ public class Main extends Application {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> ErrorDialog.uncaughtException(e)));
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> ErrorDialog.uncaughtException(e));
         try {
-            URL url = getClass().getResource("view/main.fxml");
+            URL url = getClass().getResource(BASE_PACKAGE + "/view/main.fxml");
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("dark_theme.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource(BASE_PACKAGE + "/dark_theme.css").toExternalForm());
             stage.setTitle("FX Log");
             stage.setScene(scene);
             stage.show();
@@ -37,6 +43,36 @@ public class Main extends Application {
         } catch (Exception e) {
             ErrorDialog.uncaughtException(e);
         }
+    }
+
+    /**
+     * Loads the given view.
+     *
+     * @param viewFilename
+     *         the name of the view. It can be a path relative to the views package.
+     * @return the Parent returned by the FXMLLoader
+     * @throws IOException
+     *         if the resource couldn't be loaded for some reason
+     */
+    public static Parent loadView(String viewFilename) throws IOException {
+        URL url = FXLog.class.getResource(VIEWS_PATH + '/' + viewFilename);
+        return FXMLLoader.load(url);
+    }
+
+    /**
+     * Loads the given CSS file and returns it as a style string.
+     *
+     * @param cssFilename
+     *         the name of the CSS file. It can be a path relative to the CSS package.
+     * @return the CSS as a style string
+     */
+    public static String getCss(String cssFilename) {
+        String path = CSS_PATH + '/' + cssFilename;
+        URL url = FXLog.class.getResource(path);
+        if (url == null) {
+            throw new RuntimeException(String.format("Cannot find CSS stylesheet '%s'", path));
+        }
+        return url.toExternalForm();
     }
 
     private void autoOpenFile(MainController controller) {
