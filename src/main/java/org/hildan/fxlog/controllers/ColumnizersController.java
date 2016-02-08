@@ -5,28 +5,19 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.hildan.fxlog.columns.ColumnDefinition;
-import org.hildan.fxlog.columns.Columnizer;
-import org.hildan.fxlog.config.Config;
-import org.hildan.fxlog.core.LogEntry;
-
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
+
+import org.hildan.fxlog.columns.ColumnDefinition;
+import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.config.Config;
 
 /**
  * Controller associated to the columnizer customization view.
@@ -48,13 +39,13 @@ public class ColumnizersController implements Initializable {
     private TableView<ColumnDefinition> columnsTable;
 
     @FXML
-    private TableColumn<ColumnDefinition, String> columnLabelColumn;
+    private TableColumn<ColumnDefinition, String> headerColumn;
 
     @FXML
     private TableColumn<ColumnDefinition, String> capturingGroupColumn;
 
     @FXML
-    private TextField newColumnNameField;
+    private TextField newColumnHeaderField;
 
     @FXML
     private TextField newColumnGroupField;
@@ -65,11 +56,21 @@ public class ColumnizersController implements Initializable {
     @FXML
     private TextField newPatternRegexField;
 
+    @FXML
+    private Button removeColumnizerButton;
+
+    @FXML
+    private Button removeColumnButton;
+
+    @FXML
+    private Button removePatternButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
         initializeColumnizersList();
         initializeSelectedColumnizerPane();
+        initializeDeleteButtons();
     }
 
     private void initializeColumnizersList() {
@@ -78,8 +79,8 @@ public class ColumnizersController implements Initializable {
     }
 
     private void initializeSelectedColumnizerPane() {
-        BooleanBinding isEmpty = Bindings.isEmpty(columnizersList.getSelectionModel().getSelectedItems());
-        selectedColumnizerPane.disableProperty().bind(isEmpty);
+        BooleanBinding noColumnizerSelected = columnizersList.getSelectionModel().selectedItemProperty().isNull();
+        selectedColumnizerPane.disableProperty().bind(noColumnizerSelected);
         initializePatternsList();
         initializeColumnsTable();
     }
@@ -106,7 +107,7 @@ public class ColumnizersController implements Initializable {
 
     private void initializeColumnsTable() {
         columnsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        columnLabelColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
+        headerColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
         capturingGroupColumn.setCellValueFactory(data -> data.getValue().capturingGroupNameProperty());
         ListBinding<ColumnDefinition> columnDefinitions = new ListBinding<ColumnDefinition>() {
             {
@@ -126,12 +127,32 @@ public class ColumnizersController implements Initializable {
         columnsTable.itemsProperty().bind(columnDefinitions);
     }
 
+    private void initializeDeleteButtons() {
+        IntegerExpression currentlyUsedColumnizer = config.selectedColumnizerIndexProperty();
+        IntegerExpression selectedColumnizer = columnizersList.getSelectionModel().selectedIndexProperty();
+        BooleanBinding selectedColorizerIsUsed = selectedColumnizer.isEqualTo(currentlyUsedColumnizer);
+        BooleanBinding noColumnizerSelected = columnizersList.getSelectionModel().selectedItemProperty().isNull();
+        removeColumnizerButton.disableProperty().bind(noColumnizerSelected.or(selectedColorizerIsUsed));
+
+        BooleanBinding noColumnDefSelected = columnsTable.getSelectionModel().selectedItemProperty().isNull();
+        removeColumnButton.disableProperty().bind(noColumnDefSelected);
+
+        BooleanBinding noPatternSelected = patternList.getSelectionModel().selectedItemProperty().isNull();
+        removePatternButton.disableProperty().bind(noPatternSelected);
+    }
+
     @FXML
     public void addNewColumnizer() {
         Columnizer newColumnizer = new Columnizer(newColumnizerNameField.getText());
         config.getColumnizers().add(newColumnizer);
         newColumnizerNameField.setText("");
         columnizersList.getSelectionModel().select(newColumnizer);
+    }
+
+    @FXML
+    public void removeSelectedColumnizer() {
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        config.getColumnizers().remove(selectedColumnizer);
     }
 
     @FXML
@@ -150,14 +171,28 @@ public class ColumnizersController implements Initializable {
     }
 
     @FXML
-    public void addNewColumn() {
-        String columnName = newColumnNameField.getText();
+    public void removeSelectedPattern() {
+        Pattern selectedPattern = patternList.getSelectionModel().getSelectedItem();
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        selectedColumnizer.getPatterns().remove(selectedPattern);
+    }
+
+    @FXML
+    public void addNewColumnDefinition() {
+        String columnName = newColumnHeaderField.getText();
         String columnGroup = newColumnGroupField.getText();
         ColumnDefinition newDef = new ColumnDefinition(columnName, columnGroup);
         Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
         selectedColumnizer.getColumnDefinitions().add(newDef);
-        newColumnNameField.setText("");
+        newColumnHeaderField.setText("");
         newColumnGroupField.setText("");
         columnsTable.getSelectionModel().select(newDef);
+    }
+
+    @FXML
+    public void removeSelectedColumnDefinition() {
+        ColumnDefinition selectedColumnDef = columnsTable.getSelectionModel().getSelectedItem();
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        selectedColumnizer.getColumnDefinitions().remove(selectedColumnDef);
     }
 }

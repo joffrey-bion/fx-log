@@ -76,6 +76,9 @@ public class FXLog extends Application {
     }
 
     private void autoOpenFile(MainController controller) {
+        if (Config.getInstance().getColumnizers().isEmpty()) {
+            return; // can't parse logs, better not open a file
+        }
         List<String> params = getParameters().getRaw();
         if (!params.isEmpty()) {
             String filename = params.get(0);

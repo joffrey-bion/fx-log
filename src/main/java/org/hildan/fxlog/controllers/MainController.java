@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -171,9 +170,7 @@ public class MainController implements Initializable {
             selector.getSelectionModel().select(selectedIndex);
         }
         selectedItemProperty.bindBidirectional(selector.valueProperty());
-        Callable<Integer> getSelectedIndex = () -> items.indexOf(selectedItemProperty.getValue());
-        IntegerBinding indexBinding = Bindings.createIntegerBinding(getSelectedIndex, selectedItemProperty);
-        selectedItemIndexProperty.bind(indexBinding);
+        selectedItemIndexProperty.bind(selector.getSelectionModel().selectedIndexProperty());
     }
 
     /**

@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +17,7 @@
   <items>
       <BorderPane>
          <center>
-            <ListView fx:id="columnizersList" />
+            <ListView fx:id="columnizersList" editable="true" />
          </center>
          <top>
             <Label text="Columnizers" BorderPane.alignment="CENTER_LEFT" />
@@ -26,6 +27,7 @@
                <children>
                   <TextField fx:id="newColumnizerNameField" promptText="new columnizer name" HBox.hgrow="ALWAYS" />
                 <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnizer" text="Add" HBox.hgrow="NEVER" />
+                  <Button fx:id="removeColumnizerButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeSelectedColumnizer" text="Del" />
                </children>
             </HBox>
          </bottom>
@@ -40,22 +42,29 @@
                   <Label text="Columns" VBox.vgrow="NEVER" />
                   <TableView fx:id="columnsTable" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <columns>
-                      <TableColumn fx:id="columnLabelColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="200.0" sortable="false" text="Column Label" />
+                      <TableColumn fx:id="headerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="200.0" sortable="false" text="Header Label" />
                       <TableColumn fx:id="capturingGroupColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="200.0" sortable="false" text="Associated capturing group" />
                     </columns>
+                     <tooltip>
+                        <Tooltip text="Double-click on a cell to edit its value. Press enter to commit your edit." />
+                     </tooltip>
                   </TableView>
                   <HBox spacing="2.0" VBox.vgrow="NEVER">
                      <children>
-                        <TextField fx:id="newColumnNameField" promptText="column header" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="newColumnHeaderField" promptText="column header" HBox.hgrow="ALWAYS" />
                          <TextField fx:id="newColumnGroupField" promptText="capturing group name" HBox.hgrow="ALWAYS" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumn" text="Add" HBox.hgrow="NEVER" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnDefinition" text="Add" HBox.hgrow="NEVER" />
+                        <Button fx:id="removeColumnButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeSelectedColumnDefinition" text="Del" />
                      </children>
                   </HBox>
                </children>
             </VBox>
             <BorderPane>
                <center>
-                  <ListView fx:id="patternList" />
+                  <ListView fx:id="patternList" editable="true">
+                     <tooltip>
+                        <Tooltip text="Double-click on a row to edit its value. Press enter to commit your edit." />
+                     </tooltip></ListView>
                </center>
                <top>
                   <Label text="Columnization rules" BorderPane.alignment="CENTER_LEFT" />
@@ -65,6 +74,7 @@
                      <children>
                         <TextField fx:id="newPatternRegexField" promptText="new regex" HBox.hgrow="ALWAYS" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewPattern" text="Add" HBox.hgrow="NEVER" />
+                        <Button fx:id="removePatternButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeSelectedPattern" text="Del" />
                      </children>
                   </HBox>
                </bottom>
