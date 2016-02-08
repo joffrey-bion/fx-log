@@ -19,46 +19,41 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.504950495049505" prefHeight="446.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColorizersController">
+<SplitPane dividerPositions="0.3" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColorizersController">
   <items>
       <BorderPane>
          <center>
-            <ScrollPane fitToHeight="true" fitToWidth="true">
-               <content>
-                  <ListView fx:id="colorizersList" />
-               </content>
-            </ScrollPane>
+            <ListView fx:id="colorizersList" />
          </center>
          <top>
             <Label text="Colorizers" BorderPane.alignment="CENTER_LEFT" />
          </top>
          <bottom>
-            <HBox BorderPane.alignment="CENTER">
+            <HBox spacing="2.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="newColorizerNameField" HBox.hgrow="ALWAYS" />
-                <Button mnemonicParsing="false" onAction="#createNewColorizer" text="Create" HBox.hgrow="NEVER" />
+                <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColorizer" text="Add" HBox.hgrow="NEVER" />
                </children>
             </HBox>
          </bottom>
+         <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+         </padding>
       </BorderPane>
       <SplitPane fx:id="selectedColorizerPane" dividerPositions="0.4340909090909091" orientation="VERTICAL">
          <items>
             <BorderPane>
                <center>
-                  <ScrollPane fitToHeight="true" fitToWidth="true">
-                     <content>
-                        <ListView fx:id="rulesList" prefHeight="200.0" prefWidth="200.0" />
-                     </content>
-                  </ScrollPane>
+                  <ListView fx:id="rulesList" prefHeight="200.0" prefWidth="200.0" />
                </center>
                <top>
                   <Label text="Rules" BorderPane.alignment="CENTER_LEFT" />
                </top>
                <bottom>
-                  <HBox BorderPane.alignment="CENTER">
+                  <HBox spacing="2.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TextField fx:id="newRuleNameField" HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#createNewRule" text="Create" HBox.hgrow="NEVER" />
+                        <TextField fx:id="newRuleNameField" promptText="New rule name" HBox.hgrow="ALWAYS" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule" text="Add" HBox.hgrow="NEVER" />
                      </children>
                   </HBox>
                </bottom>
@@ -69,8 +64,8 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label text="Rule Name" HBox.hgrow="NEVER" />
-                              <TextField fx:id="ruleNameField" promptText="Enter rule name" HBox.hgrow="ALWAYS" />
+                              <Label minHeight="-Infinity" minWidth="-Infinity" text="Rule Name" HBox.hgrow="NEVER" />
+                              <TextField fx:id="ruleNameField" minHeight="-Infinity" minWidth="-Infinity" promptText="Enter rule name" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Separator prefWidth="200.0" />
@@ -78,13 +73,13 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <Label text="Filter" HBox.hgrow="NEVER" />
-                                    <TextField fx:id="filterRegexField" promptText="filter regex" HBox.hgrow="ALWAYS" />
+                                    <Label minHeight="-Infinity" minWidth="-Infinity" text="Filter" HBox.hgrow="NEVER" />
+                                    <TextField fx:id="filterRegexField" minHeight="-Infinity" minWidth="-Infinity" promptText="filter regex" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
-                              <GridPane hgap="5.0">
+                              <GridPane hgap="5.0" minHeight="-Infinity" minWidth="-Infinity">
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
                                 <rowConstraints>
@@ -92,21 +87,21 @@
                                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <RadioButton fx:id="matchColumnButton" mnemonicParsing="false" selected="true" text="Match specific column:" GridPane.rowIndex="1">
+                                    <RadioButton fx:id="matchColumnButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" selected="true" text="Match specific column:" GridPane.rowIndex="1">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="filterType" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="matchRawButton" mnemonicParsing="false" text="Match raw log line" toggleGroup="$filterType" />
-                                    <TextField fx:id="filterColumnNameField" promptText="capturing group name" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="matchRawButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Match raw log line" toggleGroup="$filterType" />
+                                    <TextField fx:id="filterColumnNameField" minHeight="-Infinity" minWidth="-Infinity" promptText="capturing group name" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
                         </VBox>
                         <Separator prefWidth="200.0" />
-                        <VBox spacing="5.0">
+                        <VBox fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0">
                            <children>
-                              <Label text="Style (check to override default)" />
+                              <Label minHeight="-Infinity" minWidth="-Infinity" text="Style (check to override default)" />
                               <GridPane hgap="5.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -117,10 +112,10 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <CheckBox fx:id="overrideTextForeground" mnemonicParsing="false" text="Text foreground" GridPane.hgrow="NEVER" />
-                                    <CheckBox fx:id="overrideTextBackground" mnemonicParsing="false" text="Text background" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
-                                    <ColorPicker fx:id="foregroundColorPicker" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
-                                    <ColorPicker fx:id="backgroundColorPicker" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+                                    <CheckBox fx:id="overrideTextForeground" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Override text foreground" GridPane.hgrow="NEVER" />
+                                    <CheckBox fx:id="overrideTextBackground" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Override text background" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+                                    <ColorPicker fx:id="foregroundColorPicker" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
+                                    <ColorPicker fx:id="backgroundColorPicker" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
@@ -133,9 +128,12 @@
                </content>
             </ScrollPane>
          </items>
+         <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+         </padding>
       </SplitPane>
   </items>
    <padding>
-      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
    </padding>
 </SplitPane>

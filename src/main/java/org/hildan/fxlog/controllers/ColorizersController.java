@@ -207,7 +207,7 @@ public class ColorizersController implements Initializable {
     }
 
     @FXML
-    void createNewColorizer() {
+    public void addNewColorizer() {
         Colorizer newColorizer = new Colorizer(newColorizerNameField.getText());
         config.getColorizers().add(newColorizer);
         newColorizerNameField.setText("");
@@ -215,7 +215,7 @@ public class ColorizersController implements Initializable {
     }
 
     @FXML
-    void createNewRule() {
+    public void addNewRule() {
         Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
         StyleRule newRule = new StyleRule(newRuleNameField.getText());
         selectedColorizer.getRules().add(newRule);
