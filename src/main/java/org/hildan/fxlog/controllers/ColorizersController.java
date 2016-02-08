@@ -3,6 +3,7 @@ package org.hildan.fxlog.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -11,6 +12,7 @@ import javafx.beans.binding.ListBinding;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -158,10 +160,17 @@ public class ColorizersController implements Initializable {
         filterRegexField.setText(rule.getFilter().getPattern().toString());
         filterColumnNameField.setText(isRawFilter ? "" : rule.getFilter().getColumnName());
         Callable<Filter> createFilter = () -> {
-            if (filterType.getSelectedToggle() == matchRawButton) {
-                return Filter.matchRawLog(filterRegexField.getText());
-            } else {
-                return Filter.matchColumn(filterColumnNameField.getText(), filterRegexField.getText());
+            PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+            try {
+                filterRegexField.pseudoClassStateChanged(errorClass, false);
+                if (filterType.getSelectedToggle() == matchRawButton) {
+                    return Filter.matchRawLog(filterRegexField.getText());
+                } else {
+                    return Filter.matchColumn(filterColumnNameField.getText(), filterRegexField.getText());
+                }
+            } catch (PatternSyntaxException e) {
+                filterRegexField.pseudoClassStateChanged(errorClass, true);
+                return Filter.matchRawLog(".*");
             }
         };
         Binding<Filter> filterRegexBinding =

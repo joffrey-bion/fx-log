@@ -29,6 +29,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -188,12 +189,15 @@ public class MainController implements Initializable {
      */
     private void configureFiltering() {
         Callable<Predicate<LogEntry>> createFilter = () -> {
+            PseudoClass errorClass = PseudoClass.getPseudoClass("error");
             try {
+                filterField.pseudoClassStateChanged(errorClass, false);
                 if (filterField.getText().isEmpty()) {
                     return log -> true;
                 }
                 return Filter.matchRawLog(".*?" + filterField.getText() + ".*");
             } catch (PatternSyntaxException e) {
+                filterField.pseudoClassStateChanged(errorClass, true);
                 return log -> false;
             }
         };
