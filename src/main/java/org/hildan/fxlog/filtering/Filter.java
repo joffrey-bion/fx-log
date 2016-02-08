@@ -81,7 +81,7 @@ public class Filter implements Predicate<LogEntry> {
 
     @Override
     public boolean test(LogEntry log) {
-        if (columnName == null) {
+        if (columnName.get() == null) {
             return pattern.matcher(log.rawLine()).matches();
         } else {
             String columnValue = log.getColumnValues().get(columnName.get());
