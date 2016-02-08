@@ -13,9 +13,11 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
@@ -185,15 +187,22 @@ public class MainController implements Initializable {
      * Binds the filtered logs list predicate, the current filter, and the filter text field together.
      */
     private void configureFiltering() {
-        filteredLogs.predicateProperty().bind(filter);
-        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                filter.setValue(Filter.matchRawLog(".*?" + newValue + ".*"));
-            } else {
-                filter.setValue(log -> true);
+        Callable<Predicate<LogEntry>> createFilter = () -> {
+            try {
+                if (filterField.getText().isEmpty()) {
+                    return log -> true;
+                }
+                return Filter.matchRawLog(".*?" + filterField.getText() + ".*");
+            } catch (PatternSyntaxException e) {
+                return log -> false;
             }
-        });
+        };
+        Binding<Predicate<LogEntry>> filterBinding =
+                Bindings.createObjectBinding(createFilter, filterField.textProperty());
+        filterField.setText("");
         filter.setValue(log -> true);
+        filter.bind(filterBinding);
+        filteredLogs.predicateProperty().bind(filter);
     }
 
     /**
