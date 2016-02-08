@@ -1,6 +1,6 @@
 package org.hildan.fxlog.controllers;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableView;
@@ -66,6 +67,9 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane mainPane;
+
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private TableView<LogEntry> logsTable;
@@ -355,6 +359,13 @@ public class MainController implements Initializable {
      */
     public void quit() {
         Platform.exit();
+    }
+
+    /**
+     * Scrolls to the last logs.
+     */
+    public void scrollToBottom() {
+        scrollPane.setVvalue(1.0);
     }
 
     /**
