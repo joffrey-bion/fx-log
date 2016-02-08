@@ -1,11 +1,7 @@
 {
   "selectedColumnizerIndex": 0,
   "selectedColorizerIndex": 0,
-  "recentFiles": [
-    "C:\\Users\\Joffrey\\Downloads\\weblogic (3).log",
-    "C:\\Users\\Joffrey\\Downloads\\apache-error.log",
-    "C:\\Users\\Joffrey\\Downloads\\apache-access.log"
-  ],
+  "recentFiles": [],
   "columnizers": [
     {
       "name": "Weblogic",
