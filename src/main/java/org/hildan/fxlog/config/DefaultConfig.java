@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
 
 import org.hildan.fxlog.coloring.Colorizer;
@@ -111,7 +112,8 @@ class DefaultConfig {
         StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00AA00"), null);
         StyleRule debugRule = new StyleRule("Debug", debugFilter, Color.web("#0000BB"), null);
         StyleRule noticeRule = new StyleRule("Notice", noticeFilter, null, null);
-        return new Colorizer("Severity (light)", Arrays.asList(errorRule, warnRule, infoRule, debugRule, noticeRule));
+        return new Colorizer("Severity (light)",
+                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule));
     }
 
     private static Colorizer severityBasedColorizerDark() {
@@ -125,6 +127,7 @@ class DefaultConfig {
         StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00AA00"), null);
         StyleRule debugRule = new StyleRule("Debug", debugFilter, Color.web("#0000BB"), null);
         StyleRule noticeRule = new StyleRule("Notice", noticeFilter, null, null);
-        return new Colorizer("Severity (dark)", Arrays.asList(errorRule, warnRule, infoRule, debugRule, noticeRule));
+        return new Colorizer("Severity (dark)",
+                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule));
     }
 }

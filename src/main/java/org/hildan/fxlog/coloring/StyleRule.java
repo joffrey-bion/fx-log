@@ -1,5 +1,9 @@
 package org.hildan.fxlog.coloring;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
@@ -13,13 +17,23 @@ import org.jetbrains.annotations.Nullable;
  */
 public class StyleRule {
 
-    private final String name;
+    private final StringProperty name;
 
-    private final Filter filter;
+    private final Property<Filter> filter;
 
-    private final Color foreground;
+    private final Property<Color> foreground;
 
-    private final Color background;
+    private final Property<Color> background;
+
+    /**
+     * Creates a StyleRule with no style override.
+     *
+     * @param name
+     *         a name for this rule
+     */
+    public StyleRule(@NotNull String name) {
+        this(name, Filter.matchRawLog(""), null, null);
+    }
 
     /**
      * Creates a StyleRule with the given filter and style.
@@ -35,10 +49,10 @@ public class StyleRule {
      */
     public StyleRule(@NotNull String name, @NotNull Filter filter, @Nullable Color foreground,
                      @Nullable Color background) {
-        this.name = name;
-        this.filter = filter;
-        this.foreground = foreground;
-        this.background = background;
+        this.name = new SimpleStringProperty(name);
+        this.filter = new SimpleObjectProperty<>(filter);
+        this.foreground = new SimpleObjectProperty<>(foreground);
+        this.background = new SimpleObjectProperty<>(background);
     }
 
     /**
@@ -51,19 +65,67 @@ public class StyleRule {
      * @return true if the style of the node was changed
      */
     boolean applyTo(@NotNull Node node, @NotNull LogEntry log) {
-        if (filter.test(log)) {
+        if (filter.getValue().test(log)) {
             String style = "";
-            if (foreground != null) {
+            if (foreground.getValue() != null) {
                 // surprisingly, this is the property affecting the text's *foreground* color in a TableRow
-                style += "-fx-text-background-color: " + toString(foreground) + "; ";
+                style += "-fx-text-background-color: " + toString(foreground.getValue()) + "; ";
             }
-            if (background != null) {
-                style += "-fx-background-color: " + toString(background) + "; ";
+            if (background.getValue() != null) {
+                style += "-fx-background-color: " + toString(background.getValue()) + "; ";
             }
             node.setStyle(style);
             return true;
         }
         return false;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public Filter getFilter() {
+        return filter.getValue();
+    }
+
+    public Property<Filter> filterProperty() {
+        return filter;
+    }
+
+    public void setFilter(Filter filter) {
+        this.filter.setValue(filter);
+    }
+
+    public Color getForeground() {
+        return foreground.getValue();
+    }
+
+    public Property<Color> foregroundProperty() {
+        return foreground;
+    }
+
+    public void setForeground(Color foreground) {
+        this.foreground.setValue(foreground);
+    }
+
+    public Color getBackground() {
+        return background.getValue();
+    }
+
+    public Property<Color> backgroundProperty() {
+        return background;
+    }
+
+    public void setBackground(Color background) {
+        this.background.setValue(background);
     }
 
     /**
@@ -79,6 +141,6 @@ public class StyleRule {
 
     @Override
     public String toString() {
-        return name;
+        return name.get();
     }
 }

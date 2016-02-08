@@ -4,6 +4,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import org.hildan.fxlog.core.LogEntry;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Filter implements Predicate<LogEntry> {
 
-    private final String column;
+    private final StringProperty columnName;
 
     private final Pattern pattern;
 
     /**
      * Creates a new filter.
      *
-     * @param column
+     * @param columnName
      *         the capturing group name corresponding to the column to apply this filter to, or null to apply this
      *         filter to the whole raw log line
      * @param regex
@@ -27,9 +30,9 @@ public class Filter implements Predicate<LogEntry> {
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
-    private Filter(String column, String regex) throws PatternSyntaxException {
+    private Filter(String columnName, String regex) throws PatternSyntaxException {
         this.pattern = Pattern.compile(regex);
-        this.column = column;
+        this.columnName = new SimpleStringProperty(columnName);
     }
 
     /**
@@ -60,12 +63,28 @@ public class Filter implements Predicate<LogEntry> {
         return new Filter(columnName, regex);
     }
 
+    public String getColumnName() {
+        return columnName.get();
+    }
+
+    public StringProperty columnNameProperty() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName.set(columnName);
+    }
+
+    public Pattern getPattern() {
+        return pattern;
+    }
+
     @Override
     public boolean test(LogEntry log) {
-        if (column == null) {
+        if (columnName == null) {
             return pattern.matcher(log.rawLine()).matches();
         } else {
-            String columnValue = log.getColumnValues().get(column);
+            String columnValue = log.getColumnValues().get(columnName.get());
             return columnValue != null && pattern.matcher(columnValue).matches();
         }
     }

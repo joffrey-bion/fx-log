@@ -1,7 +1,9 @@
 package org.hildan.fxlog.coloring;
 
-import java.util.List;
-
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
 import org.hildan.fxlog.core.LogEntry;
@@ -12,9 +14,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Colorizer {
 
-    private final String name;
+    private final StringProperty name;
 
-    private final List<StyleRule> styleRules;
+    private final ObservableList<StyleRule> styleRules;
+
+    /**
+     * Creates a new Colorizer with no rules.
+     *
+     * @param name
+     *         a name for this Colorizer
+     */
+    public Colorizer(@NotNull String name) {
+        this(name, FXCollections.observableArrayList());
+    }
 
     /**
      * Creates a new Colorizer with the given rules.
@@ -24,9 +36,25 @@ public class Colorizer {
      * @param styleRules
      *         the list of StyleRules to use when styling a Node
      */
-    public Colorizer(@NotNull String name, @NotNull List<StyleRule> styleRules) {
-        this.name = name;
+    public Colorizer(@NotNull String name, @NotNull ObservableList<StyleRule> styleRules) {
+        this.name = new SimpleStringProperty(name);
         this.styleRules = styleRules;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public ObservableList<StyleRule> getRules() {
+        return styleRules;
     }
 
     /**
@@ -48,6 +76,6 @@ public class Colorizer {
 
     @Override
     public String toString() {
-        return name;
+        return name.get();
     }
 }

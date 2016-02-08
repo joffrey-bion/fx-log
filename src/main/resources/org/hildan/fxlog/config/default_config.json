@@ -1,8 +1,10 @@
 {
+  "selectedColumnizerIndex": 0,
+  "selectedColorizerIndex": 0,
   "recentFiles": [
-    "C:\\Users\\Joffrey\\Downloads\\apache-access.log",
-    "C:\\Users\\Joffrey\\Downloads\\weblogic (1).log",
-    "C:\\Users\\Joffrey\\Downloads\\apache-error.log"
+    "C:\\Users\\Joffrey\\Downloads\\weblogic (3).log",
+    "C:\\Users\\Joffrey\\Downloads\\apache-error.log",
+    "C:\\Users\\Joffrey\\Downloads\\apache-access.log"
   ],
   "columnizers": [
     {
@@ -22,85 +24,85 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 75.341796875,
+          "width": 159.685546875,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 61.625,
+          "width": 69.52734375,
           "visible": true
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
-          "width": 76.888671875,
+          "width": 117.2109375,
           "visible": true
         },
         {
           "headerLabel": "Machine Name",
           "capturingGroupName": "machine",
-          "width": 100.16796875,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Server Name",
           "capturingGroupName": "server",
-          "width": 87.998046875,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
-          "width": 71.591796875,
+          "width": 69.0,
           "visible": true
         },
         {
           "headerLabel": "User ID",
           "capturingGroupName": "user",
-          "width": 58.677734375,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Transaction ID",
           "capturingGroupName": "transaction",
-          "width": 95.78515625,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Diagnostic Context ID",
           "capturingGroupName": "context",
-          "width": 135.271484375,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Timestamp",
           "capturingGroupName": "timestamp",
-          "width": 78.458984375,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Message ID",
           "capturingGroupName": "msgId",
-          "width": 81.576171875,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 46.625,
+          "width": 317.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 759.173828125,
+          "width": 828.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 75.453125,
+          "width": 304.0,
           "visible": true
         }
       ]
@@ -115,55 +117,55 @@
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 135.1171875,
+          "width": 125.1171875,
           "visible": true
         },
         {
           "headerLabel": "User",
           "capturingGroupName": "user",
-          "width": 43.783203125,
-          "visible": false
+          "width": 49.224609375,
+          "visible": true
         },
         {
           "headerLabel": "Username",
           "capturingGroupName": "username",
-          "width": 73.291015625,
-          "visible": false
+          "width": 80.42578125,
+          "visible": true
         },
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 165.341796875,
+          "width": 165.794921875,
           "visible": true
         },
         {
           "headerLabel": "Request",
           "capturingGroupName": "request",
-          "width": 557.744140625,
+          "width": 618.0,
           "visible": true
         },
         {
           "headerLabel": "Resp. Code",
           "capturingGroupName": "rstatus",
-          "width": 79.291015625,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Resp. Size (bytes)",
           "capturingGroupName": "rsize",
-          "width": 111.294921875,
+          "width": 122.49609375,
           "visible": true
         },
         {
           "headerLabel": "Referer",
           "capturingGroupName": "referer",
-          "width": 58.103515625,
+          "width": 201.0,
           "visible": true
         },
         {
           "headerLabel": "User-Agent",
           "capturingGroupName": "useragent",
-          "width": 80.521484375,
+          "width": 360.0,
           "visible": true
         }
       ]
@@ -180,25 +182,25 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 175.0,
+          "width": 157.580078125,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 122.0,
+          "width": 69.52734375,
           "visible": true
         },
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 200.0,
+          "width": 133.205078125,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 632.0,
+          "width": 752.0,
           "visible": true
         }
       ]
@@ -211,61 +213,56 @@
         {
           "name": "Error",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Ee]rror"
           },
-          "foreground": {
-            "red": 0.6666667,
-            "green": 0.0,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#b31a1aff",
+          "background": "null"
         },
         {
           "name": "Warn",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Ww]arn(ing)?"
           },
-          "foreground": {
-            "red": 0.6666667,
-            "green": 0.53333336,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#e6994dff",
+          "background": "null"
         },
         {
           "name": "Info",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Ii]nfo"
           },
-          "foreground": {
-            "red": 0.0,
-            "green": 0.6666667,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#10c14bff",
+          "background": "null"
         },
         {
           "name": "Debug",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Dd]ebug"
           },
-          "foreground": {
-            "red": 0.0,
-            "green": 0.0,
-            "blue": 0.73333335,
-            "opacity": 1.0
-          }
+          "foreground": "#334db3ff",
+          "background": "null"
         },
         {
           "name": "Notice",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Nn]otice"
-          }
+          },
+          "foreground": "#ccccccff",
+          "background": "null"
+        },
+        {
+          "name": "Stacktrace",
+          "filter": {
+            "columnName": 0,
+            "pattern": "\\s*at .*"
+          },
+          "foreground": "#b31a1aff",
+          "background": "null"
         }
       ]
     },
@@ -275,61 +272,47 @@
         {
           "name": "Error",
           "filter": {
-            "column": "severity",
-            "pattern": "[Ee]rror"
+            "columnName": "[Ee]rror",
+            "pattern": "severity"
           },
-          "foreground": {
-            "red": 0.6666667,
-            "green": 0.0,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#aa0000ff",
+          "background": "null"
         },
         {
           "name": "Warn",
           "filter": {
-            "column": "severity",
-            "pattern": "[Ww]arn(ing)?"
+            "columnName": "[Ww]arn(ing)?",
+            "pattern": "severity"
           },
-          "foreground": {
-            "red": 0.6666667,
-            "green": 0.53333336,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#aa8800ff",
+          "background": "null"
         },
         {
           "name": "Info",
           "filter": {
-            "column": "severity",
-            "pattern": "[Ii]nfo"
+            "columnName": "[Ii]nfo",
+            "pattern": "severity"
           },
-          "foreground": {
-            "red": 0.0,
-            "green": 0.6666667,
-            "blue": 0.0,
-            "opacity": 1.0
-          }
+          "foreground": "#ffffffff",
+          "background": "null"
         },
         {
           "name": "Debug",
           "filter": {
-            "column": "severity",
+            "columnName": "severity",
             "pattern": "[Dd]ebug"
           },
-          "foreground": {
-            "red": 0.0,
-            "green": 0.0,
-            "blue": 0.73333335,
-            "opacity": 1.0
-          }
+          "foreground": "#0000bbff",
+          "background": "null"
         },
         {
           "name": "Notice",
           "filter": {
-            "column": "severity",
-            "pattern": "[Nn]otice"
-          }
+            "columnName": "[Nn]otice",
+            "pattern": "severity"
+          },
+          "foreground": "null",
+          "background": "null"
         }
       ]
     }

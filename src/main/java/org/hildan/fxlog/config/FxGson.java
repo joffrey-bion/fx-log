@@ -4,16 +4,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.regex.Pattern;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
@@ -39,17 +33,16 @@ class FxGson {
      * @return a pre-configured {@link GsonBuilder} that handles properly JavaFX properties.
      */
     static GsonBuilder builder() {
-        return new GsonBuilder().registerTypeAdapter(ObservableList.class, new ObservableListCreator())
+        // serialization of nulls is necessary to have properties with null values deserialized properly
+        return new GsonBuilder().serializeNulls()
+                                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
+                                .registerTypeAdapter(StringProperty.class, new StringPropertySerializer())
                                 .registerTypeAdapter(DoubleProperty.class, new DoublePropertySerializer())
-                                .registerTypeAdapter(DoubleProperty.class, new DoublePropertyDeserializer())
                                 .registerTypeAdapter(BooleanProperty.class, new BooleanPropertySerializer())
-                                .registerTypeAdapter(BooleanProperty.class, new BooleanPropertyDeserializer())
                                 .registerTypeAdapter(IntegerProperty.class, new IntegerPropertySerializer())
-                                .registerTypeAdapter(IntegerProperty.class, new IntegerPropertyDeserializer())
                                 .registerTypeAdapter(Property.class, new PropertySerializer())
-                                .registerTypeAdapter(Property.class, new PropertyDeserializer())
-                                .registerTypeAdapter(Pattern.class, new PatternSerializer())
-                                .registerTypeAdapter(Pattern.class, new PatternDeserializer());
+                                .registerTypeAdapter(Color.class, new ColorSerializer())
+                                .registerTypeAdapter(Pattern.class, new PatternSerializer());
     }
 
     private static class ObservableListCreator implements InstanceCreator<ObservableList<?>> {
@@ -60,14 +53,79 @@ class FxGson {
         }
     }
 
-    private static class DoublePropertySerializer implements JsonSerializer<DoubleProperty> {
+    private static class PropertySerializer implements JsonSerializer<Property<?>>, JsonDeserializer<Property<?>> {
+
+        private static final String NULL_PLACEHOLDER = "null";
+
         @Override
-        public JsonElement serialize(DoubleProperty doubleProp, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(doubleProp.get());
+        public JsonElement serialize(Property<?> property, Type type, JsonSerializationContext context) {
+            Object value = property.getValue();
+            // FIXME this is the only workaround I could think of so far for this Gson bug:
+            // https://github.com/google/gson/issues/171
+            // Ongoing stackoverflow to tackle this problem
+            // http://stackoverflow.com/questions/35260490/gson-custom-deserializer-not-called-for-null
+            return context.serialize(value != null ? value : NULL_PLACEHOLDER);
+        }
+
+        @Override
+        public Property<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+                JsonParseException {
+            if (isNullPlaceholder(json)) {
+                return new SimpleObjectProperty<>(null);
+            }
+            Type typeParam = ((ParameterizedType) typeOfT).getActualTypeArguments()[0];
+            Object obj = context.deserialize(json, typeParam);
+            return new SimpleObjectProperty<>(obj);
+        }
+
+        private static boolean isNullPlaceholder(JsonElement json) {
+            try {
+                return json.isJsonPrimitive() && NULL_PLACEHOLDER.equals(json.getAsString());
+            } catch (ClassCastException e) {
+                return false; // not a string, so definitely not the placeholder
+            }
         }
     }
 
-    private static class DoublePropertyDeserializer implements JsonDeserializer<DoubleProperty> {
+    private static class StringPropertySerializer implements JsonSerializer<StringProperty>,
+            JsonDeserializer<StringProperty> {
+
+        private static final int NULL_PLACEHOLDER = 0;
+
+        @Override
+        public JsonElement serialize(StringProperty property, Type type, JsonSerializationContext context) {
+            if (property.get() != null) {
+                return new JsonPrimitive(property.get());
+            } else {
+                return new JsonPrimitive(NULL_PLACEHOLDER);
+            }
+        }
+
+        @Override
+        public StringProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+                JsonParseException {
+            if (isNullPlaceholder(json)) {
+                return new SimpleStringProperty(null);
+            }
+            return new SimpleStringProperty(json.getAsString());
+        }
+
+        private static boolean isNullPlaceholder(JsonElement json) {
+            try {
+                return json.isJsonPrimitive() && NULL_PLACEHOLDER == json.getAsInt();
+            } catch (ClassCastException | NumberFormatException e) {
+                return false; // not an int, so definitely not the placeholder
+            }
+        }
+    }
+
+    private static class DoublePropertySerializer implements JsonSerializer<DoubleProperty>,
+            JsonDeserializer<DoubleProperty> {
+        @Override
+        public JsonElement serialize(DoubleProperty property, Type type, JsonSerializationContext context) {
+            return new JsonPrimitive(property.get());
+        }
+
         @Override
         public DoubleProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
@@ -75,14 +133,13 @@ class FxGson {
         }
     }
 
-    private static class BooleanPropertySerializer implements JsonSerializer<BooleanProperty> {
+    private static class BooleanPropertySerializer implements JsonSerializer<BooleanProperty>,
+            JsonDeserializer<BooleanProperty> {
         @Override
-        public JsonElement serialize(BooleanProperty booleanProp, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(booleanProp.get());
+        public JsonElement serialize(BooleanProperty property, Type type, JsonSerializationContext context) {
+            return new JsonPrimitive(property.get());
         }
-    }
 
-    private static class BooleanPropertyDeserializer implements JsonDeserializer<BooleanProperty> {
         @Override
         public BooleanProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
@@ -90,14 +147,13 @@ class FxGson {
         }
     }
 
-    private static class IntegerPropertySerializer implements JsonSerializer<IntegerProperty> {
+    private static class IntegerPropertySerializer implements JsonSerializer<IntegerProperty>,
+            JsonDeserializer<IntegerProperty> {
         @Override
-        public JsonElement serialize(IntegerProperty intProp, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(intProp.get());
+        public JsonElement serialize(IntegerProperty property, Type type, JsonSerializationContext context) {
+            return new JsonPrimitive(property.get());
         }
-    }
 
-    private static class IntegerPropertyDeserializer implements JsonDeserializer<IntegerProperty> {
         @Override
         public IntegerProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
@@ -105,31 +161,25 @@ class FxGson {
         }
     }
 
-    private static class PropertySerializer implements JsonSerializer<Property<?>> {
+    private static class ColorSerializer implements JsonSerializer<Color>, JsonDeserializer<Color> {
         @Override
-        public JsonElement serialize(Property<?> doubleProp, Type type, JsonSerializationContext context) {
-            return context.serialize(doubleProp.getValue());
+        public JsonElement serialize(Color color, Type type, JsonSerializationContext context) {
+            return new JsonPrimitive("#" + color.toString().substring(2));
         }
-    }
 
-    private static class PropertyDeserializer implements JsonDeserializer<Property<?>> {
         @Override
-        public Property<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+        public Color deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
-            Type typeParam = ((ParameterizedType)typeOfT).getActualTypeArguments()[0];
-            Object obj = context.deserialize(json, typeParam);
-            return new SimpleObjectProperty<>(obj);
+            return Color.web(json.getAsString());
         }
     }
 
-    private static class PatternSerializer implements JsonSerializer<Pattern> {
+    private static class PatternSerializer implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
         @Override
         public JsonElement serialize(Pattern pattern, Type type, JsonSerializationContext context) {
             return new JsonPrimitive(pattern.toString());
         }
-    }
 
-    private static class PatternDeserializer implements JsonDeserializer<Pattern> {
         @Override
         public Pattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {

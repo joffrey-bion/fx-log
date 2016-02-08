@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
@@ -27,7 +28,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -40,6 +45,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.coloring.ColorizedRowFactory;
@@ -56,6 +62,8 @@ public class MainController implements Initializable {
 
     private Config config;
 
+    private Stage colorizersStage;
+
     @FXML
     private BorderPane mainPane;
 
@@ -67,6 +75,9 @@ public class MainController implements Initializable {
 
     @FXML
     private ChoiceBox<Colorizer> colorizerSelector;
+
+    @FXML
+    private Button editColorizersBtn;
 
     @FXML
     private TextField filterField;
@@ -108,6 +119,7 @@ public class MainController implements Initializable {
         configureFiltering();
         configureLogsTable();
         configureRecentFilesMenu();
+        configureColorizersStage();
     }
 
     /**
@@ -219,6 +231,32 @@ public class MainController implements Initializable {
         config.getRecentFiles().addListener(updateRecentFilesMenu);
         // manual trigger the first time for initialization
         updateRecentFilesMenu.onChanged(null);
+    }
+
+    /**
+     * Configures the stage in which the colorizers customization UI is started.
+     */
+    private void configureColorizersStage() {
+        colorizersStage = new Stage();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("../view/colorizers.fxml"));
+            Scene scene = new Scene(root);
+            colorizersStage.setTitle("Customize Colorizers");
+            colorizersStage.setScene(scene);
+            editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
+            List<String> styles = scene.getStylesheets();
+            styles.clear();
+            styles.add(getClass().getResource("../light_theme.css").toExternalForm());
+        } catch (IOException e) {
+            ErrorDialog.uncaughtException(e);
+        }
+    }
+
+    /**
+     * Opens the custom colorizers window.
+     */
+    public void editColorizers() {
+        colorizersStage.showAndWait();
     }
 
     /**
@@ -368,18 +406,24 @@ public class MainController implements Initializable {
      * Switches to the dark theme.
      */
     public void selectDarkTheme() {
-        List<String> styles = mainPane.getScene().getStylesheets();
-        styles.clear();
-        styles.add(getClass().getResource("/org/hildan/fxlog/dark_theme.css").toExternalForm());
+        List<List<String>> styles =
+                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
+        for (List<String> style : styles) {
+            style.clear();
+            style.add(getClass().getResource("../dark_theme.css").toExternalForm());
+        }
     }
 
     /**
      * Switches to the bright theme.
      */
     public void selectBrightTheme() {
-        List<String> styles = mainPane.getScene().getStylesheets();
-        styles.clear();
-        styles.add(getClass().getResource("/org/hildan/fxlog/light_theme.css").toExternalForm());
+        List<List<String>> styles =
+                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
+        for (List<String> style : styles) {
+            style.clear();
+            style.add(getClass().getResource("../light_theme.css").toExternalForm());
+        }
     }
 
     /**
