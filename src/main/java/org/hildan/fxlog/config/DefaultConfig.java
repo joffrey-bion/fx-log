@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
 import org.hildan.fxlog.coloring.Colorizer;
@@ -38,7 +39,7 @@ class DefaultConfig {
     }
 
     private static Columnizer weblogicColumnizer() {
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
         columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
         columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
         columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
@@ -56,7 +57,7 @@ class DefaultConfig {
         String weblogicLogStart =
                 "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
 
-        List<String> regexps = Arrays.asList(//
+        ObservableList<String> regexps = FXCollections.observableArrayList(//
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sessionid>.*?)>", // with session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
                 weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
@@ -70,7 +71,7 @@ class DefaultConfig {
     }
 
     private static Columnizer apacheAccessColumnizer() {
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
         columnDefinitions.add(new ColumnDefinition("Client", "client"));
         columnDefinitions.add(new ColumnDefinition("User", "user"));
         columnDefinitions.add(new ColumnDefinition("Username", "username"));
@@ -83,12 +84,12 @@ class DefaultConfig {
         String apacheCommon = "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\]"
                 + " \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+)";
         String apacheCombined = apacheCommon + " \"(?<referer>.*?)\" \"(?<useragent>.*?)\"";
-        List<String> regexps = Arrays.asList(apacheCombined, apacheCommon);
+        ObservableList<String> regexps = FXCollections.observableArrayList(apacheCombined, apacheCommon);
         return new Columnizer("Apache Access Log", columnDefinitions, regexps);
     }
 
     private static Columnizer apacheErrorColumnizer() {
-        List<ColumnDefinition> columnDefinitions = new ArrayList<>(5);
+        ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
         columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
         columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
         columnDefinitions.add(new ColumnDefinition("Client", "client"));
@@ -97,7 +98,7 @@ class DefaultConfig {
         String noClient = "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] (?<msg>.*)";
         String noClientNoSev = "\\[(?<datetime>.*?)\\] (?<msg>.*)";
         String defaultToMsg = "(?<msg>.*)";
-        List<String> regexps = Arrays.asList(full, noClient, noClientNoSev, defaultToMsg);
+        ObservableList<String> regexps = FXCollections.observableArrayList(full, noClient, noClientNoSev, defaultToMsg);
         return new Columnizer("Apache Error Log", columnDefinitions, regexps);
     }
 

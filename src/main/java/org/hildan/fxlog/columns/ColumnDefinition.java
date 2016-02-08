@@ -4,15 +4,17 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * Defines a column to hold part of a log line.
  */
 public class ColumnDefinition {
 
-    private final String headerLabel;
+    private final StringProperty headerLabel;
 
-    private final String capturingGroupName;
+    private final StringProperty capturingGroupName;
 
     private final DoubleProperty width;
 
@@ -27,8 +29,8 @@ public class ColumnDefinition {
      *         the name of the capturing group of the regexp to put inside this column
      */
     public ColumnDefinition(String headerLabel, String capturingGroupName) {
-        this.capturingGroupName = capturingGroupName;
-        this.headerLabel = headerLabel;
+        this.capturingGroupName = new SimpleStringProperty(capturingGroupName);
+        this.headerLabel = new SimpleStringProperty(headerLabel);
         this.width = new SimpleDoubleProperty(80d);
         this.visible = new SimpleBooleanProperty(true);
     }
@@ -36,15 +38,31 @@ public class ColumnDefinition {
     /**
      * @return the header of this column
      */
-    String getHeaderLabel() {
+    public String getHeaderLabel() {
+        return headerLabel.get();
+    }
+
+    public StringProperty headerLabelProperty() {
         return headerLabel;
+    }
+
+    public void setHeaderLabel(String headerLabel) {
+        this.headerLabel.set(headerLabel);
     }
 
     /**
      * @return the name of the capturing group to get the data from for this column
      */
-    String getCapturingGroupName() {
+    public String getCapturingGroupName() {
+        return capturingGroupName.get();
+    }
+
+    public StringProperty capturingGroupNameProperty() {
         return capturingGroupName;
+    }
+
+    public void setCapturingGroupName(String capturingGroupName) {
+        this.capturingGroupName.set(capturingGroupName);
     }
 
     /**

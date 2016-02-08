@@ -28,7 +28,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -64,6 +63,8 @@ public class MainController implements Initializable {
 
     private Config config;
 
+    private Stage columnizersStage;
+
     private Stage colorizersStage;
 
     @FXML
@@ -80,6 +81,9 @@ public class MainController implements Initializable {
 
     @FXML
     private ChoiceBox<Colorizer> colorizerSelector;
+
+    @FXML
+    private Button editColumnizersBtn;
 
     @FXML
     private Button editColorizersBtn;
@@ -124,6 +128,7 @@ public class MainController implements Initializable {
         configureFiltering();
         configureLogsTable();
         configureRecentFilesMenu();
+        configureColumnizersStage();
         configureColorizersStage();
     }
 
@@ -258,10 +263,36 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Configures the stage in which the columnizers customization UI is started.
+     */
+    private void configureColumnizersStage() {
+        columnizersStage = new Stage();
+        try {
+            Parent root = FXLog.loadView("columnizers.fxml");
+            Scene scene = new Scene(root);
+            columnizersStage.setTitle("Customize Columnizers");
+            columnizersStage.setScene(scene);
+            editColumnizersBtn.disableProperty().bind(columnizersStage.showingProperty());
+            List<String> styles = scene.getStylesheets();
+            styles.clear();
+            styles.add(FXLog.getCss("light_theme.css"));
+        } catch (IOException e) {
+            ErrorDialog.uncaughtException(e);
+        }
+    }
+
+    /**
      * Opens the custom colorizers window.
      */
     public void editColorizers() {
         colorizersStage.showAndWait();
+    }
+
+    /**
+     * Opens the custom columnizers window.
+     */
+    public void editColumnizers() {
+        columnizersStage.showAndWait();
     }
 
     /**

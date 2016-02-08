@@ -10,6 +10,10 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -21,11 +25,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Columnizer {
 
-    private final String name;
+    private final StringProperty name;
 
-    private final List<Pattern> patterns;
+    private final ObservableList<Pattern> patterns;
 
-    private final List<ColumnDefinition> columnDefinitions;
+    private final ObservableList<ColumnDefinition> columnDefinitions;
+
+    /**
+     * Creates a new Columnizer with the no columns and no patterns.
+     *
+     * @param name
+     *         a name for this columnizer
+     */
+    public Columnizer(@NotNull String name) {
+        this(name, FXCollections.observableArrayList(), FXCollections.observableArrayList());
+    }
 
     /**
      * Creates a new Columnizer with the given definitions.
@@ -40,14 +54,35 @@ public class Columnizer {
      * @throws PatternSyntaxException
      *         if one of the regexps' syntax is invalid
      */
-    public Columnizer(@NotNull String name, @NotNull List<ColumnDefinition> columnDefinitions,
-                      @NotNull List<String> regexps) throws PatternSyntaxException {
+    public Columnizer(@NotNull String name, @NotNull ObservableList<ColumnDefinition> columnDefinitions,
+                      @NotNull ObservableList<String> regexps) throws PatternSyntaxException {
         if (columnDefinitions.isEmpty()) {
             throw new IllegalArgumentException("There must be at least one column definition");
         }
-        this.name = name;
+        this.name = new SimpleStringProperty(name);
         this.columnDefinitions = columnDefinitions;
-        this.patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
+        List<Pattern> patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
+        this.patterns = FXCollections.observableArrayList(patterns);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public ObservableList<Pattern> getPatterns() {
+        return patterns;
+    }
+
+    public ObservableList<ColumnDefinition> getColumnDefinitions() {
+        return columnDefinitions;
     }
 
     /**
@@ -105,13 +140,16 @@ public class Columnizer {
                 return new LogEntry(columnValues, inputLogLine);
             }
         }
-        // no pattern matched, put everything in the first column
+        // no pattern matched, put empty values in all columns
         Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             String groupName = columnDefinition.getCapturingGroupName();
             columnValues.put(groupName, "");
         }
-        columnValues.put(columnDefinitions.get(0).getCapturingGroupName(), inputLogLine);
+        // put the whole line in the first column as a fallback, if possible
+        if (columnDefinitions.size() > 1) {
+            columnValues.put(columnDefinitions.get(0).getCapturingGroupName(), inputLogLine);
+        }
         return new LogEntry(columnValues, inputLogLine);
     }
 
@@ -139,6 +177,6 @@ public class Columnizer {
 
     @Override
     public String toString() {
-        return name;
+        return name.get();
     }
 }

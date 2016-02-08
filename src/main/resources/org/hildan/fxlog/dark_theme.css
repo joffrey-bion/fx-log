@@ -11,3 +11,8 @@
 .text-field:focused {
     -fx-prompt-text-fill: transparent;
 }
+
+.text-field:error {
+    -fx-text-box-border: red ;
+    -fx-focus-color: red ;
+}
