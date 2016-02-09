@@ -186,7 +186,7 @@ class FxGson {
     private static class PatternSerializer implements JsonSerializer<Pattern>, JsonDeserializer<Pattern> {
         @Override
         public JsonElement serialize(Pattern pattern, Type type, JsonSerializationContext context) {
-            return new JsonPrimitive(pattern.toString());
+            return new JsonPrimitive(pattern.pattern());
         }
 
         @Override
