@@ -2,8 +2,7 @@ package org.hildan.fxlog.coloring;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.util.Callback;
 
 import org.hildan.fxlog.core.LogEntry;
