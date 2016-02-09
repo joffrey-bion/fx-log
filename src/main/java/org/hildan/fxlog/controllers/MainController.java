@@ -36,6 +36,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -65,9 +66,6 @@ public class MainController implements Initializable {
     private BorderPane mainPane;
 
     @FXML
-    private ScrollPane scrollPane;
-
-    @FXML
     private TableView<LogEntry> logsTable;
 
     @FXML
@@ -91,6 +89,12 @@ public class MainController implements Initializable {
     @FXML
     private MenuItem closeMenu;
 
+    @FXML
+    private CheckMenuItem followTailMenu;
+
+    @FXML
+    private ToggleButton toggleFollowTailButton;
+
     private Property<Columnizer> columnizer;
 
     private Property<Colorizer> colorizer;
@@ -101,7 +105,9 @@ public class MainController implements Initializable {
 
     private Property<Predicate<LogEntry>> filter;
 
-    private BooleanProperty tailing;
+    private BooleanProperty followingTail;
+
+    private BooleanProperty tailingFile;
 
     private Tailer tailer;
 
@@ -115,8 +121,13 @@ public class MainController implements Initializable {
         filter = new SimpleObjectProperty<>();
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
-        tailing = new SimpleBooleanProperty(false);
-        closeMenu.disableProperty().bind(tailing.not());
+        followingTail = new SimpleBooleanProperty(false);
+        tailingFile = new SimpleBooleanProperty(false);
+        closeMenu.disableProperty().bind(tailingFile.not());
+        logsTable.setOnScroll(e -> followingTail.set(false));
+        followTailMenu.selectedProperty().bindBidirectional(followingTail);
+        toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
+
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
@@ -124,6 +135,7 @@ public class MainController implements Initializable {
         configureRecentFilesMenu();
         configureColumnizersStage();
         configureColorizersStage();
+        configureAutoScroll();
     }
 
     /**
@@ -283,9 +295,33 @@ public class MainController implements Initializable {
         }
     }
 
+    private void configureAutoScroll() {
+        followingTail.addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                scrollToBottom();
+            } else {
+                if (columnizedLogs.size() > 10) {
+                    logsTable.scrollTo(columnizedLogs.size() - 10);
+                }
+            }
+        });
+        logsTable.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.SPACE) {
+                followingTail.set(!followingTail.get());
+            }
+        });
+    }
+
+    private void scrollToBottom() {
+        if (!columnizedLogs.isEmpty()) {
+            logsTable.scrollTo(columnizedLogs.size() - 1);
+        }
+    }
+
     /**
      * Opens the custom colorizers window.
      */
+    @FXML
     public void editColorizers() {
         colorizersStage.showAndWait();
     }
@@ -293,6 +329,7 @@ public class MainController implements Initializable {
     /**
      * Opens the custom columnizers window.
      */
+    @FXML
     public void editColumnizers() {
         columnizersStage.showAndWait();
     }
@@ -300,6 +337,7 @@ public class MainController implements Initializable {
     /**
      * Opens a file chooser to choose the file to tail, and starts tailing the selected file.
      */
+    @FXML
     public void openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
@@ -356,14 +394,14 @@ public class MainController implements Initializable {
         config.addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         tailer = Tailer.create(file, logTailListener, 500);
-        tailing.set(true);
+        tailingFile.set(true);
     }
 
     /**
      * Closes and re-opens the file being tailed. Useful to update the columnization for instance.
      */
     private void restartTailing() {
-        if (!tailing.getValue()) {
+        if (!tailingFile.getValue()) {
             System.err.println("Can't RE-start if we're not tailing");
             return;
         }
@@ -379,32 +417,28 @@ public class MainController implements Initializable {
     /**
      * Closes the currently opened file.
      */
+    @FXML
     public void closeCurrentFile() {
         if (tailer != null) {
             logTailListener.stop();
             tailer.stop();
         }
         columnizedLogs.clear();
-        tailing.set(false);
+        tailingFile.set(false);
     }
 
     /**
      * Exits the application.
      */
+    @FXML
     public void quit() {
         Platform.exit();
     }
 
     /**
-     * Scrolls to the last logs.
-     */
-    public void scrollToBottom() {
-        scrollPane.setVvalue(1.0);
-    }
-
-    /**
      * Copy to the clipboard the raw logs corresponding to the selected lines.
      */
+    @FXML
     public void copyRaw() {
         copySelectedLogsToClipboard(LogEntry::rawLine);
     }
@@ -412,6 +446,7 @@ public class MainController implements Initializable {
     /**
      * Copy to the clipboard the tab-separated columnized logs corresponding to the selected lines.
      */
+    @FXML
     public void copyPretty() {
         copySelectedLogsToClipboard(LogEntry::toColumnizedString);
     }
@@ -436,6 +471,7 @@ public class MainController implements Initializable {
     /**
      * Selects all the logs in the table.
      */
+    @FXML
     public void selectAll() {
         logsTable.getSelectionModel().selectAll();
     }
@@ -443,6 +479,7 @@ public class MainController implements Initializable {
     /**
      * Unselects all the logs in the table.
      */
+    @FXML
     public void unselectAll() {
         logsTable.getSelectionModel().clearSelection();
     }
@@ -450,6 +487,7 @@ public class MainController implements Initializable {
     /**
      * Switches to the dark theme.
      */
+    @FXML
     public void selectDarkTheme() {
         List<List<String>> styles =
                 Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
@@ -462,6 +500,7 @@ public class MainController implements Initializable {
     /**
      * Switches to the bright theme.
      */
+    @FXML
     public void selectBrightTheme() {
         List<List<String>> styles =
                 Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
@@ -474,6 +513,7 @@ public class MainController implements Initializable {
     /**
      * Opens the web page containing the user manual.
      */
+    @FXML
     public void openUserManual() {
         try {
             Desktop.getDesktop().browse(new URI("https://github.com/joffrey-bion/fx-log"));
