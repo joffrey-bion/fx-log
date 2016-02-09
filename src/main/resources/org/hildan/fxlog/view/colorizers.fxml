@@ -33,6 +33,7 @@
                <children>
                   <TextField fx:id="newColorizerNameField" HBox.hgrow="ALWAYS" />
                 <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColorizer" text="Add" HBox.hgrow="NEVER" />
+                  <Button fx:id="removeColorizerButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeSelectedColorizer" text="Del" />
                </children>
             </HBox>
          </bottom>
@@ -54,6 +55,7 @@
                      <children>
                         <TextField fx:id="newRuleNameField" promptText="New rule name" HBox.hgrow="ALWAYS" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule" text="Add" HBox.hgrow="NEVER" />
+                        <Button fx:id="removeRuleButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#removeSelectedRule" text="Del" />
                      </children>
                   </HBox>
                </bottom>

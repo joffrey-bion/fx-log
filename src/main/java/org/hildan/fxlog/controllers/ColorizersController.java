@@ -8,6 +8,7 @@ import java.util.regex.PatternSyntaxException;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
@@ -79,12 +80,19 @@ public class ColorizersController implements Initializable {
     @FXML
     private ColorPicker backgroundColorPicker;
 
+    @FXML
+    private Button removeColorizerButton;
+
+    @FXML
+    private Button removeRuleButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
         initializeColorizersList();
         initializeSelectedColorizerPane();
         initializeSelectedRulePane();
+        initializeDeleteButtons();
     }
 
     private void initializeColorizersList() {
@@ -227,6 +235,17 @@ public class ColorizersController implements Initializable {
         colorProperty.bind(colorBinding);
     }
 
+    private void initializeDeleteButtons() {
+        IntegerExpression currentlyUsedColorizer = config.selectedColorizerIndexProperty();
+        IntegerExpression selectedColorizer = colorizersList.getSelectionModel().selectedIndexProperty();
+        BooleanBinding selectedColorizerIsUsed = selectedColorizer.isEqualTo(currentlyUsedColorizer);
+        BooleanBinding noColorizerSelected = colorizersList.getSelectionModel().selectedItemProperty().isNull();
+        removeColorizerButton.disableProperty().bind(noColorizerSelected.or(selectedColorizerIsUsed));
+
+        BooleanBinding noRuleSelected = rulesList.getSelectionModel().selectedItemProperty().isNull();
+        removeRuleButton.disableProperty().bind(noRuleSelected);
+    }
+
     @FXML
     public void addNewColorizer() {
         Colorizer newColorizer = new Colorizer(newColorizerNameField.getText());
@@ -236,11 +255,24 @@ public class ColorizersController implements Initializable {
     }
 
     @FXML
+    public void removeSelectedColorizer() {
+        Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
+        config.getColorizers().remove(selectedColorizer);
+    }
+
+    @FXML
     public void addNewRule() {
         Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
         StyleRule newRule = new StyleRule(newRuleNameField.getText());
         selectedColorizer.getRules().add(newRule);
         newRuleNameField.setText("");
         rulesList.getSelectionModel().select(newRule);
+    }
+
+    @FXML
+    public void removeSelectedRule() {
+        StyleRule selectedPattern = rulesList.getSelectionModel().getSelectedItem();
+        Colorizer selectedColumnizer = colorizersList.getSelectionModel().getSelectedItem();
+        selectedColumnizer.getRules().remove(selectedPattern);
     }
 }
