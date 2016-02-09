@@ -2,3 +2,8 @@
     -fx-text-box-border: red;
     -fx-focus-color: red;
 }
+
+.list-cell:error {
+    -fx-text-box-border: red;
+    -fx-focus-color: red;
+}

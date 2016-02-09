@@ -38,7 +38,7 @@ public class ColumnDefinition {
     /**
      * @return the header of this column
      */
-    public String getHeaderLabel() {
+    String getHeaderLabel() {
         return headerLabel.get();
     }
 
@@ -46,23 +46,15 @@ public class ColumnDefinition {
         return headerLabel;
     }
 
-    public void setHeaderLabel(String headerLabel) {
-        this.headerLabel.set(headerLabel);
-    }
-
     /**
      * @return the name of the capturing group to get the data from for this column
      */
-    public String getCapturingGroupName() {
+    String getCapturingGroupName() {
         return capturingGroupName.get();
     }
 
     public StringProperty capturingGroupNameProperty() {
         return capturingGroupName;
-    }
-
-    public void setCapturingGroupName(String capturingGroupName) {
-        this.capturingGroupName.set(capturingGroupName);
     }
 
     /**

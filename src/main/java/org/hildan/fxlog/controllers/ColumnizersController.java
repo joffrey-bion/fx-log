@@ -14,6 +14,8 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
+import javafx.util.StringConverter;
 
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
@@ -76,6 +78,22 @@ public class ColumnizersController implements Initializable {
     private void initializeColumnizersList() {
         columnizersList.setItems(config.getColumnizers());
         columnizersList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        columnizersList.setCellFactory(TextFieldListCell.forListView(new StringConverter<Columnizer>() {
+            @Override
+            public String toString(Columnizer columnizer) {
+                return columnizer.toString();
+            }
+
+            @Override
+            public Columnizer fromString(String string) {
+                // temporary object
+                return new Columnizer(string);
+            }
+        }));
+        columnizersList.setOnEditCommit(e -> {
+            Columnizer editedColumnizer = columnizersList.getItems().get(e.getIndex());
+            editedColumnizer.setName(e.getNewValue().getName());
+        });
     }
 
     private void initializeSelectedColumnizerPane() {
@@ -87,6 +105,33 @@ public class ColumnizersController implements Initializable {
 
     private void initializePatternsList() {
         patternList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        patternList.setCellFactory(l -> new TextFieldListCell<Pattern>(new StringConverter<Pattern>() {
+            @Override
+            public String toString(Pattern pattern) {
+                return pattern.toString();
+            }
+
+            @Override
+            public Pattern fromString(String string) {
+                try {
+                    return Pattern.compile(string);
+                } catch (PatternSyntaxException e) {
+                    return null;
+                }
+            }
+        }) {
+            @Override
+            public void commitEdit(Pattern pattern) {
+                if (!isEditing()) return;
+                PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+                pseudoClassStateChanged(errorClass, pattern == null);
+                if (pattern != null) {
+                    // only if the pattern is valid, otherwise we stay in edit state
+                    super.commitEdit(pattern);
+                }
+            }
+        });
+        patternList.setOnEditCommit(e -> patternList.getItems().set(e.getIndex(), e.getNewValue()));
         ListBinding<Pattern> patterns = new ListBinding<Pattern>() {
             {
                 bind(columnizersList.getSelectionModel().selectedItemProperty());
@@ -107,8 +152,15 @@ public class ColumnizersController implements Initializable {
 
     private void initializeColumnsTable() {
         columnsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        newColumnHeaderField.setMaxWidth(headerColumn.getPrefWidth());
+        newColumnGroupField.setMaxWidth(capturingGroupColumn.getPrefWidth());
+
+        headerColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         headerColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
+
+        capturingGroupColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         capturingGroupColumn.setCellValueFactory(data -> data.getValue().capturingGroupNameProperty());
+
         ListBinding<ColumnDefinition> columnDefinitions = new ListBinding<ColumnDefinition>() {
             {
                 bind(columnizersList.getSelectionModel().selectedItemProperty());
