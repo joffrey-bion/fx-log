@@ -56,9 +56,6 @@ public class Columnizer {
      */
     public Columnizer(@NotNull String name, @NotNull ObservableList<ColumnDefinition> columnDefinitions,
                       @NotNull ObservableList<String> regexps) throws PatternSyntaxException {
-        if (columnDefinitions.isEmpty()) {
-            throw new IllegalArgumentException("There must be at least one column definition");
-        }
         this.name = new SimpleStringProperty(name);
         this.columnDefinitions = columnDefinitions;
         List<Pattern> patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
