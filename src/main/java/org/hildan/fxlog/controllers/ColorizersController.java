@@ -16,7 +16,9 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
@@ -49,9 +51,6 @@ public class ColorizersController implements Initializable {
 
     @FXML
     private ScrollPane selectedRulePane;
-
-    @FXML
-    private TextField ruleNameField;
 
     @FXML
     private TextField filterRegexField;
@@ -91,6 +90,22 @@ public class ColorizersController implements Initializable {
     private void initializeColorizersList() {
         colorizersList.setItems(config.getColorizers());
         colorizersList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        colorizersList.setCellFactory(TextFieldListCell.forListView(new StringConverter<Colorizer>() {
+            @Override
+            public String toString(Colorizer colorizer) {
+                return colorizer.toString();
+            }
+
+            @Override
+            public Colorizer fromString(String string) {
+                // temporary object
+                return new Colorizer(string);
+            }
+        }));
+        colorizersList.setOnEditCommit(e -> {
+            Colorizer editedColorizer = colorizersList.getItems().get(e.getIndex());
+            editedColorizer.setName(e.getNewValue().getName());
+        });
     }
 
     private void initializeSelectedColorizerPane() {
@@ -113,6 +128,23 @@ public class ColorizersController implements Initializable {
         };
         rulesList.itemsProperty().bind(rulesOfColorizer);
         rulesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        rulesList.setCellFactory(TextFieldListCell.forListView(new StringConverter<StyleRule>() {
+            @Override
+            public String toString(StyleRule columnizer) {
+                return columnizer.toString();
+            }
+
+            @Override
+            public StyleRule fromString(String string) {
+                // temporary object
+                return new StyleRule(string);
+            }
+        }));
+        rulesList.setOnEditCommit(e -> {
+            StyleRule editedRule = rulesList.getItems().get(e.getIndex());
+            editedRule.setName(e.getNewValue().getName());
+        });
+
     }
 
     private void initializeSelectedRulePane() {
@@ -134,7 +166,6 @@ public class ColorizersController implements Initializable {
 
     private void bindRuleToUI(@Nullable StyleRule rule) {
         if (rule == null) {
-            ruleNameField.setText("");
             overrideTextBackground.setSelected(false);
             overrideTextForeground.setSelected(false);
             backgroundColorPicker.setValue(null);
@@ -144,8 +175,6 @@ public class ColorizersController implements Initializable {
             filterColumnNameField.setText("");
             return;
         }
-        ruleNameField.setText(rule.getName());
-        rule.nameProperty().bind(ruleNameField.textProperty());
 
         boolean isRawFilter = rule.getFilter().getColumnName() == null;
         filterType.selectToggle(isRawFilter ? matchRawButton : matchColumnButton);
