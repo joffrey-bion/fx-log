@@ -1,6 +1,10 @@
 package org.hildan.fxlog.core;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.hildan.fxlog.columns.ColumnDefinition;
 
 /**
  * Represents a columnized log entry.
@@ -49,7 +53,11 @@ public class LogEntry {
      *
      * @return a tab-separated string of this log's column values
      */
-    public String toColumnizedString() {
-        return String.join("\t", columnValues.values());
+    public String toColumnizedString(List<ColumnDefinition> columnDefinitions) {
+        return columnDefinitions.stream()
+                                .filter(ColumnDefinition::isVisible)
+                                .map(ColumnDefinition::getCapturingGroupName)
+                                .map(col -> getColumnValues().get(col))
+                                .collect(Collectors.joining("\t"));
     }
 }

@@ -46,6 +46,7 @@ import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.ColorizedRowFactory;
 import org.hildan.fxlog.coloring.Colorizer;
+import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.core.LogEntry;
@@ -440,7 +441,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void copyRaw() {
-        copySelectedLogsToClipboard(LogEntry::rawLine);
+        copySelectedLogsToClipboard(LogEntry::rawLine, "");
     }
 
     /**
@@ -448,7 +449,12 @@ public class MainController implements Initializable {
      */
     @FXML
     public void copyPretty() {
-        copySelectedLogsToClipboard(LogEntry::toColumnizedString);
+        List<ColumnDefinition> columnDefinitions = columnizer.getValue().getColumnDefinitions();
+        String headers = columnDefinitions.stream()
+                                          .filter(ColumnDefinition::isVisible)
+                                          .map(ColumnDefinition::getHeaderLabel)
+                                          .collect(Collectors.joining("\t"));
+        copySelectedLogsToClipboard(log -> log.toColumnizedString(columnDefinitions), headers + '\n');
     }
 
     /**
@@ -456,15 +462,17 @@ public class MainController implements Initializable {
      *
      * @param logToLine
      *         the function to use to convert each log into a string
+     * @param prefix
+     *         some extra content to put before the logs
      */
-    private void copySelectedLogsToClipboard(Function<LogEntry, String> logToLine) {
+    private void copySelectedLogsToClipboard(Function<LogEntry, String> logToLine, String prefix) {
         String textLogs = logsTable.getSelectionModel()
                                    .getSelectedItems()
                                    .stream()
                                    .map(logToLine)
-                                   .collect(Collectors.joining(String.format("%n")));
+                                   .collect(Collectors.joining("\n"));
         ClipboardContent content = new ClipboardContent();
-        content.putString(textLogs);
+        content.putString(prefix + textLogs);
         Clipboard.getSystemClipboard().setContent(content);
     }
 

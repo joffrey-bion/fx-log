@@ -38,7 +38,7 @@ public class ColumnDefinition {
     /**
      * @return the header of this column
      */
-    String getHeaderLabel() {
+    public String getHeaderLabel() {
         return headerLabel.get();
     }
 
@@ -49,7 +49,7 @@ public class ColumnDefinition {
     /**
      * @return the name of the capturing group to get the data from for this column
      */
-    String getCapturingGroupName() {
+    public String getCapturingGroupName() {
         return capturingGroupName.get();
     }
 
@@ -74,7 +74,7 @@ public class ColumnDefinition {
     /**
      * @return whether this column is visible
      */
-    boolean isVisible() {
+    public boolean isVisible() {
         return visible.get();
     }
 
