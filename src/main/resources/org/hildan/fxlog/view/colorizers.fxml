@@ -12,6 +12,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -69,7 +70,10 @@
                               <HBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
                                     <Label minHeight="-Infinity" minWidth="-Infinity" text="Filter" HBox.hgrow="NEVER" />
-                                    <TextField fx:id="filterRegexField" minHeight="-Infinity" minWidth="-Infinity" promptText="filter regex" HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="filterRegexField" minHeight="-Infinity" minWidth="-Infinity" promptText="filter regex" HBox.hgrow="ALWAYS">
+                                       <tooltip>
+                                          <Tooltip text="The regex to choose the logs to format" />
+                                       </tooltip></TextField>
                                  </children>
                               </HBox>
                               <GridPane hgap="5.0" minHeight="-Infinity" minWidth="-Infinity">
@@ -88,7 +92,10 @@
                                        </toggleGroup>
                                     </RadioButton>
                                     <RadioButton fx:id="matchRawButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Match raw log line" toggleGroup="$filterType" />
-                                    <TextField fx:id="filterColumnNameField" minHeight="-Infinity" minWidth="-Infinity" promptText="capturing group name" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                    <TextField fx:id="filterColumnNameField" minHeight="-Infinity" minWidth="-Infinity" promptText="capturing group name" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                                       <tooltip>
+                                          <Tooltip text="The name of the capturing group defining the column (in a columnizer)" />
+                                       </tooltip></TextField>
                                  </children>
                               </GridPane>
                            </children>
