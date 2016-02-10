@@ -197,7 +197,7 @@ public class MainController implements Initializable {
                 if (filterField.getText().isEmpty()) {
                     return log -> true;
                 }
-                return Filter.matchRawLog(".*?" + filterField.getText() + ".*");
+                return Filter.findInRawLog(filterField.getText());
             } catch (PatternSyntaxException e) {
                 filterField.pseudoClassStateChanged(errorClass, true);
                 return log -> false;

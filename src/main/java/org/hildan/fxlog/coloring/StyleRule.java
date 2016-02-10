@@ -32,7 +32,7 @@ public class StyleRule {
      *         a name for this rule
      */
     public StyleRule(@NotNull String name) {
-        this(name, Filter.matchRawLog(""), null, null);
+        this(name, Filter.findInRawLog(""), null, null);
     }
 
     /**

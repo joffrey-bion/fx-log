@@ -4,6 +4,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,7 +19,7 @@ public class Filter implements Predicate<LogEntry> {
 
     private final StringProperty columnName;
 
-    private final Pattern pattern;
+    private final Property<Pattern> pattern;
 
     /**
      * Creates a new filter.
@@ -31,35 +33,35 @@ public class Filter implements Predicate<LogEntry> {
      *         if the given regex is not well formed
      */
     private Filter(String columnName, String regex) throws PatternSyntaxException {
-        this.pattern = Pattern.compile(regex);
+        this.pattern = new SimpleObjectProperty<>(Pattern.compile(regex));
         this.columnName = new SimpleStringProperty(columnName);
     }
 
     /**
-     * Creates a new raw log filter.
+     * Creates a new filter which applies on the raw log line.
      *
      * @param regex
-     *         the regex that the raw log line should match
+     *         the regex that the whole raw log line should match
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter matchRawLog(@NotNull String regex) {
+    public static Filter findInRawLog(@NotNull String regex) {
         return new Filter(null, regex);
     }
 
     /**
-     * Creates a new column filter.
+     * Creates a new filter which applies on the value of the given column.
      *
      * @param columnName
      *         the capturing group name corresponding to the column to apply this filter to
      * @param regex
-     *         the regex that the given column should match
+     *         the regex that the whole value of the given column should match
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter matchColumn(@NotNull String columnName, @NotNull String regex) {
+    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex) {
         return new Filter(columnName, regex);
     }
 
@@ -76,16 +78,24 @@ public class Filter implements Predicate<LogEntry> {
     }
 
     public Pattern getPattern() {
+        return pattern.getValue();
+    }
+
+    public Property<Pattern> patternProperty() {
         return pattern;
+    }
+
+    public void setPattern(Pattern pattern) {
+        this.pattern.setValue(pattern);
     }
 
     @Override
     public boolean test(LogEntry log) {
         if (columnName.get() == null) {
-            return pattern.matcher(log.rawLine()).matches();
+            return pattern.getValue().matcher(log.rawLine()).find();
         } else {
             String columnValue = log.getColumnValues().get(columnName.get());
-            return columnValue != null && pattern.matcher(columnValue).matches();
+            return columnValue != null && pattern.getValue().matcher(columnValue).find();
         }
     }
 }

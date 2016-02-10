@@ -98,33 +98,43 @@ class DefaultConfig {
         return new Columnizer("Apache Error Log", columnDefinitions, regexps);
     }
 
+    private static final Filter ERROR_SEVERITY = Filter.findInColumn("severity", "[Ee]rror");
+
+    private static final Filter WARN_SEVERITY = Filter.findInColumn("severity", "[Ww]arn(ing)?");
+
+    private static final Filter INFO_SEVERITY = Filter.findInColumn("severity", "[Ii]nfo");
+
+    private static final Filter DEBUG_SEVERITY = Filter.findInColumn("severity", "[Dd]ebug");
+
+    private static final Filter NOTICE_SEVERITY = Filter.findInColumn("severity", "[Nn]otice");
+
+    private static final Filter STACKTRACE = Filter.findInColumn("severity", "(at \\S.*)|(Caused By.*)");
+
+    private static final Filter DEFAULT = Filter.findInRawLog(".*");
+
     private static Colorizer severityBasedColorizerLight() {
-        Filter errorFilter = Filter.matchColumn("severity", "[Ee]rror");
-        Filter warnFilter = Filter.matchColumn("severity", "[Ww]arn(ing)?");
-        Filter infoFilter = Filter.matchColumn("severity", "[Ii]nfo");
-        Filter debugFilter = Filter.matchColumn("severity", "[Dd]ebug");
-        Filter noticeFilter = Filter.matchColumn("severity", "[Nn]otice");
-        StyleRule errorRule = new StyleRule("Error", errorFilter, Color.web("#AA0000"), null);
-        StyleRule warnRule = new StyleRule("Warn", warnFilter, Color.web("#AA8800"), null);
-        StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00AA00"), null);
-        StyleRule debugRule = new StyleRule("Debug", debugFilter, Color.web("#0000BB"), null);
-        StyleRule noticeRule = new StyleRule("Notice", noticeFilter, null, null);
+        StyleRule errorRule = new StyleRule("Error", ERROR_SEVERITY, Color.web("#aa0000ff"), null);
+        StyleRule warnRule = new StyleRule("Warn", WARN_SEVERITY, Color.web("#b27200ff"), null);
+        StyleRule infoRule = new StyleRule("Info", INFO_SEVERITY, Color.web("#008100ff"), null);
+        StyleRule debugRule = new StyleRule("Debug", DEBUG_SEVERITY, Color.web("#0000bbff"), null);
+        StyleRule noticeRule = new StyleRule("Notice", NOTICE_SEVERITY, null, null);
+        StyleRule stackTraceRule = new StyleRule("Stacktrace", STACKTRACE, Color.web("#990000ff"), null);
         return new Colorizer("Severity (light)",
-                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule));
+                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule,
+                        stackTraceRule));
     }
 
     private static Colorizer severityBasedColorizerDark() {
-        Filter errorFilter = Filter.matchColumn("severity", "[Ee]rror");
-        Filter warnFilter = Filter.matchColumn("severity", "[Ww]arn(ing)?");
-        Filter infoFilter = Filter.matchColumn("severity", "[Ii]nfo");
-        Filter debugFilter = Filter.matchColumn("severity", "[Dd]ebug");
-        Filter noticeFilter = Filter.matchColumn("severity", "[Nn]otice");
-        StyleRule errorRule = new StyleRule("Error", errorFilter, Color.web("#AA0000"), null);
-        StyleRule warnRule = new StyleRule("Warn", warnFilter, Color.web("#AA8800"), null);
-        StyleRule infoRule = new StyleRule("Info", infoFilter, Color.web("#00AA00"), null);
-        StyleRule debugRule = new StyleRule("Debug", debugFilter, Color.web("#0000BB"), null);
-        StyleRule noticeRule = new StyleRule("Notice", noticeFilter, null, null);
+        StyleRule errorRule = new StyleRule("Error", ERROR_SEVERITY, Color.web("#ca1d1dff"), Color.web("#1a1a1aff"));
+        StyleRule warnRule = new StyleRule("Warn", WARN_SEVERITY, Color.web("#e6994dff"), Color.web("#1a1a1aff"));
+        StyleRule infoRule = new StyleRule("Info", INFO_SEVERITY, Color.web("#10c14bff"), Color.web("#1a1a1aff"));
+        StyleRule debugRule = new StyleRule("Debug", DEBUG_SEVERITY, Color.web("#334db3ff"), Color.web("#1a1a1aff"));
+        StyleRule noticeRule = new StyleRule("Notice", NOTICE_SEVERITY, Color.web("#ccccccff"), Color.web("#1a1a1aff"));
+        StyleRule stackTraceRule =
+                new StyleRule("Stacktrace", STACKTRACE, Color.web("#990000ff"), Color.web("#1a1a1aff"));
+        StyleRule defaultRule = new StyleRule("Stacktrace", DEFAULT, null, Color.web("#1a1a1aff"));
         return new Colorizer("Severity (dark)",
-                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule));
+                FXCollections.observableArrayList(errorRule, warnRule, infoRule, debugRule, noticeRule, stackTraceRule,
+                        defaultRule));
     }
 }

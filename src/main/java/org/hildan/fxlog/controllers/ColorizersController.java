@@ -3,6 +3,7 @@ package org.hildan.fxlog.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Binding;
@@ -10,6 +11,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -152,7 +154,6 @@ public class ColorizersController implements Initializable {
             StyleRule editedRule = rulesList.getItems().get(e.getIndex());
             editedRule.setName(e.getNewValue().getName());
         });
-
     }
 
     private void initializeSelectedRulePane() {
@@ -184,28 +185,38 @@ public class ColorizersController implements Initializable {
             return;
         }
 
-        boolean isRawFilter = rule.getFilter().getColumnName() == null;
+        Filter ruleFilter = rule.getFilter();
+        boolean isRawFilter = ruleFilter.getColumnName() == null;
         filterType.selectToggle(isRawFilter ? matchRawButton : matchColumnButton);
-        filterRegexField.setText(rule.getFilter().getPattern().toString());
+        filterRegexField.setText(ruleFilter.getPattern().toString());
         filterColumnNameField.setText(isRawFilter ? "" : rule.getFilter().getColumnName());
-        Callable<Filter> createFilter = () -> {
+
+        Callable<Pattern> createPattern = () -> {
             PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+            filterRegexField.pseudoClassStateChanged(errorClass, false);
             try {
-                filterRegexField.pseudoClassStateChanged(errorClass, false);
-                if (filterType.getSelectedToggle() == matchRawButton) {
-                    return Filter.matchRawLog(filterRegexField.getText());
-                } else {
-                    return Filter.matchColumn(filterColumnNameField.getText(), filterRegexField.getText());
-                }
+                return Pattern.compile(filterRegexField.getText());
             } catch (PatternSyntaxException e) {
                 filterRegexField.pseudoClassStateChanged(errorClass, true);
-                return Filter.matchRawLog(".*");
+                // return current pattern to avoid changing it
+                return Pattern.compile("^$");
             }
         };
-        Binding<Filter> filterRegexBinding =
-                Bindings.createObjectBinding(createFilter, filterColumnNameField.textProperty(),
-                        filterRegexField.textProperty(), filterType.selectedToggleProperty());
-        rule.filterProperty().bind(filterRegexBinding);
+        Binding<Pattern> filterPatternBinding =
+                Bindings.createObjectBinding(createPattern, filterRegexField.textProperty());
+        ruleFilter.patternProperty().bind(filterPatternBinding);
+
+        Callable<String> getColumnName = () -> {
+            if (filterType.getSelectedToggle() == matchRawButton) {
+                return null;
+            } else {
+                return filterColumnNameField.getText();
+            }
+        };
+        StringBinding filterColumnBinding =
+                Bindings.createStringBinding(getColumnName, filterColumnNameField.textProperty(),
+                        filterType.selectedToggleProperty());
+        ruleFilter.columnNameProperty().bind(filterColumnBinding);
 
         bindActivableColorPicker(rule.backgroundProperty(), backgroundColorPicker, overrideTextBackground);
         bindActivableColorPicker(rule.foregroundProperty(), foregroundColorPicker, overrideTextForeground);
@@ -216,9 +227,10 @@ public class ColorizersController implements Initializable {
             return;
         }
         rule.nameProperty().unbind();
-        rule.filterProperty().unbind();
         rule.backgroundProperty().unbind();
         rule.foregroundProperty().unbind();
+        rule.getFilter().columnNameProperty().unbind();
+        rule.getFilter().patternProperty().unbind();
     }
 
     private void bindActivableColorPicker(@NotNull Property<Color> colorProperty, @NotNull ColorPicker picker,
