@@ -31,7 +31,10 @@ Use regular expressions to parse your raw log lines into nice columns:
 
 ![Customize Columnizers](doc/screenshots/customize_columnizers.png)
 
-Built-in support is already included for standard server logs.
+Built-in support is already included for standard server logs. You can choose which column to show/hide using the
+little "+" button at the top right-hand corner of the logs table:
+
+![Show/hide columns](doc/screenshots/hide_columns.png)
 
 ### Colorization
 
