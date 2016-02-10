@@ -1,7 +1,9 @@
 {
   "selectedColumnizerIndex": 0,
-  "selectedColorizerIndex": 0,
-  "recentFiles": [],
+  "selectedColorizerIndex": 1,
+  "recentFiles": [
+    "C:\\Users\\Joffrey\\Downloads\\weblogic (3).log"
+  ],
   "columnizers": [
     {
       "name": "Weblogic",
@@ -212,8 +214,8 @@
             "columnName": "severity",
             "pattern": "[Ee]rror"
           },
-          "foreground": "#b31a1aff",
-          "background": "null"
+          "foreground": "#ca1d1dff",
+          "background": "#1a1a1aff"
         },
         {
           "name": "Warn",
@@ -222,7 +224,7 @@
             "pattern": "[Ww]arn(ing)?"
           },
           "foreground": "#e6994dff",
-          "background": "null"
+          "background": "#1a1a1aff"
         },
         {
           "name": "Info",
@@ -231,7 +233,7 @@
             "pattern": "[Ii]nfo"
           },
           "foreground": "#10c14bff",
-          "background": "null"
+          "background": "#1a1a1aff"
         },
         {
           "name": "Debug",
@@ -240,7 +242,7 @@
             "pattern": "[Dd]ebug"
           },
           "foreground": "#334db3ff",
-          "background": "null"
+          "background": "#1a1a1aff"
         },
         {
           "name": "Notice",
@@ -249,16 +251,25 @@
             "pattern": "[Nn]otice"
           },
           "foreground": "#ccccccff",
-          "background": "null"
+          "background": "#1a1a1aff"
         },
         {
           "name": "Stacktrace",
           "filter": {
-            "columnName": 0,
-            "pattern": "\\s*at .*"
+            "columnName": "msg",
+            "pattern": "(at \\S.*)|(Caused By.*)"
           },
-          "foreground": "#b31a1aff",
-          "background": "null"
+          "foreground": "#eb2a2aff",
+          "background": "#1a1a1aff"
+        },
+        {
+          "name": "Default",
+          "filter": {
+            "columnName": "msg",
+            "pattern": ".*"
+          },
+          "foreground": "null",
+          "background": "#1a1a1aff"
         }
       ]
     },
@@ -268,8 +279,8 @@
         {
           "name": "Error",
           "filter": {
-            "columnName": "[Ee]rror",
-            "pattern": "severity"
+            "columnName": "severity",
+            "pattern": "[Ee]rror"
           },
           "foreground": "#aa0000ff",
           "background": "null"
@@ -277,19 +288,19 @@
         {
           "name": "Warn",
           "filter": {
-            "columnName": "[Ww]arn(ing)?",
-            "pattern": "severity"
+            "columnName": "severity",
+            "pattern": "[Ww]arn(ing)?"
           },
-          "foreground": "#aa8800ff",
+          "foreground": "#b27200ff",
           "background": "null"
         },
         {
           "name": "Info",
           "filter": {
-            "columnName": "[Ii]nfo",
-            "pattern": "severity"
+            "columnName": "severity",
+            "pattern": "[Ii]nfo"
           },
-          "foreground": "#ffffffff",
+          "foreground": "#008100ff",
           "background": "null"
         },
         {
@@ -304,10 +315,19 @@
         {
           "name": "Notice",
           "filter": {
-            "columnName": "[Nn]otice",
-            "pattern": "severity"
+            "columnName": "severity",
+            "pattern": "[Nn]otice"
           },
           "foreground": "null",
+          "background": "null"
+        },
+        {
+          "name": "Stacktrace",
+          "filter": {
+            "columnName": "msg",
+            "pattern": "(at \\S.*)|(Caused By.*)"
+          },
+          "foreground": "#990000ff",
           "background": "null"
         }
       ]
