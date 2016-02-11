@@ -2,6 +2,7 @@
     -fx-base: rgb(50, 50, 50);
     -fx-background: rgb(50, 50, 50);
     -fx-control-inner-background: rgb(50, 50, 50);
+    -fx-light-text-color: rgb(220, 220, 220);
 }
 
 .text-field {
