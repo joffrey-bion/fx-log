@@ -212,6 +212,11 @@ public class MainController implements Initializable {
         filter.setValue(log -> true);
         filter.bind(filterBinding);
         filteredLogs.predicateProperty().bind(filter);
+        filteredLogs.predicateProperty().addListener((obs, before, now) -> {
+            if (followingTail.get()) {
+                scrollToBottom();
+            }
+        });
     }
 
     /**
