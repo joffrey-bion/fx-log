@@ -14,11 +14,11 @@ import org.hildan.fxlog.errors.ErrorDialog;
  */
 public class LogTailListener implements TailerListener {
 
-    private final Columnizer columnizer;
+    protected final Columnizer columnizer;
 
-    private final List<LogEntry> logs;
+    protected final List<LogEntry> logs;
 
-    private volatile boolean running;
+    protected volatile boolean running;
 
     /**
      * Creates a new LogTailListener adding to the given log list using the given columnizer.
