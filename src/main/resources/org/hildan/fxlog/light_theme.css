@@ -7,3 +7,9 @@
     -fx-text-box-border: red;
     -fx-focus-color: red;
 }
+
+#logs-table .scroll-bar .thumb,
+#logs-table .scroll-bar .increment-button,
+#logs-table .scroll-bar .decrement-button {
+    -fx-padding: 5px;
+}
