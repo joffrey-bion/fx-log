@@ -5,11 +5,14 @@ import java.nio.file.Paths;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.themes.Themes;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,6 +45,8 @@ public class Config {
 
     private final IntegerProperty selectedColorizerIndex;
 
+    private final StringProperty currentTheme;
+
     private final ObservableList<String> recentFiles;
 
     private final ObservableList<Columnizer> columnizers;
@@ -54,6 +59,7 @@ public class Config {
     Config() {
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
+        this.currentTheme = new SimpleStringProperty(Themes.LIGHT);
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
@@ -65,6 +71,18 @@ public class Config {
 
     public IntegerProperty selectedColumnizerIndexProperty() {
         return selectedColumnizerIndex;
+    }
+
+    public String getCurrentTheme() {
+        return currentTheme.get();
+    }
+
+    public StringProperty currentThemeProperty() {
+        return currentTheme;
+    }
+
+    public void setCurrentTheme(String currentTheme) {
+        this.currentTheme.set(currentTheme);
     }
 
     /**

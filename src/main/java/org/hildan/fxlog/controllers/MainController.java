@@ -55,6 +55,7 @@ import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
 import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
+import org.hildan.fxlog.themes.Themes;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
@@ -308,7 +309,8 @@ public class MainController implements Initializable {
                     logsTable.scrollTo(indexFirst - 1);
                 }
             }
-        }); logsTable.setOnKeyPressed(event -> {
+        });
+        logsTable.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
                 followingTail.set(!followingTail.get());
             }
@@ -519,12 +521,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void selectDarkTheme() {
-        List<List<String>> styles =
-                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
-        for (List<String> style : styles) {
-            style.clear();
-            style.add(FXLog.getCss("dark_theme.css"));
-        }
+        selectTheme(Themes.DARK);
     }
 
     /**
@@ -532,12 +529,18 @@ public class MainController implements Initializable {
      */
     @FXML
     public void selectBrightTheme() {
+        selectTheme(Themes.LIGHT);
+    }
+
+    private void selectTheme(String cssFile) {
         List<List<String>> styles =
-                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets());
+                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets(),
+                        columnizersStage.getScene().getStylesheets());
         for (List<String> style : styles) {
             style.clear();
-            style.add(FXLog.getCss("light_theme.css"));
+            style.add(FXLog.getCss(cssFile));
         }
+        Config.getInstance().setCurrentTheme(cssFile);
     }
 
     /**

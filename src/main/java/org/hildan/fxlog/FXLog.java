@@ -34,7 +34,7 @@ public class FXLog extends Application {
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource(BASE_PACKAGE + "/light_theme.css").toExternalForm());
+            scene.getStylesheets().add(getCss(Config.getInstance().getCurrentTheme()));
             stage.setTitle("FX Log");
             stage.setScene(scene);
             stage.show();
