@@ -42,6 +42,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
+import com.sun.javafx.scene.control.skin.TableViewSkin;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.ColorizedRowFactory;
@@ -301,16 +303,36 @@ public class MainController implements Initializable {
             if (newValue) {
                 scrollToBottom();
             } else {
-                if (columnizedLogs.size() > 10) {
-                    logsTable.scrollTo(columnizedLogs.size() - 10);
+                int indexFirst = getFirstVisibleRowIndex(logsTable);
+                if (indexFirst > 1 && !logsTable.getItems().isEmpty()) {
+                    logsTable.scrollTo(indexFirst - 1);
                 }
             }
-        });
-        logsTable.setOnKeyPressed(event -> {
+        }); logsTable.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
                 followingTail.set(!followingTail.get());
             }
         });
+    }
+
+    private static int getFirstVisibleRowIndex(TableView table) {
+        TableViewSkin<?> skin = (TableViewSkin) table.getSkin();
+        if (skin == null) {
+            return 0;
+        }
+        VirtualFlow<?> flow = (VirtualFlow) skin.getChildren().get(1);
+        if (flow == null) {
+            return 0;
+        }
+        if (flow.getFirstVisibleCellWithinViewPort() == null) {
+            return 0;
+        }
+        int indexFirst = flow.getFirstVisibleCellWithinViewPort().getIndex();
+        if (indexFirst >= table.getItems().size()) {
+            return table.getItems().size() - 1;
+        } else {
+            return indexFirst;
+        }
     }
 
     private void scrollToBottom() {
