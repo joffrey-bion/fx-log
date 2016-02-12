@@ -37,6 +37,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -128,9 +129,6 @@ public class MainController implements Initializable {
         followingTail = new SimpleBooleanProperty(false);
         tailingFile = new SimpleBooleanProperty(false);
         closeMenu.disableProperty().bind(tailingFile.not());
-        logsTable.setOnScroll(e -> followingTail.set(false));
-        followTailMenu.selectedProperty().bindBidirectional(followingTail);
-        toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
 
         configureColumnizerSelector();
         configureColorizerSelector();
@@ -305,6 +303,9 @@ public class MainController implements Initializable {
     }
 
     private void configureAutoScroll() {
+        followTailMenu.selectedProperty().bindBidirectional(followingTail);
+        toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
+        logsTable.addEventFilter(ScrollEvent.ANY, event -> followingTail.set(false));
         followingTail.addListener((obs, oldValue, newValue) -> {
             if (newValue) {
                 scrollToBottom();
