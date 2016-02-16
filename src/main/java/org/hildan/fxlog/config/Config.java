@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
-import org.hildan.fxlog.themes.Themes;
+import org.hildan.fxlog.themes.Theme;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -45,7 +45,7 @@ public class Config {
 
     private final IntegerProperty selectedColorizerIndex;
 
-    private final StringProperty currentTheme;
+    private final Property<Theme> currentTheme;
 
     private final ObservableList<String> recentFiles;
 
@@ -59,7 +59,7 @@ public class Config {
     Config() {
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
-        this.currentTheme = new SimpleStringProperty(Themes.LIGHT);
+        this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
@@ -73,16 +73,13 @@ public class Config {
         return selectedColumnizerIndex;
     }
 
-    public String getCurrentTheme() {
-        return currentTheme.get();
+    @NotNull
+    public Theme getCurrentTheme() {
+        return currentTheme.getValue();
     }
 
-    public StringProperty currentThemeProperty() {
-        return currentTheme;
-    }
-
-    public void setCurrentTheme(String currentTheme) {
-        this.currentTheme.set(currentTheme);
+    public void setCurrentTheme(@NotNull Theme currentTheme) {
+        this.currentTheme.setValue(currentTheme);
     }
 
     /**

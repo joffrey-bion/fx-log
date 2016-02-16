@@ -10,7 +10,6 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -20,6 +19,7 @@ import javafx.util.StringConverter;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
+import org.hildan.fxlog.themes.Css;
 
 /**
  * Controller associated to the columnizer customization view.
@@ -123,8 +123,7 @@ public class ColumnizersController implements Initializable {
             @Override
             public void commitEdit(Pattern pattern) {
                 if (!isEditing()) return;
-                PseudoClass errorClass = PseudoClass.getPseudoClass("error");
-                pseudoClassStateChanged(errorClass, pattern == null);
+                pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, pattern == null);
                 if (pattern != null) {
                     // only if the pattern is valid, otherwise we stay in edit state
                     super.commitEdit(pattern);
@@ -209,16 +208,15 @@ public class ColumnizersController implements Initializable {
 
     @FXML
     public void addNewPattern() {
-        PseudoClass errorClass = PseudoClass.getPseudoClass("error");
         try {
             Pattern newRule = Pattern.compile(newPatternRegexField.getText());
             Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
             selectedColumnizer.getPatterns().add(newRule);
             newPatternRegexField.setText("");
             patternList.getSelectionModel().select(newRule);
-            newPatternRegexField.pseudoClassStateChanged(errorClass, false);
+            newPatternRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
         } catch (PatternSyntaxException e) {
-            newPatternRegexField.pseudoClassStateChanged(errorClass, true);
+            newPatternRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
         }
     }
 

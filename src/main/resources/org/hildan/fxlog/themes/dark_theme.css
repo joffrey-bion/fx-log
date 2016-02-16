@@ -1,0 +1,19 @@
+.root {
+    -fx-base: rgb(50, 50, 50);
+    -fx-background: rgb(50, 50, 50);
+    -fx-control-inner-background: rgb(20, 20, 20);
+    -fx-control-inner-background-alt: derive(-fx-control-inner-background, 2%);
+    -fx-light-text-color: rgb(220, 220, 220);
+    -fx-mid-text-color: rgb(100, 100, 100);
+    -fx-dark-text-color: rgb(20, 20, 20);
+}
+
+/* Fix derived prompt color */
+.text-input {
+    -fx-highlight-fill: derive(-fx-control-inner-background,+20%);
+    -fx-prompt-text-fill: derive(-fx-control-inner-background,+50%);
+}
+.text-input:focused {
+    -fx-highlight-fill: -fx-accent;
+    -fx-prompt-text-fill: transparent;
+}

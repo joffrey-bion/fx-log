@@ -92,6 +92,6 @@
         </VBox>
     </top>
     <center>
-            <TableView id="logs-table" fx:id="logsTable" stylesheets="@../light_theme.css" tableMenuButtonVisible="true" />
+            <TableView id="logs-table" fx:id="logsTable" tableMenuButtonVisible="true" />
     </center>
 </BorderPane>

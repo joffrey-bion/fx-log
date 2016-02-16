@@ -15,7 +15,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -27,6 +26,7 @@ import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
+import org.hildan.fxlog.themes.Css;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -192,12 +192,13 @@ public class ColorizersController implements Initializable {
         filterColumnNameField.setText(isRawFilter ? "" : rule.getFilter().getColumnName());
 
         Callable<Pattern> createPattern = () -> {
-            PseudoClass errorClass = PseudoClass.getPseudoClass("error");
-            filterRegexField.pseudoClassStateChanged(errorClass, false);
+            filterRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
             try {
+                System.out.println("pattern compiling..");
                 return Pattern.compile(filterRegexField.getText());
             } catch (PatternSyntaxException e) {
-                filterRegexField.pseudoClassStateChanged(errorClass, true);
+                System.out.println("pattern invalid");
+                filterRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
                 // return current pattern to avoid changing it
                 return Pattern.compile("^$");
             }

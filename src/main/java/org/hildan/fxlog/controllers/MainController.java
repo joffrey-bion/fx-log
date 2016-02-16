@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
@@ -28,7 +27,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -56,7 +54,8 @@ import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.core.LogTailListener;
 import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
-import org.hildan.fxlog.themes.Themes;
+import org.hildan.fxlog.themes.Css;
+import org.hildan.fxlog.themes.Theme;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
@@ -192,15 +191,14 @@ public class MainController implements Initializable {
      */
     private void configureFiltering() {
         Callable<Predicate<LogEntry>> createFilter = () -> {
-            PseudoClass errorClass = PseudoClass.getPseudoClass("error");
             try {
-                filterField.pseudoClassStateChanged(errorClass, false);
+                filterField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
                 if (filterField.getText().isEmpty()) {
                     return log -> true;
                 }
                 return Filter.findInRawLog(filterField.getText());
             } catch (PatternSyntaxException e) {
-                filterField.pseudoClassStateChanged(errorClass, true);
+                filterField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
                 return log -> false;
             }
         };
@@ -275,9 +273,7 @@ public class MainController implements Initializable {
             colorizersStage.setTitle("Customize Colorizers");
             colorizersStage.setScene(scene);
             editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
-            List<String> styles = scene.getStylesheets();
-            styles.clear();
-            styles.add(FXLog.getCss("light_theme.css"));
+            Config.getInstance().getCurrentTheme().apply(scene);
         } catch (IOException e) {
             ErrorDialog.uncaughtException(e);
         }
@@ -294,9 +290,7 @@ public class MainController implements Initializable {
             columnizersStage.setTitle("Customize Columnizers");
             columnizersStage.setScene(scene);
             editColumnizersBtn.disableProperty().bind(columnizersStage.showingProperty());
-            List<String> styles = scene.getStylesheets();
-            styles.clear();
-            styles.add(FXLog.getCss("light_theme.css"));
+            Config.getInstance().getCurrentTheme().apply(scene);
         } catch (IOException e) {
             ErrorDialog.uncaughtException(e);
         }
@@ -527,7 +521,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void selectDarkTheme() {
-        selectTheme(Themes.DARK);
+        selectTheme(Theme.DARK);
     }
 
     /**
@@ -535,18 +529,11 @@ public class MainController implements Initializable {
      */
     @FXML
     public void selectBrightTheme() {
-        selectTheme(Themes.LIGHT);
+        selectTheme(Theme.LIGHT);
     }
 
-    private void selectTheme(String cssFile) {
-        List<List<String>> styles =
-                Arrays.asList(mainPane.getScene().getStylesheets(), colorizersStage.getScene().getStylesheets(),
-                        columnizersStage.getScene().getStylesheets());
-        for (List<String> style : styles) {
-            style.clear();
-            style.add(FXLog.getCss(cssFile));
-        }
-        Config.getInstance().setCurrentTheme(cssFile);
+    private void selectTheme(Theme theme) {
+        theme.apply(mainPane.getScene(), colorizersStage.getScene(), columnizersStage.getScene());
     }
 
     /**

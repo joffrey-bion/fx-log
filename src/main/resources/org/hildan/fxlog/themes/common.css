@@ -1,13 +1,14 @@
-.text-field:error {
+/* Red border on invalid fields/cells */
+.text-input:invalid {
+    -fx-text-box-border: red;
+    -fx-focus-color: red;
+}
+.list-cell:invalid {
     -fx-text-box-border: red;
     -fx-focus-color: red;
 }
 
-.list-cell:error {
-    -fx-text-box-border: red;
-    -fx-focus-color: red;
-}
-
+/* Make the scrollbar bigger */
 #logs-table .scroll-bar .thumb,
 #logs-table .scroll-bar .increment-button,
 #logs-table .scroll-bar .decrement-button {
