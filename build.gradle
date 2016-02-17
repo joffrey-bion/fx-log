@@ -17,6 +17,7 @@ def mainClassName = "org.hildan.fxlog.FXLog"
 repositories { mavenCentral() }
 
 dependencies {
+    compile 'org.controlsfx:controlsfx:8.40.10'
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.code.gson:gson:2.5'
     compile 'org.jetbrains:annotations:13.0'

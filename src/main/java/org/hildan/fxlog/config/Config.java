@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.text.Font;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.Columnizer;
@@ -47,6 +48,8 @@ public class Config {
 
     private final Property<Theme> currentTheme;
 
+    private final Property<Font> logsFont;
+
     private final ObservableList<String> recentFiles;
 
     private final ObservableList<Columnizer> columnizers;
@@ -60,6 +63,7 @@ public class Config {
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
+        this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
@@ -80,6 +84,18 @@ public class Config {
 
     public void setCurrentTheme(@NotNull Theme currentTheme) {
         this.currentTheme.setValue(currentTheme);
+    }
+
+    public Font getLogsFont() {
+        return logsFont.getValue();
+    }
+
+    public Property<Font> logsFontProperty() {
+        return logsFont;
+    }
+
+    public void setLogsFont(Font logsFont) {
+        this.logsFont.setValue(logsFont);
     }
 
     /**

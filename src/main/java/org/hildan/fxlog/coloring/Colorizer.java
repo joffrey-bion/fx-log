@@ -65,7 +65,7 @@ public class Colorizer {
      * @param log
      *         the log on which to test the rules
      */
-    void applyTo(@NotNull Node node, @NotNull LogEntry log) {
+    public void applyTo(@NotNull Node node, @NotNull LogEntry log) {
         node.setStyle(null);
         for (StyleRule rule : styleRules) {
             if (rule.applyTo(node, log)) {

@@ -45,7 +45,6 @@ import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
 import org.hildan.fxlog.FXLog;
-import org.hildan.fxlog.coloring.ColorizedRowFactory;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
@@ -56,6 +55,7 @@ import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
+import org.hildan.fxlog.view.StyledTableCell;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
@@ -221,16 +221,23 @@ public class MainController implements Initializable {
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         if (columnizer.getValue() != null) {
-            logsTable.getColumns().addAll(columnizer.getValue().getColumns());
+            logsTable.getColumns().addAll(getConfiguredColumns(columnizer.getValue()));
         }
         columnizer.addListener((observable, oldValue, newValue) -> {
             logsTable.getColumns().clear();
-            logsTable.getColumns().addAll(newValue.getColumns());
+            logsTable.getColumns().addAll(getConfiguredColumns(newValue));
         });
         logsTable.setItems(filteredLogs);
-        ColorizedRowFactory colorizedRowFactory = new ColorizedRowFactory();
-        colorizedRowFactory.colorizerProperty().bind(colorizer);
-        logsTable.setRowFactory(colorizedRowFactory);
+    }
+
+    private List<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
+        List<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
+        columns.forEach(col -> col.setCellFactory(column -> {
+            StyledTableCell cell = new StyledTableCell(column);
+            cell.colorizerProperty().bind(colorizer);
+            return cell;
+        }));
+        return columns;
     }
 
     /**

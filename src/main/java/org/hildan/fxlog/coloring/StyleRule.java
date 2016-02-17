@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import org.hildan.fxlog.core.LogEntry;
@@ -68,8 +69,12 @@ public class StyleRule {
         if (filter.getValue().test(log)) {
             String style = "";
             if (foreground.getValue() != null) {
-                // surprisingly, this is the property affecting the text's *foreground* color in a TableRow
-                style += "-fx-text-background-color: " + toString(foreground.getValue()) + "; ";
+                if (node instanceof TableRow) {
+                    // surprisingly, this is the property affecting the text's *foreground* color in a TableRow
+                    style += "-fx-text-background-color: " + toString(foreground.getValue()) + "; ";
+                } else {
+                    style += "-fx-fill: " + toString(foreground.getValue()) + "; ";
+                }
             }
             if (background.getValue() != null) {
                 style += "-fx-background-color: " + toString(background.getValue()) + "; ";

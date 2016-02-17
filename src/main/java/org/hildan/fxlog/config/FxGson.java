@@ -17,6 +17,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
@@ -51,6 +53,7 @@ class FxGson {
                                 .registerTypeAdapter(IntegerProperty.class, new IntegerPropertySerializer())
                                 .registerTypeAdapter(Property.class, new PropertySerializer())
                                 .registerTypeAdapter(Color.class, new ColorSerializer())
+                                .registerTypeAdapter(Font.class, new FontSerializer())
                                 .registerTypeAdapter(Pattern.class, new PatternSerializer());
     }
 
@@ -180,6 +183,26 @@ class FxGson {
         public Color deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
                 JsonParseException {
             return Color.web(json.getAsString());
+        }
+    }
+
+    private static class FontSerializer implements JsonSerializer<Font>, JsonDeserializer<Font> {
+        @Override
+        public JsonElement serialize(Font font, Type type, JsonSerializationContext context) {
+            String family = font.getFamily();
+            String weight = font.getStyle();
+            double size = font.getSize();
+            return new JsonPrimitive(family + "," + weight + "," + size);
+        }
+
+        @Override
+        public Font deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
+                JsonParseException {
+            String[] font = json.getAsString().split(",");
+            String family = font[0];
+            FontWeight weight = FontWeight.findByName(font[1]);
+            double size = Double.parseDouble(font[2]);
+            return Font.font(family, weight, size);
         }
     }
 
