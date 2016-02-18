@@ -73,7 +73,7 @@ public class Config {
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
-        this.wrapLogsText = new SimpleBooleanProperty(true);
+        this.wrapLogsText = new SimpleBooleanProperty(false);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();

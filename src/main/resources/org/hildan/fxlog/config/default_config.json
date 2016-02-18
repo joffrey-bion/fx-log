@@ -1,38 +1,37 @@
 {
   "selectedColumnizerIndex": 0,
   "selectedColorizerIndex": 1,
+  "currentTheme": "LIGHT",
+  "openLastFileAtStartup": true,
+  "skipEmptyLogs": true,
+  "wrapLogsText": false,
+  "logsFont": "System,Regular,11.0",
   "recentFiles": [],
   "columnizers": [
     {
       "name": "Weblogic",
       "patterns": [
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sessionid>.*?)>",
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)>",
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<class>.*?)> <(?<msg>.*?)",
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?);jsessionid=(?<sid>.*?)>",
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)>",
-        "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)> <(?<msg>.*?)",
-        "(?<msg>.*);jsessionid=(?<sid>.*?)>",
-        "(?<msg>.*)>",
+        "####<(?<datetime>[^>]*?)> <(?<severity>[^>]*?)> <(?<subsystem>[^>]*?)> <(?<machine>[^>]*?)> <(?<server>[^>]*?)> <(?<thread>[^>]*?)> <(?<user>.*?)> <(?<transaction>[^>]*?)> <(?<context>[^>]*?)> <(?<timestamp>[^>]*?)> <(?<msgId>[^>]*?)>( <(?<class>[^>]*?)>)? <(?<msg>[^>]*?)(;jsessionid=(?<sessionid>.*))?>?",
+        "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>",
         "(?<msg>.*)"
       ],
       "columnDefinitions": [
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 159.685546875,
+          "width": 155.419921875,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 69.52734375,
+          "width": 34.52734375,
           "visible": true
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
-          "width": 117.2109375,
+          "width": 55.14501953125,
           "visible": true
         },
         {
@@ -50,7 +49,7 @@
         {
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
-          "width": 69.0,
+          "width": 201.68798828125,
           "visible": true
         },
         {
@@ -86,19 +85,19 @@
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 317.0,
+          "width": 163.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 828.0,
+          "width": 2124.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 304.0,
+          "width": 486.0,
           "visible": true
         }
       ]
@@ -106,8 +105,7 @@
     {
       "name": "Apache Access Log",
       "patterns": [
-        "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\] \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+) \"(?<referer>.*?)\" \"(?<useragent>.*?)\"",
-        "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>.*?)\\] \"(?<request>.*?)\" (?<rstatus>\\S+) (?<rsize>\\S+)"
+        "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>[^\\]]*?)\\] \"(?<request>[^\"]*?)\" (?<rstatus>\\S+) (?<rsize>\\S+)( \"(?<referer>[^\"]*?)\" \"(?<useragent>[^\"]*?)\")?"
       ],
       "columnDefinitions": [
         {
@@ -169,9 +167,9 @@
     {
       "name": "Apache Error Log",
       "patterns": [
-        "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] \\[(?<client>.*?)\\] (?<msg>.*)",
-        "\\[(?<datetime>.*?)\\] \\[(?<severity>.*?)\\] (?<msg>.*)",
-        "\\[(?<datetime>.*?)\\] (?<msg>.*)",
+        "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] \\[(?<client>\\]*?)\\] (?<msg>.*)",
+        "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] (?<msg>.*)",
+        "\\[(?<datetime>[^\\]]*?)\\] (?<msg>.*)",
         "(?<msg>.*)"
       ],
       "columnDefinitions": [
@@ -213,7 +211,7 @@
             "pattern": "[Ee]rror"
           },
           "foreground": "#ca1d1dff",
-          "background": "#1a1a1aff"
+          "background": "null"
         },
         {
           "name": "Warn",
@@ -222,7 +220,7 @@
             "pattern": "[Ww]arn(ing)?"
           },
           "foreground": "#e6994dff",
-          "background": "#1a1a1aff"
+          "background": "null"
         },
         {
           "name": "Info",
@@ -231,7 +229,7 @@
             "pattern": "[Ii]nfo"
           },
           "foreground": "#10c14bff",
-          "background": "#1a1a1aff"
+          "background": "null"
         },
         {
           "name": "Debug",
@@ -240,7 +238,7 @@
             "pattern": "[Dd]ebug"
           },
           "foreground": "#334db3ff",
-          "background": "#1a1a1aff"
+          "background": "null"
         },
         {
           "name": "Notice",
@@ -249,7 +247,7 @@
             "pattern": "[Nn]otice"
           },
           "foreground": "#ccccccff",
-          "background": "#1a1a1aff"
+          "background": "null"
         },
         {
           "name": "Stacktrace",
@@ -257,17 +255,17 @@
             "columnName": "msg",
             "pattern": "(at \\S.*)|(Caused By.*)"
           },
-          "foreground": "#eb2a2aff",
-          "background": "#1a1a1aff"
+          "foreground": "#ca1d1dff",
+          "background": "null"
         },
         {
           "name": "Default",
           "filter": {
-            "columnName": "msg",
+            "columnName": 0,
             "pattern": ".*"
           },
-          "foreground": "null",
-          "background": "#1a1a1aff"
+          "foreground": "#e6e6e6ff",
+          "background": "null"
         }
       ]
     },
@@ -327,8 +325,21 @@
           },
           "foreground": "#990000ff",
           "background": "null"
+        },
+        {
+          "name": "Default",
+          "filter": {
+            "columnName": 0,
+            "pattern": ".*"
+          },
+          "foreground": "#1a1a1aff",
+          "background": "null"
         }
       ]
+    },
+    {
+      "name": "None",
+      "styleRules": []
     }
   ]
 }
