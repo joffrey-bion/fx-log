@@ -78,7 +78,7 @@ public class BufferedLogTailListener extends LogTailListener {
     @Override
     public void handle(String line) {
         // avoid polluting vertical space with empty lines
-        if (running && !line.isEmpty()) {
+        if (running && !(skipEmptyLogs.get() && line.isEmpty())) {
             LogEntry log = columnizer.parse(line);
             buffer.add(log);
             if (needsToClearBuffer()) {

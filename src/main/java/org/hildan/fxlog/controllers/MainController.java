@@ -66,6 +66,8 @@ public class MainController implements Initializable {
 
     private Stage colorizersStage;
 
+    private Stage preferencesStage;
+
     @FXML
     private BorderPane mainPane;
 
@@ -92,6 +94,9 @@ public class MainController implements Initializable {
 
     @FXML
     private MenuItem closeMenu;
+
+    @FXML
+    private MenuItem editPreferencesMenu;
 
     @FXML
     private CheckMenuItem followTailMenu;
@@ -136,6 +141,7 @@ public class MainController implements Initializable {
         configureRecentFilesMenu();
         configureColumnizersStage();
         configureColorizersStage();
+        configurePreferencesStage();
         configureAutoScroll();
     }
 
@@ -303,6 +309,23 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Configures the preferences stage.
+     */
+    private void configurePreferencesStage() {
+        preferencesStage = new Stage();
+        try {
+            Parent root = FXLog.loadView("preferences.fxml");
+            Scene scene = new Scene(root);
+            preferencesStage.setTitle("Preferences");
+            preferencesStage.setScene(scene);
+            editPreferencesMenu.disableProperty().bind(preferencesStage.showingProperty());
+            Config.getInstance().getCurrentTheme().apply(scene);
+        } catch (IOException e) {
+            ErrorDialog.uncaughtException(e);
+        }
+    }
+
     private void configureAutoScroll() {
         followTailMenu.selectedProperty().bindBidirectional(followingTail);
         toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
@@ -367,6 +390,14 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Opens the preferences window.
+     */
+    @FXML
+    public void editPreferences() {
+        preferencesStage.showAndWait();
+    }
+
+    /**
      * Opens a file chooser to choose the file to tail, and starts tailing the selected file.
      */
     @FXML
@@ -425,6 +456,7 @@ public class MainController implements Initializable {
         closeCurrentFile();
         config.addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+        logTailListener.skipEmptyLogsProperty().bind(config.skipEmptyLogsProperty());
         tailer = Tailer.create(file, logTailListener, 500);
         tailingFile.set(true);
     }

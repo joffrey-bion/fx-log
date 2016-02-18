@@ -3,8 +3,10 @@ package org.hildan.fxlog.config;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -48,6 +50,10 @@ public class Config {
 
     private final Property<Theme> currentTheme;
 
+    private final BooleanProperty openLastFileAtStartup;
+
+    private final BooleanProperty skipEmptyLogs;
+
     private final Property<Font> logsFont;
 
     private final ObservableList<String> recentFiles;
@@ -63,6 +69,8 @@ public class Config {
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
+        this.openLastFileAtStartup = new SimpleBooleanProperty(true);
+        this.skipEmptyLogs = new SimpleBooleanProperty(true);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
@@ -86,10 +94,37 @@ public class Config {
         this.currentTheme.setValue(currentTheme);
     }
 
+    public boolean getOpenLastFileAtStartup() {
+        return openLastFileAtStartup.get();
+    }
+
+    @NotNull
+    public BooleanProperty openLastFileAtStartupProperty() {
+        return openLastFileAtStartup;
+    }
+
+    public void setOpenLastFileAtStartup(boolean openLastFileAtStartup) {
+        this.openLastFileAtStartup.set(openLastFileAtStartup);
+    }
+
+    public boolean getSkipEmptyLogs() {
+        return skipEmptyLogs.get();
+    }
+
+    @NotNull
+    public BooleanProperty skipEmptyLogsProperty() {
+        return skipEmptyLogs;
+    }
+
+    public void setSkipEmptyLogs(boolean skipEmptyLogs) {
+        this.skipEmptyLogs.set(skipEmptyLogs);
+    }
+
     public Font getLogsFont() {
         return logsFont.getValue();
     }
 
+    @NotNull
     public Property<Font> logsFontProperty() {
         return logsFont;
     }

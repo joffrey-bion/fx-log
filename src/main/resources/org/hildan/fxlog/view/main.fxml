@@ -33,6 +33,7 @@
                                 <Menu fx:id="recentFilesMenu" text="Open _Recent" />
                                 <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="editPreferencesMenu" mnemonicParsing="false" onAction="#editPreferences" text="Preferences..." />
                                 <MenuItem onAction="#quit" text="_Quit">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

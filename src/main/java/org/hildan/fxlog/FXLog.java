@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.controllers.MainController;
 import org.hildan.fxlog.errors.ErrorDialog;
+import org.jetbrains.annotations.NotNull;
 
 public class FXLog extends Application {
 
@@ -52,13 +53,14 @@ public class FXLog extends Application {
      * @throws IOException
      *         if the resource couldn't be loaded for some reason
      */
-    public static Parent loadView(String viewFilename) throws IOException {
+    public static Parent loadView(@NotNull String viewFilename) throws IOException {
         URL url = FXLog.class.getResource(VIEWS_PATH + '/' + viewFilename);
         return FXMLLoader.load(url);
     }
 
-    private void autoOpenFile(MainController controller) {
-        if (Config.getInstance().getColumnizers().isEmpty()) {
+    private void autoOpenFile(@NotNull MainController controller) {
+        Config config = Config.getInstance();
+        if (config.getColumnizers().isEmpty()) {
             return; // can't parse logs, better not open a file
         }
         List<String> params = getParameters().getRaw();
@@ -69,8 +71,8 @@ public class FXLog extends Application {
             } catch (FileNotFoundException e) {
                 ErrorDialog.fileNotFound(filename);
             }
-        } else {
-            List<String> recentFiles = Config.getInstance().getRecentFiles();
+        } else if (config.getOpenLastFileAtStartup()) {
+            List<String> recentFiles = config.getRecentFiles();
             if (!recentFiles.isEmpty()) {
                 controller.openRecentFile(recentFiles.get(0));
             }

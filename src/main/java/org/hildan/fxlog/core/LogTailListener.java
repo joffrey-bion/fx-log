@@ -3,6 +3,8 @@ package org.hildan.fxlog.core;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
@@ -18,6 +20,8 @@ public class LogTailListener implements TailerListener {
 
     protected final List<LogEntry> logs;
 
+    protected final BooleanProperty skipEmptyLogs;
+
     protected volatile boolean running;
 
     /**
@@ -31,6 +35,7 @@ public class LogTailListener implements TailerListener {
     public LogTailListener(Columnizer columnizer, List<LogEntry> logs) {
         this.columnizer = columnizer;
         this.logs = logs;
+        this.skipEmptyLogs = new SimpleBooleanProperty();
     }
 
     @Override
@@ -65,7 +70,7 @@ public class LogTailListener implements TailerListener {
     @Override
     public void handle(String line) {
         // avoid polluting vertical space with empty lines
-        if (running && !line.isEmpty()) {
+        if (running && !(skipEmptyLogs.get() && line.isEmpty())) {
             LogEntry log = columnizer.parse(line);
             // needs to run on the main thread to avoid concurrent modifications
             Platform.runLater(() -> {
@@ -83,5 +88,17 @@ public class LogTailListener implements TailerListener {
             // will be handled as a dialog at top level
             throw new RuntimeException("Exception while reading the log file", ex);
         }
+    }
+
+    public boolean getSkipEmptyLogs() {
+        return skipEmptyLogs.get();
+    }
+
+    public BooleanProperty skipEmptyLogsProperty() {
+        return skipEmptyLogs;
+    }
+
+    public void setSkipEmptyLogs(boolean skipEmptyLogs) {
+        this.skipEmptyLogs.set(skipEmptyLogs);
     }
 }
