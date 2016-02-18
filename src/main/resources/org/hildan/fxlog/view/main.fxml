@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -86,7 +87,8 @@
                   <ChoiceBox fx:id="colorizerSelector" />
                   <Button fx:id="editColorizersBtn" mnemonicParsing="false" onAction="#editColorizers" text="Edit" />
                         <TextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS" />
-                  <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" text="Scroll" />
+                  <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Case Sensitive" />
+                  <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" text="Follow Tail" />
                     </items>
                 </ToolBar>
             </children>

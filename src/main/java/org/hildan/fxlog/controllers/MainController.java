@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
@@ -88,6 +89,9 @@ public class MainController implements Initializable {
 
     @FXML
     private TextField filterField;
+
+    @FXML
+    private CheckBox caseSensitiveFilterCheckbox;
 
     @FXML
     private Menu recentFilesMenu;
@@ -179,9 +183,9 @@ public class MainController implements Initializable {
      * @param <T>
      *         the type of items in the selector
      */
-    private <T> void bindSelector(@NotNull ChoiceBox<T> selector, @NotNull ObservableList<T> items,
-                                  @NotNull Property<T> selectedItemProperty,
-                                  @NotNull IntegerProperty selectedItemIndexProperty) {
+    private static <T> void bindSelector(@NotNull ChoiceBox<T> selector, @NotNull ObservableList<T> items,
+                                         @NotNull Property<T> selectedItemProperty,
+                                         @NotNull IntegerProperty selectedItemIndexProperty) {
         selector.setItems(items);
         if (!items.isEmpty()) {
             int selectedIndex = selectedItemIndexProperty.get();
@@ -202,14 +206,16 @@ public class MainController implements Initializable {
                 if (filterField.getText().isEmpty()) {
                     return log -> true;
                 }
-                return Filter.findInRawLog(filterField.getText());
+                int flags = caseSensitiveFilterCheckbox.isSelected() ? 0 : Pattern.CASE_INSENSITIVE;
+                return Filter.findInRawLog(filterField.getText(), flags);
             } catch (PatternSyntaxException e) {
                 filterField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
                 return log -> false;
             }
         };
         Binding<Predicate<LogEntry>> filterBinding =
-                Bindings.createObjectBinding(createFilter, filterField.textProperty());
+                Bindings.createObjectBinding(createFilter, filterField.textProperty(),
+                        caseSensitiveFilterCheckbox.selectedProperty());
         filterField.setText("");
         filter.setValue(log -> true);
         filter.bind(filterBinding);

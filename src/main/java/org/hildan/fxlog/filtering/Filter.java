@@ -29,11 +29,16 @@ public class Filter implements Predicate<LogEntry> {
      *         filter to the whole raw log line
      * @param regex
      *         the regex that the given column (or whole line) should match
+     * @param flags
+     *         the match flags, a bit mask that may include {@link Pattern#CASE_INSENSITIVE}, {@link Pattern#MULTILINE},
+     *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
+     *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
+     *         Pattern#COMMENTS}
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
-    private Filter(String columnName, String regex) throws PatternSyntaxException {
-        this.pattern = new SimpleObjectProperty<>(Pattern.compile(regex));
+    private Filter(String columnName, String regex, int flags) throws PatternSyntaxException {
+        this.pattern = new SimpleObjectProperty<>(Pattern.compile(regex, flags));
         this.columnName = new SimpleStringProperty(columnName);
     }
 
@@ -46,8 +51,26 @@ public class Filter implements Predicate<LogEntry> {
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInRawLog(@NotNull String regex) {
-        return new Filter(null, regex);
+    public static Filter findInRawLog(@NotNull String regex) throws PatternSyntaxException {
+        return new Filter(null, regex, 0);
+    }
+
+    /**
+     * Creates a new filter which applies on the raw log line.
+     *
+     * @param regex
+     *         the regex that the whole raw log line should match
+     * @param flags
+     *         the match flags, a bit mask that may include {@link Pattern#CASE_INSENSITIVE}, {@link Pattern#MULTILINE},
+     *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
+     *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
+     *         Pattern#COMMENTS}
+     * @throws PatternSyntaxException
+     *         if the given regex is not well formed
+     */
+    @NotNull
+    public static Filter findInRawLog(@NotNull String regex, int flags) throws PatternSyntaxException {
+        return new Filter(null, regex, flags);
     }
 
     /**
@@ -61,8 +84,29 @@ public class Filter implements Predicate<LogEntry> {
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex) {
-        return new Filter(columnName, regex);
+    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex) throws PatternSyntaxException {
+        return new Filter(columnName, regex, 0);
+    }
+
+    /**
+     * Creates a new filter which applies on the value of the given column.
+     *
+     * @param columnName
+     *         the capturing group name corresponding to the column to apply this filter to
+     * @param regex
+     *         the regex that the whole value of the given column should match
+     * @param flags
+     *         the match flags, a bit mask that may include {@link Pattern#CASE_INSENSITIVE}, {@link Pattern#MULTILINE},
+     *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
+     *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
+     *         Pattern#COMMENTS}
+     * @throws PatternSyntaxException
+     *         if the given regex is not well formed
+     */
+    @NotNull
+    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex, int flags) throws
+            PatternSyntaxException {
+        return new Filter(columnName, regex, flags);
     }
 
     public String getColumnName() {
