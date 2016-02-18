@@ -31,6 +31,7 @@
                   <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
                      <children>
                         <Label minHeight="-Infinity" minWidth="-Infinity" text="Logs table" />
+                        <CheckBox fx:id="wrapLogsTextCheckbox" mnemonicParsing="false" text="Wrap text within columns" />
                         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Text font">

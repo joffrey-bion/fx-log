@@ -54,6 +54,8 @@ public class Config {
 
     private final BooleanProperty skipEmptyLogs;
 
+    private final BooleanProperty wrapLogsText;
+
     private final Property<Font> logsFont;
 
     private final ObservableList<String> recentFiles;
@@ -71,6 +73,7 @@ public class Config {
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
+        this.wrapLogsText = new SimpleBooleanProperty(true);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.recentFiles = FXCollections.observableArrayList();
         this.columnizers = FXCollections.observableArrayList();
@@ -118,6 +121,19 @@ public class Config {
 
     public void setSkipEmptyLogs(boolean skipEmptyLogs) {
         this.skipEmptyLogs.set(skipEmptyLogs);
+    }
+
+    public boolean getWrapLogsText() {
+        return wrapLogsText.get();
+    }
+
+    @NotNull
+    public BooleanProperty wrapLogsTextProperty() {
+        return wrapLogsText;
+    }
+
+    public void setWrapLogsText(boolean wrapLogsText) {
+        this.wrapLogsText.set(wrapLogsText);
     }
 
     public Font getLogsFont() {

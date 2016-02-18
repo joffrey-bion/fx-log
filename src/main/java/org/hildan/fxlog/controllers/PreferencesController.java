@@ -27,6 +27,9 @@ public class PreferencesController implements Initializable {
     private CheckBox skipEmptyLogsCheckbox;
 
     @FXML
+    private CheckBox wrapLogsTextCheckbox;
+
+    @FXML
     private TextField logsFontField;
 
     @Override
@@ -34,6 +37,7 @@ public class PreferencesController implements Initializable {
         config = Config.getInstance();
         reopenLastFileCheckbox.selectedProperty().bindBidirectional(config.openLastFileAtStartupProperty());
         skipEmptyLogsCheckbox.selectedProperty().bindBidirectional(config.skipEmptyLogsProperty());
+        wrapLogsTextCheckbox.selectedProperty().bindBidirectional(config.wrapLogsTextProperty());
 
         Callable<String> configFontString = () -> {
             Font font = config.getLogsFont();

@@ -19,14 +19,25 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     private final Property<Colorizer> colorizer = new SimpleObjectProperty<>();
 
     public StyledTableCell(TableColumn<LogEntry, String> column) {
-        text.wrappingWidthProperty().bind(column.widthProperty());
+        setWrap(column, Config.getInstance().getWrapLogsText());
+        Config.getInstance().wrapLogsTextProperty().addListener((obs, oldVal, newVal) -> setWrap(column, newVal));
         text.fontProperty().bind(Config.getInstance().logsFontProperty());
         setGraphic(text);
         setText(null);
     }
 
+    private void setWrap(TableColumn<LogEntry, String> column, boolean wrap) {
+        if (wrap) {
+            text.wrappingWidthProperty().bind(column.widthProperty());
+        } else {
+            text.wrappingWidthProperty().unbind();
+            text.setWrappingWidth(0); // disables wrapping
+        }
+    }
+
     @Override
     public void updateItem(String item, boolean empty) {
+        //noinspection StringEquality
         if (item == getItem()) {
             return;
         }
