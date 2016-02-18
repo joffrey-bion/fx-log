@@ -9,7 +9,7 @@
   "recentFiles": [],
   "columnizers": [
     {
-      "name": "Weblogic",
+      "name": "Weblogic Server Log",
       "patterns": [
         "####<(?<datetime>[^>]*?)> <(?<severity>[^>]*?)> <(?<subsystem>[^>]*?)> <(?<machine>[^>]*?)> <(?<server>[^>]*?)> <(?<thread>[^>]*?)> <(?<user>.*?)> <(?<transaction>[^>]*?)> <(?<context>[^>]*?)> <(?<timestamp>[^>]*?)> <(?<msgId>[^>]*?)>( <(?<class>[^>]*?)>)? <(?<msg>[^>]*?)(;jsessionid=(?<sessionid>.*))?>?",
         "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>",
