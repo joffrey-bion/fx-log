@@ -1,0 +1,6 @@
+user=joffrey-bion
+project=fx-log
+since-tag=v0.9
+bug-labels=bug (minor), bug (major)
+enhancement-labels=enhancement,feature,visual improvement
+release-url=https://bintray.com/joffrey-bion/applications/fx-log/%s
