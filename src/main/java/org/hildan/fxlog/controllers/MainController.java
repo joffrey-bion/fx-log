@@ -427,24 +427,11 @@ public class MainController implements Initializable {
      */
     public void openRecentFile(String filename) {
         try {
-            startTailingFile(filename);
+            startTailingFile(new File(filename));
         } catch (FileNotFoundException e) {
             config.removeFromRecentFiles(filename);
             ErrorDialog.recentFileNotFound(filename);
         }
-    }
-
-    /**
-     * Starts tailing the given file, thus updating the log lines in the table.
-     *
-     * @param filename
-     *         the path of the file to tail
-     * @throws FileNotFoundException
-     *         if the file was not found
-     */
-    public void startTailingFile(String filename) throws FileNotFoundException {
-        File file = new File(filename);
-        startTailingFile(file);
     }
 
     /**
@@ -455,7 +442,7 @@ public class MainController implements Initializable {
      * @throws FileNotFoundException
      *         if the file was not found
      */
-    private void startTailingFile(File file) throws FileNotFoundException {
+    public void startTailingFile(File file) throws FileNotFoundException {
         if (!file.exists()) {
             throw new FileNotFoundException(file.getAbsolutePath());
         }

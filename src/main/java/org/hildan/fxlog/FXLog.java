@@ -1,5 +1,6 @@
 package org.hildan.fxlog;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +11,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
 
 import org.hildan.fxlog.config.Config;
@@ -38,6 +41,7 @@ public class FXLog extends Application {
             stage.setScene(scene);
             stage.show();
             MainController controller = loader.getController();
+            configureDragAndDrop(scene, controller);
             autoOpenFile(controller);
         } catch (Exception e) {
             ErrorDialog.uncaughtException(e);
@@ -67,7 +71,7 @@ public class FXLog extends Application {
         if (!params.isEmpty()) {
             String filename = params.get(0);
             try {
-                controller.startTailingFile(filename);
+                controller.startTailingFile(new File(filename));
             } catch (FileNotFoundException e) {
                 ErrorDialog.fileNotFound(filename);
             }
@@ -77,6 +81,35 @@ public class FXLog extends Application {
                 controller.openRecentFile(recentFiles.get(0));
             }
         }
+    }
+
+    private void configureDragAndDrop(@NotNull Scene scene, @NotNull MainController controller) {
+        scene.setOnDragOver(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasFiles()) {
+                event.acceptTransferModes(TransferMode.ANY);
+            } else {
+                event.consume();
+            }
+        });
+
+        // Dropping over surface
+        scene.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                for (File file:db.getFiles()) {
+                    try {
+                        controller.startTailingFile(file);
+                    } catch (FileNotFoundException e) {
+                        ErrorDialog.fileNotFound(file.getAbsolutePath());
+                    }
+                }
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
     }
 
     @Override
