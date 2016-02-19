@@ -9,11 +9,9 @@ You can find the executable Jar in the
 
 ## What does it look like?
 
-![Main view (light theme)](doc/screenshots/main_light_theme.png)
-
-Wanna go dark?
-
-![Main view (dark theme)](doc/screenshots/main_dark_theme.png)
+Light Theme                                                       |  Dark Theme
+:----------------------------------------------------------------:|:----------------------------------------------:
+![Main view (light theme)](doc/screenshots/main_light_theme.png)  |  ![Main view (dark theme)](doc/screenshots/main_dark_theme.png)
 
 ## Features
 
@@ -23,24 +21,26 @@ FX Log follows the end of your file and streams in real time.
 
 ### Filtering
 
-Show only the interesting logs at any time.
+Choose the logs that matter to you at any time.
 
 ### Columnization
 
-Use regular expressions to parse your raw log lines into nice columns:
+Use regular expressions to parse your raw log lines into nice columns. Built-in support is already included for
+standard server logs like Weblogic and Apache.
 
-![Customize Columnizers](doc/screenshots/customize_columnizers.png)
+Custom columnizer                                                   |  Select interesting columns
+:------------------------------------------------------------------:|:----------------------------------------------:
+![Customize Columnizers](doc/screenshots/customize_columnizers.png) | ![Show/hide columns](doc/screenshots/hide_columns.png)
 
-Built-in support is already included for standard server logs. You can choose which column to show/hide using the
-little "+" button at the top right-hand corner of the logs table:
-
-![Show/hide columns](doc/screenshots/hide_columns.png)
-
-### Colorization
+### Coloration
 
 Use regular expressions on raw log lines or column values to change the style of some logs:
 
 ![Customize Colorizers](doc/screenshots/customize_colorizers.png)
+
+## Report issues - Suggest improvements
+
+You can suggest improvements or report problems in the [GitHub issue page](https://github.com/joffrey-bion/fx-log/issues).
 
 ## Contribute
 
