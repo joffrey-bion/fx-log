@@ -9,7 +9,7 @@ You can find the executable Jar in the
 
 ## What does it look like?
 
-Light Theme                                                       |  Dark Theme
+Light Theme & Light Colorizer                                     |  Dark Theme & Dark Colorizer
 :----------------------------------------------------------------:|:----------------------------------------------:
 ![Main view (light theme)](doc/screenshots/main_light_theme.png)  |  ![Main view (dark theme)](doc/screenshots/main_dark_theme.png)
 
