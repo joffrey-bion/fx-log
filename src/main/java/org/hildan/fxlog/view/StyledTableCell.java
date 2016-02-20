@@ -37,14 +37,9 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     @Override
     public void updateItem(String item, boolean empty) {
-        //noinspection StringEquality
-        if (item == getItem()) {
-            return;
-        }
         super.updateItem(item, empty);
-        if (item == null) {
+        if (empty || item == null) {
             setGraphic(null);
-            text.setText(null);
             return;
         }
         setGraphic(text);
