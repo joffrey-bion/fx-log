@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.4.1](https://bintray.com/joffrey-bion/applications/fx-log/1.4.1) (2016-02-20)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4...v1.4.1)
+
+**Fixed bugs:**
+
+- Log colors shift when changing filter state [\#45](https://github.com/joffrey-bion/fx-log/issues/45)
+
+**Closed issues:**
+
+- Project first import issue on Intellij [\#6](https://github.com/joffrey-bion/fx-log/issues/6)
+
+**Merged pull requests:**
+
+- Build: don't fail if no gradle.properties [\#44](https://github.com/joffrey-bion/fx-log/pull/44) ([mebubo](https://github.com/mebubo))
+
 ## [v1.4](https://bintray.com/joffrey-bion/applications/fx-log/1.4) (2016-02-19)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.3...v1.4)
 
