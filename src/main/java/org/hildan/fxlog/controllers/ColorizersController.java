@@ -18,7 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 

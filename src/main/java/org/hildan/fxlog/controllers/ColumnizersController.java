@@ -13,7 +13,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 
 import org.hildan.fxlog.columns.ColumnDefinition;
@@ -122,7 +123,9 @@ public class ColumnizersController implements Initializable {
         }) {
             @Override
             public void commitEdit(Pattern pattern) {
-                if (!isEditing()) return;
+                if (!isEditing()) {
+                    return;
+                }
                 pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, pattern == null);
                 if (pattern != null) {
                     // only if the pattern is valid, otherwise we stay in edit state
