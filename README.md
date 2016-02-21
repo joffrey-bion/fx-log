@@ -15,7 +15,7 @@ You can find the executable Jar in the
 
 Light Theme & Light Colorizer                                     |  Dark Theme & Dark Colorizer
 :----------------------------------------------------------------:|:----------------------------------------------:
-![Main view (light theme)](doc/screenshots/main_light_theme.png)  |  ![Main view (dark theme)](doc/screenshots/main_dark_theme.png)
+![Main view (light theme)](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/main_light_theme.png)  |  ![Main view (dark theme)](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/main_dark_theme.png)
 
 ## Features
 
@@ -34,20 +34,24 @@ standard server logs like Weblogic and Apache.
 
 Custom columnizer                                                   |  Select interesting columns
 :------------------------------------------------------------------:|:----------------------------------------------:
-![Customize Columnizers](doc/screenshots/customize_columnizers.png) | ![Show/hide columns](doc/screenshots/hide_columns.png)
+![Customize Columnizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_columnizers.png) | ![Show/hide columns](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/hide_columns.png)
 
 ### Coloration
 
 Use regular expressions on raw log lines or column values to change the style of some logs:
 
-![Customize Colorizers](doc/screenshots/customize_colorizers.png)
+![Customize Colorizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_colorizers.png)
 
-## Report issues - Suggest improvements
+## Report issues - Suggest improvements [![GitHub issues](https://img.shields.io/github/issues/joffrey-bion/fx-log.svg)](https://github.com/joffrey-bion/fx-log/issues)
 
-You can suggest improvements or report problems in the [GitHub issue page](https://github.com/joffrey-bion/fx-log/issues).
+You can suggest improvements or report problems in the  [GitHub issue page](https://github.com/joffrey-bion/fx-log/issues).
 
 ## Contribute
 
 In order to contribute, you will need [Gradle](http://gradle.org/gradle-download/) and at least JDK 8 u40.
 You might also find the [Java FX Scene Builder](http://gluonhq.com/open-source/scene-builder/) pretty useful to edit
 the views.
+
+## Copyright and License [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
+
+Copyright (c) 2016 Joffrey Bion. Code released under [the MIT license](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
