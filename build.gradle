@@ -1,10 +1,11 @@
 // bintray plugin is used to upload artifacts to a bintray repo
-plugins { id "com.jfrog.bintray" version "1.0" }
+plugins { id "com.jfrog.bintray" version "1.6" }
 
 apply plugin: 'java'
 apply from: 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
 
 group = 'org.hildan'
 version = '1.4.1'
@@ -86,3 +87,22 @@ bintray {
         }
     }
 }
+
+checkstyle {
+    toolVersion = '6.15'
+}
+
+// Fail build on Checkstyle warnings
+// https://issues.gradle.org/browse/GRADLE-2888
+def checkstyleWarningsFile = 'build/reports/checkstyle/main.xml'
+
+task verifyNoCheckstyleWarnings(type: GradleBuild) {
+    doLast {
+        File warningsFile = file(checkstyleWarningsFile)
+        if (warningsFile.exists() && warningsFile.text.contains("<error ")) {
+            throw new GradleException("There were checkstyle warnings! For more info check $warningsFile")
+        }
+    }
+}
+
+checkstyleMain.finalizedBy verifyNoCheckstyleWarnings

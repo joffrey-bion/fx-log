@@ -50,18 +50,13 @@ class DefaultConfig {
         columnDefinitions.add(new ColumnDefinition("Class", "class"));
         columnDefinitions.add(new ColumnDefinition("Message", "msg"));
         columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid"));
-        String weblogicLogStart =
-                "####<(?<datetime>.*?)> <(?<severity>.*?)> <(?<subsystem>.*?)> <(?<machine>.*?)> <(?<server>.*?)> <(?<thread>.*?)> <(?<user>.*?)> <(?<transaction>.*?)> <(?<context>.*?)> <(?<timestamp>.*?)> <(?<msgId>.*?)>";
 
         ObservableList<String> regexps = FXCollections.observableArrayList(//
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?);jsessionid=(?<sessionid>.*?)>", // with session ID
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)>", // without session ID
-                weblogicLogStart + " <(?<class>.*?)> <(?<msg>.*?)", // without session ID and continued on next line
-                weblogicLogStart + " <(?<msg>.*?);jsessionid=(?<sid>.*?)>", // without class but with session ID
-                weblogicLogStart + " <(?<msg>.*?)>", // without class
-                weblogicLogStart + " <(?<msg>.*?)", // without class and continued on next line
-                "(?<msg>.*);jsessionid=(?<sid>.*?)>", // end of log message on new line with session ID
-                "(?<msg>.*)>", // end of log message on new line
+                "####<(?<datetime>[^>]*?)> <(?<severity>[^>]*?)> <(?<subsystem>[^>]*?)> <(?<machine>[^>]*?)> "
+                        + "<(?<server>[^>]*?)> <(?<thread>[^>]*?)> <(?<user>.*?)> <(?<transaction>[^>]*?)> "
+                        + "<(?<context>[^>]*?)> <(?<timestamp>[^>]*?)> <(?<msgId>[^>]*?)>( <(?<class>[^>]*?)>)? "
+                        + "<(?<msg>[^>]*?)(;jsessionid=(?<sessionid>.*))?>?",
+                "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>", // end of log message on new line
                 "(?<msg>.*)"); // middle of log message on new line
         return new Columnizer("Weblogic", columnDefinitions, regexps);
     }
