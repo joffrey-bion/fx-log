@@ -10,7 +10,6 @@ apply plugin: 'checkstyle'
 group = 'org.hildan'
 version = '1.4.1'
 sourceCompatibility = '1.8'
-
 description = 'A JavaFX program to view log files in a beautiful way.'
 
 def mainClassName = "org.hildan.fxlog.FXLog"
@@ -36,13 +35,11 @@ jar {
     }
 }
 
+// defines JavaFX deployment info
 javafx {
-    // Application name and ID presented by target OS
     appID 'FX-Log'
     appName 'FX Log'
     vendor = "Hildan Software"
-
-    // Main class of application
     mainClass mainClassName
 
     profiles {
@@ -51,7 +48,6 @@ javafx {
         }
     }
 
-    // deploy/info attributes
     copyright = 'Copyright (c) 2016 Joffrey Bion'
     description = project.description
     licenseType = 'MIT'
@@ -85,6 +81,14 @@ bintray {
             vcsTag = 'v' + project.version
             gpg { sign = true }
         }
+    }
+}
+
+task generateChangeLog(type: Exec) {
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'github_changelog_generator', '--exclude-labels=wontfix,on hold,duplicate', '&&', 'sed', '-i', 's_applications/fx-log/v_applications/fx-log/_g', 'CHANGELOG.md'
+    } else {
+        commandLine 'github_changelog_generator', '--exclude-labels=wontfix,on hold,duplicate', '&&', 'sed', '-i', 's_applications/fx-log/v_applications/fx-log/_g', 'CHANGELOG.md'
     }
 }
 
