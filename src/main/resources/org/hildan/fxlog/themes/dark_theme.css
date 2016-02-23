@@ -6,7 +6,7 @@
     -fx-light-text-color: rgb(220, 220, 220);
     -fx-mid-text-color: rgb(100, 100, 100);
     -fx-dark-text-color: rgb(20, 20, 20);
-    -fx-accent: rgb(0, 52, 73);
+    -fx-accent: rgb(0, 50, 70);
     -fx-selection-bar-non-focused: rgb(50, 50, 50);
 }
 
@@ -18,4 +18,62 @@
 .text-input:focused {
     -fx-highlight-fill: -fx-accent;
     -fx-prompt-text-fill: transparent;
+}
+
+/*
+ * Pseudo classes on table-row-cell:
+ * - focused = last clicked
+ * - selected = within the selection
+ */
+
+/* Non selected rows */
+.table-view {
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Selected row (last clicked) when table is focused */
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-table-cell-border-color: -fx-selection-bar;
+}
+
+/* Selected row (not last clicked) when table is focused */
+.table-view:focused .table-row-cell:selected {
+    -fx-table-cell-border-color: -fx-selection-bar;
+}
+
+/*!* Selected row (last clicked) when table not focused *!*/
+.table-row-cell:focused:selected {
+    -fx-table-cell-border-color: -fx-selection-bar-non-focused;
+}
+
+/* Selected row (not last clicked) when table not focused */
+.table-row-cell:selected {
+    -fx-table-cell-border-color: -fx-selection-bar-non-focused;
+}
+
+/* HOVERED ROWS */
+
+/* Non-selected row hovered */
+.table-view:row-selection .table-row-cell:filled:hover {
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Selected row (last clicked) hovered when table is focused */
+.table-view:focused .table-row-cell:filled:focused:selected:hover {
+    -fx-table-cell-border-color: -fx-selection-bar;
+}
+
+/* Selected row (last clicked) hovered when table not focused */
+.table-view:row-selection .table-row-cell:filled:focused:selected:hover {
+    -fx-table-cell-border-color: -fx-selection-bar-non-focused;
+}
+
+/* Selected row (not last clicked) hovered when table focused or not */
+.table-view:focused:row-selection .table-row-cell:filled:selected:hover {
+    -fx-table-cell-border-color: -fx-selection-bar;
+}
+
+/* Selected row (not last clicked) hovered when table focused or not */
+.table-view:row-selection .table-row-cell:filled:selected:hover {
+    -fx-table-cell-border-color: -fx-selection-bar-non-focused;
 }
