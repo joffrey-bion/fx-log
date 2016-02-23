@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.4.2](https://bintray.com/joffrey-bion/applications/fx-log/1.4.2) (2016-02-23)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4.1...v1.4.2)
+
+**Implemented enhancements:**
+
+- Refine CSS for dark theme [\#7](https://github.com/joffrey-bion/fx-log/issues/7)
+
+**Closed issues:**
+
+- Resizing down hides the scrollbars [\#47](https://github.com/joffrey-bion/fx-log/issues/47)
+
 ## [v1.4.1](https://bintray.com/joffrey-bion/applications/fx-log/1.4.1) (2016-02-20)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4...v1.4.1)
 
