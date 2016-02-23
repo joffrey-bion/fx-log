@@ -42,7 +42,7 @@ Use regular expressions on raw log lines or column values to change the style of
 
 ![Customize Colorizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_colorizers.png)
 
-## Report issues - Suggest improvements [![GitHub issues](https://img.shields.io/github/issues/joffrey-bion/fx-log.svg)](https://github.com/joffrey-bion/fx-log/issues)
+## Report issues - Suggest improvements
 
 You can suggest improvements or report problems in the  [GitHub issue page](https://github.com/joffrey-bion/fx-log/issues).
 
