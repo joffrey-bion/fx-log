@@ -30,8 +30,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -45,7 +43,6 @@ import javafx.stage.Stage;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
-import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
@@ -57,6 +54,7 @@ import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.view.StyledTableCell;
+import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
@@ -143,9 +141,7 @@ public class MainController implements Initializable {
         configureFiltering();
         configureLogsTable();
         configureRecentFilesMenu();
-        configureColumnizersStage();
-        configureColorizersStage();
-        configurePreferencesStage();
+        configureSecondaryStages();
         configureAutoScroll();
     }
 
@@ -282,54 +278,16 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Configures the stage in which the colorizers customization UI is started.
+     * Configures the preferences and customization stages.
      */
-    private void configureColorizersStage() {
-        colorizersStage = new Stage();
-        try {
-            Parent root = FXLog.loadView("colorizers.fxml");
-            Scene scene = new Scene(root);
-            colorizersStage.setTitle("Customize Colorizers");
-            colorizersStage.setScene(scene);
-            editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
-            Config.getInstance().getCurrentTheme().apply(scene);
-        } catch (IOException e) {
-            ErrorDialog.uncaughtException(e);
-        }
-    }
-
-    /**
-     * Configures the stage in which the columnizers customization UI is started.
-     */
-    private void configureColumnizersStage() {
-        columnizersStage = new Stage();
-        try {
-            Parent root = FXLog.loadView("columnizers.fxml");
-            Scene scene = new Scene(root);
-            columnizersStage.setTitle("Customize Columnizers");
-            columnizersStage.setScene(scene);
-            editColumnizersBtn.disableProperty().bind(columnizersStage.showingProperty());
-            Config.getInstance().getCurrentTheme().apply(scene);
-        } catch (IOException e) {
-            ErrorDialog.uncaughtException(e);
-        }
-    }
-
-    /**
-     * Configures the preferences stage.
-     */
-    private void configurePreferencesStage() {
-        preferencesStage = new Stage();
-        try {
-            Parent root = FXLog.loadView("preferences.fxml");
-            Scene scene = new Scene(root);
-            preferencesStage.setTitle("Preferences");
-            preferencesStage.setScene(scene);
-            editPreferencesMenu.disableProperty().bind(preferencesStage.showingProperty());
-            Config.getInstance().getCurrentTheme().apply(scene);
-        } catch (IOException e) {
-            ErrorDialog.uncaughtException(e);
-        }
+    private void configureSecondaryStages() {
+        Theme theme = config.getCurrentTheme();
+        colorizersStage = UIUtils.createStage("colorizers.fxml", "Customize Colorizers", theme);
+        columnizersStage = UIUtils.createStage("columnizers.fxml", "Customize Columnizers", theme);
+        preferencesStage = UIUtils.createStage("preferences.fxml", "Preferences", theme);
+        editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
+        editColumnizersBtn.disableProperty().bind(columnizersStage.showingProperty());
+        editPreferencesMenu.disableProperty().bind(preferencesStage.showingProperty());
     }
 
     private void configureAutoScroll() {
