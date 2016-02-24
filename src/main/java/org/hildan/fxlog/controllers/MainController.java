@@ -19,11 +19,14 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -43,6 +46,7 @@ import javafx.stage.Stage;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
+import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
@@ -116,6 +120,8 @@ public class MainController implements Initializable {
 
     private Property<Predicate<LogEntry>> filter;
 
+    private StringProperty tailedFileName;
+
     private BooleanProperty followingTail;
 
     private BooleanProperty tailingFile;
@@ -134,8 +140,10 @@ public class MainController implements Initializable {
         columnizer = new SimpleObjectProperty<>();
         followingTail = new SimpleBooleanProperty(false);
         tailingFile = new SimpleBooleanProperty(false);
+        tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
 
+        configureTitleBinding();
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
@@ -143,6 +151,26 @@ public class MainController implements Initializable {
         configureRecentFilesMenu();
         configureSecondaryStages();
         configureAutoScroll();
+    }
+
+    private void configureTitleBinding() {
+        mainPane.sceneProperty().addListener((obsScene, oldScene, newScene) -> {
+            newScene.windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
+                Stage stage = (Stage)newWindow;
+                StringBinding titleBinding = createTitleBinding(tailingFile, tailedFileName);
+                stage.titleProperty().bind(titleBinding);
+            });
+        });
+    }
+
+    private static StringBinding createTitleBinding(BooleanProperty appendFileName, StringProperty filename) {
+        return Bindings.createStringBinding(() -> {
+            String newTitle = FXLog.APP_NAME;
+            if (appendFileName.get()) {
+                newTitle += " - " + filename.get();
+            }
+            return newTitle;
+        }, filename, appendFileName);
     }
 
     /**
@@ -410,6 +438,7 @@ public class MainController implements Initializable {
         logTailListener.skipEmptyLogsProperty().bind(config.skipEmptyLogsProperty());
         tailer = Tailer.create(file, logTailListener, 500);
         tailingFile.set(true);
+        tailedFileName.set(file.getAbsolutePath());
     }
 
     /**
@@ -440,6 +469,7 @@ public class MainController implements Initializable {
         }
         columnizedLogs.clear();
         tailingFile.set(false);
+        tailedFileName.set("");
     }
 
     /**

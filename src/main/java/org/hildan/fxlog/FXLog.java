@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class FXLog extends Application {
 
+    public static final String APP_NAME = "FX Log";
+
     public static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
 
     private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
@@ -37,7 +39,7 @@ public class FXLog extends Application {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Config.getInstance().getCurrentTheme().apply(scene);
-            stage.setTitle("FX Log");
+            stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
             MainController controller = loader.getController();
