@@ -44,11 +44,12 @@ Use regular expressions on raw log lines or column values to change the style of
 
 ## Report issues - Suggest improvements
 
-You can suggest improvements or report problems in the  [GitHub issue page](https://github.com/joffrey-bion/fx-log/issues).
+You can suggest improvements or report problems in the
+[GitHub issues page](https://github.com/joffrey-bion/fx-log/issues).
 
 ## Contribute
 
-In order to contribute, you will need the following
+### Required Software
 
 - [Git LFS extension](https://git-lfs.github.com/) (for big sample log files)
 
@@ -56,9 +57,14 @@ In order to contribute, you will need the following
 
 - [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (at least jdk8_u40)
 
-- You might also find the [Java FX Scene Builder](http://gluonhq.com/open-source/scene-builder/) pretty useful to edit
-the views.
+- [optional] [Java FX Scene Builder](http://gluonhq.com/open-source/scene-builder/) (pretty useful to edit
+the views)
+
+### Coding style
+
+For your pull-request to build, your code has to respect the checkstyle config in `config/checkstyle`.
 
 ## Copyright and License [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
 
-Copyright (c) 2016 Joffrey Bion. Code released under [the MIT license](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
+Copyright (c) 2016 Joffrey Bion. Code released under
+[the MIT license](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
