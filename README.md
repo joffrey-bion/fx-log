@@ -48,8 +48,15 @@ You can suggest improvements or report problems in the  [GitHub issue page](http
 
 ## Contribute
 
-In order to contribute, you will need [Gradle](http://gradle.org/gradle-download/) and at least JDK 8 u40.
-You might also find the [Java FX Scene Builder](http://gluonhq.com/open-source/scene-builder/) pretty useful to edit
+In order to contribute, you will need the following
+
+- [Git LFS extension](https://git-lfs.github.com/) (for big sample log files)
+
+- [Gradle](http://gradle.org/gradle-download/) (at least version 2.7)
+
+- [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (at least jdk8_u40)
+
+- You might also find the [Java FX Scene Builder](http://gluonhq.com/open-source/scene-builder/) pretty useful to edit
 the views.
 
 ## Copyright and License [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
