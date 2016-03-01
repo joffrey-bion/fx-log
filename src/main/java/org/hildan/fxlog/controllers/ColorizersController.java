@@ -219,8 +219,8 @@ public class ColorizersController implements Initializable {
                         filterType.selectedToggleProperty());
         ruleFilter.columnNameProperty().bind(filterColumnBinding);
 
-        bindActivableColorPicker(rule.backgroundProperty(), backgroundColorPicker, overrideTextBackground);
-        bindActivableColorPicker(rule.foregroundProperty(), foregroundColorPicker, overrideTextForeground);
+        bindActivableColorPicker(rule.backgroundColorProperty(), backgroundColorPicker, overrideTextBackground);
+        bindActivableColorPicker(rule.foregroundColorProperty(), foregroundColorPicker, overrideTextForeground);
     }
 
     private void unbindRuleFromUI(@Nullable StyleRule rule) {
@@ -228,8 +228,8 @@ public class ColorizersController implements Initializable {
             return;
         }
         rule.nameProperty().unbind();
-        rule.backgroundProperty().unbind();
-        rule.foregroundProperty().unbind();
+        rule.backgroundColorProperty().unbind();
+        rule.foregroundColorProperty().unbind();
         rule.getFilter().columnNameProperty().unbind();
         rule.getFilter().patternProperty().unbind();
     }

@@ -48,8 +48,8 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
             TableRow row = getTableRow();
             if (row != null && row.getItem() != null) {
                 LogEntry log = (LogEntry) row.getItem();
-                colorizer.getValue().applyTo(text, log); // for the foreground
-                colorizer.getValue().applyTo(this, log); // for the background
+                colorizer.getValue().bindStyle(text, log); // for the foreground
+                colorizer.getValue().bindStyle(this, log); // for the background
             }
         }
     }

@@ -1,11 +1,11 @@
 {
   "selectedColumnizerIndex": 0,
-  "selectedColorizerIndex": 1,
-  "currentTheme": "LIGHT",
+  "selectedColorizerIndex": 2,
+  "currentTheme": "DARK",
   "openLastFileAtStartup": true,
   "skipEmptyLogs": true,
   "wrapLogsText": false,
-  "logsFont": "System,Regular,11.0",
+  "logsFont": "SansSerif,Regular,11.0",
   "recentFiles": [],
   "columnizers": [
     {
@@ -210,8 +210,8 @@
             "columnName": "severity",
             "pattern": "[Ee]rror"
           },
-          "foreground": "#ca1d1dff",
-          "background": "null"
+          "foregroundColor": "#ca1d1dff",
+          "backgroundColor": "null"
         },
         {
           "name": "Warn",
@@ -219,8 +219,8 @@
             "columnName": "severity",
             "pattern": "[Ww]arn(ing)?"
           },
-          "foreground": "#e6994dff",
-          "background": "null"
+          "foregroundColor": "#e6994dff",
+          "backgroundColor": "null"
         },
         {
           "name": "Info",
@@ -228,8 +228,8 @@
             "columnName": "severity",
             "pattern": "[Ii]nfo"
           },
-          "foreground": "#10c14bff",
-          "background": "null"
+          "foregroundColor": "#10c14bff",
+          "backgroundColor": "null"
         },
         {
           "name": "Debug",
@@ -237,8 +237,8 @@
             "columnName": "severity",
             "pattern": "[Dd]ebug"
           },
-          "foreground": "#334db3ff",
-          "background": "null"
+          "foregroundColor": "#334db3ff",
+          "backgroundColor": "null"
         },
         {
           "name": "Notice",
@@ -246,8 +246,8 @@
             "columnName": "severity",
             "pattern": "[Nn]otice"
           },
-          "foreground": "#ccccccff",
-          "background": "null"
+          "foregroundColor": "#ccccccff",
+          "backgroundColor": "null"
         },
         {
           "name": "Stacktrace",
@@ -255,8 +255,8 @@
             "columnName": "msg",
             "pattern": "(at \\S.*)|(Caused By.*)"
           },
-          "foreground": "#ca1d1dff",
-          "background": "null"
+          "foregroundColor": "#ca1d1dff",
+          "backgroundColor": "null"
         },
         {
           "name": "Default",
@@ -264,8 +264,8 @@
             "columnName": 0,
             "pattern": ".*"
           },
-          "foreground": "#e6e6e6ff",
-          "background": "null"
+          "foregroundColor": "#e6e6e6ff",
+          "backgroundColor": "null"
         }
       ]
     },
@@ -278,8 +278,8 @@
             "columnName": "severity",
             "pattern": "[Ee]rror"
           },
-          "foreground": "#aa0000ff",
-          "background": "null"
+          "foregroundColor": "#aa0000ff",
+          "backgroundColor": "null"
         },
         {
           "name": "Warn",
@@ -287,8 +287,8 @@
             "columnName": "severity",
             "pattern": "[Ww]arn(ing)?"
           },
-          "foreground": "#b27200ff",
-          "background": "null"
+          "foregroundColor": "#b27200ff",
+          "backgroundColor": "null"
         },
         {
           "name": "Info",
@@ -296,8 +296,8 @@
             "columnName": "severity",
             "pattern": "[Ii]nfo"
           },
-          "foreground": "#008100ff",
-          "background": "null"
+          "foregroundColor": "#008100ff",
+          "backgroundColor": "null"
         },
         {
           "name": "Debug",
@@ -305,8 +305,8 @@
             "columnName": "severity",
             "pattern": "[Dd]ebug"
           },
-          "foreground": "#0000bbff",
-          "background": "null"
+          "foregroundColor": "#0000bbff",
+          "backgroundColor": "null"
         },
         {
           "name": "Notice",
@@ -314,8 +314,8 @@
             "columnName": "severity",
             "pattern": "[Nn]otice"
           },
-          "foreground": "null",
-          "background": "null"
+          "foregroundColor": "null",
+          "backgroundColor": "null"
         },
         {
           "name": "Stacktrace",
@@ -323,8 +323,8 @@
             "columnName": "msg",
             "pattern": "(at \\S.*)|(Caused By.*)"
           },
-          "foreground": "#990000ff",
-          "background": "null"
+          "foregroundColor": "#990000ff",
+          "backgroundColor": "null"
         },
         {
           "name": "Default",
@@ -332,8 +332,85 @@
             "columnName": 0,
             "pattern": ".*"
           },
-          "foreground": "#1a1a1aff",
-          "background": "null"
+          "foregroundColor": "#1a1a1aff",
+          "backgroundColor": "null"
+        }
+      ]
+    },
+    {
+      "name": "Weblogic (dark)",
+      "styleRules": [
+        {
+          "name": "Highlight",
+          "filter": {
+            "columnName": "msg",
+            "pattern": "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)"
+          },
+          "foregroundColor": "#50e6ffff",
+          "backgroundColor": "#002042ff"
+        },
+        {
+          "name": "Error",
+          "filter": {
+            "columnName": "severity",
+            "pattern": "[Ee]rror"
+          },
+          "foregroundColor": "#ca1d1dff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Warn",
+          "filter": {
+            "columnName": "severity",
+            "pattern": "[Ww]arn(ing)?"
+          },
+          "foregroundColor": "#e6994dff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Info",
+          "filter": {
+            "columnName": "severity",
+            "pattern": "[Ii]nfo"
+          },
+          "foregroundColor": "#10c14bff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Debug",
+          "filter": {
+            "columnName": "severity",
+            "pattern": "[Dd]ebug"
+          },
+          "foregroundColor": "#334db3ff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Notice",
+          "filter": {
+            "columnName": "severity",
+            "pattern": "[Nn]otice"
+          },
+          "foregroundColor": "#ccccccff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Stacktrace",
+          "filter": {
+            "columnName": "msg",
+            "pattern": "(at \\S.*)|(Caused By.*)|((\\S+\\.)+\\S+.*)"
+          },
+          "foregroundColor": "#ca1d1dff",
+          "backgroundColor": "null"
+        },
+        {
+          "name": "Default",
+          "filter": {
+            "columnName": 0,
+            "pattern": ".*"
+          },
+          "foregroundColor": "#e6e6e6ff",
+          "backgroundColor": "null"
         }
       ]
     },
