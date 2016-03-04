@@ -270,6 +270,8 @@ public class MainController implements Initializable {
         List<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
             StyledTableCell cell = new StyledTableCell(column);
+            cell.fontProperty().bind(config.logsFontProperty());
+            cell.wrapTextProperty().bind(config.wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
             return cell;
         }));
