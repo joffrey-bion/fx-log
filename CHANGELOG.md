@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.5](https://bintray.com/joffrey-bion/applications/fx-log/1.5) (2016-03-14)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4.2...v1.5)
+
+**Implemented enhancements:**
+
+- Missing File name and path in the UI [\#48](https://github.com/joffrey-bion/fx-log/issues/48)
+
+**Fixed bugs:**
+
+- Colorizer background color has no effect [\#54](https://github.com/joffrey-bion/fx-log/issues/54)
+- Colorizer's "stacktrace" rule does not match first line [\#52](https://github.com/joffrey-bion/fx-log/issues/52)
+- Weblogic's columnizer fails on messages containing \<\> [\#49](https://github.com/joffrey-bion/fx-log/issues/49)
+- Colors not updating immediately [\#21](https://github.com/joffrey-bion/fx-log/issues/21)
+
 ## [v1.4.2](https://bintray.com/joffrey-bion/applications/fx-log/1.4.2) (2016-02-23)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4.1...v1.4.2)
 
