@@ -14,7 +14,7 @@ apply plugin: 'idea'
 apply plugin: 'checkstyle'
 
 group = 'org.hildan'
-version = '1.4.2'
+version = '1.5'
 sourceCompatibility = 1.8
 description = 'A JavaFX program to view log files in a beautiful way.'
 
