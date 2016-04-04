@@ -44,11 +44,15 @@ class ConfigLoader {
      */
     static Config getUserConfig() throws JsonSyntaxException {
         try {
-            return readConfigFrom(new FileReader(USER_CONFIG_PATH));
+            Config config = readConfigFrom(new FileReader(USER_CONFIG_PATH));
+            if (config.getVersion() == Config.FORMAT_VERSION) {
+                return config;
+            } else {
+                System.err.println("User config outdated");
+                ErrorDialog.configOutdated();
+            }
         } catch (FileNotFoundException e) {
             System.out.println("User config not found, falling back to built-in config");
-        } catch (JsonIOException e) {
-            System.out.println("IO error while reading user config, falling back to built-in config");
         } catch (Exception e) {
             ErrorDialog.configReadException(USER_CONFIG_PATH, e);
         }
@@ -62,7 +66,11 @@ class ConfigLoader {
             return DefaultConfig.generate();
         }
         try {
-            return readConfigFrom(new InputStreamReader(jsonConfigStream));
+            Config config = readConfigFrom(new InputStreamReader(jsonConfigStream));
+            if (config.getVersion() == Config.FORMAT_VERSION) {
+                return config;
+            }
+            System.err.println("Built-in config version does not match the current config version");
         } catch (JsonSyntaxException e) {
             System.err.println("Syntax error in built-in config. SHAME.");
         } catch (JsonIOException e) {

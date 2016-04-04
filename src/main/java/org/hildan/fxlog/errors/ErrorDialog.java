@@ -5,6 +5,7 @@ import java.io.StringWriter;
 
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
@@ -13,8 +14,12 @@ import javafx.scene.layout.Priority;
  */
 public class ErrorDialog {
 
+    private static final ButtonType BTN_OVERWRITE = new ButtonType("Overwrite", ButtonData.YES);
+
+    private static final ButtonType BTN_I_WILL_FIX = new ButtonType("I'll fix it", ButtonData.NO);
+
     private static Alert createExceptionDialog(AlertType type, String title, String header, String content,
-                                              Throwable e) {
+                                               Throwable e) {
         // useful to have it in the console output for debugging
         e.printStackTrace();
 
@@ -49,14 +54,34 @@ public class ErrorDialog {
         return alert;
     }
 
+    public static void configOutdated() {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Outdated Configuration");
+        alert.setHeaderText("The format of your config file is too old for this version of FX-Log.");
+        alert.setContentText("As of now, there is no automatic way to convert your file to the new config format."
+                + " Your config file needs to be deleted and replaced by the new default config, or you can exit and"
+                + " change it manually to try and keep your custom stuff. Sorry for the inconvenience.");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(BTN_OVERWRITE);
+        alert.getButtonTypes().add(BTN_I_WILL_FIX);
+        alert.showAndWait()
+             .filter(response -> response == BTN_I_WILL_FIX)
+             .ifPresent(response -> System.exit(0));
+    }
+
     public static void configReadException(String filename, Throwable e) {
         e.printStackTrace();
         String title = "Config Load Error";
         String header = "Messing up much with the config?";
-        String content = String.format("There is an error in your config file '%s'.\n\n"
-                + "The built-in config was used instead. Unfortunately, your dirty work will be erased.", filename);
+        String content = String.format("There was an error while reading your config file '%s'. You can either "
+                + "replace your config with the default, or exit and fix the config file yourself", filename);
         Alert alert = createExceptionDialog(AlertType.WARNING, title, header, content, e);
-        alert.showAndWait();
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(BTN_OVERWRITE);
+        alert.getButtonTypes().add(BTN_I_WILL_FIX);
+        alert.showAndWait()
+             .filter(response -> response == BTN_I_WILL_FIX)
+             .ifPresent(response -> System.exit(0));
     }
 
     public static void configWriteException(Throwable e) {
@@ -89,8 +114,9 @@ public class ErrorDialog {
         alert.setTitle("File Not Found");
         alert.setHeaderText("Your file has disappeared!");
         String pathMention = path != null ? String.format("('%s') ", path) : "";
-        alert.setContentText(String.format("The file you selected %swas somehow deleted right before I opened it."
-                + "Unlucky you.", pathMention));
+        alert.setContentText(
+                String.format("The file you selected %swas somehow deleted right before I opened it. Unlucky you.",
+                        pathMention));
         alert.showAndWait();
     }
 
