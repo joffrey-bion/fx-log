@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.6](https://bintray.com/joffrey-bion/applications/fx-log/1.6) (2016-04-04)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.5...v1.6)
+
+**Implemented enhancements:**
+
+- Add config format version concept [\#56](https://github.com/joffrey-bion/fx-log/issues/56)
+
+**Fixed bugs:**
+
+- NPE when opening a file or changing theme [\#57](https://github.com/joffrey-bion/fx-log/issues/57)
+
 ## [v1.5](https://bintray.com/joffrey-bion/applications/fx-log/1.5) (2016-03-14)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.4.2...v1.5)
 
