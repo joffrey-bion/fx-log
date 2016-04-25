@@ -84,12 +84,6 @@ public class MainController implements Initializable {
     private ChoiceBox<Colorizer> colorizerSelector;
 
     @FXML
-    private Button editColumnizersBtn;
-
-    @FXML
-    private Button editColorizersBtn;
-
-    @FXML
     private TextField filterField;
 
     @FXML
@@ -100,9 +94,6 @@ public class MainController implements Initializable {
 
     @FXML
     private MenuItem closeMenu;
-
-    @FXML
-    private MenuItem editPreferencesMenu;
 
     @FXML
     private CheckMenuItem followTailMenu;
@@ -315,9 +306,6 @@ public class MainController implements Initializable {
         colorizersStage = UIUtils.createStage("colorizers.fxml", "Customize Colorizers", theme);
         columnizersStage = UIUtils.createStage("columnizers.fxml", "Customize Columnizers", theme);
         preferencesStage = UIUtils.createStage("preferences.fxml", "Preferences", theme);
-        editColorizersBtn.disableProperty().bind(colorizersStage.showingProperty());
-        editColumnizersBtn.disableProperty().bind(columnizersStage.showingProperty());
-        editPreferencesMenu.disableProperty().bind(preferencesStage.showingProperty());
     }
 
     private void configureAutoScroll() {
@@ -372,7 +360,11 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editColorizers() {
-        colorizersStage.showAndWait();
+        if (!colorizersStage.isShowing()) {
+            colorizersStage.showAndWait();
+        } else {
+            colorizersStage.toFront();
+        }
     }
 
     /**
@@ -380,7 +372,11 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editColumnizers() {
-        columnizersStage.showAndWait();
+        if (!columnizersStage.isShowing()) {
+            columnizersStage.showAndWait();
+        } else {
+            columnizersStage.toFront();
+        }
     }
 
     /**
@@ -388,7 +384,11 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editPreferences() {
-        preferencesStage.showAndWait();
+        if (!preferencesStage.isShowing()) {
+            preferencesStage.showAndWait();
+        } else {
+            preferencesStage.toFront();
+        }
     }
 
     /**

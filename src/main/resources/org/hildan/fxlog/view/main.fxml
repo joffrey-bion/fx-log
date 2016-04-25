@@ -35,7 +35,7 @@
                                 <Menu fx:id="recentFilesMenu" text="Open _Recent" />
                                 <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="editPreferencesMenu" mnemonicParsing="false" onAction="#editPreferences" text="Preferences..." />
+                        <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences..." />
                                 <MenuItem onAction="#quit" text="_Quit">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -83,13 +83,13 @@
                     <items>
                   <Label text="Columns" />
                   <ChoiceBox fx:id="columnizerSelector" />
-                  <Button fx:id="editColumnizersBtn" mnemonicParsing="false" onAction="#editColumnizers" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#editColumnizers" text="Edit" />
                   <Label text="Colors" />
                   <ChoiceBox fx:id="colorizerSelector" />
-                  <Button fx:id="editColorizersBtn" mnemonicParsing="false" onAction="#editColorizers" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#editColorizers" text="Edit" />
                         <TextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS" />
                   <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Case Sensitive" />
-                  <Button fx:id="clearLogsButton" mnemonicParsing="false" onAction="#clearLogs" text="Clear">
+                  <Button mnemonicParsing="false" onAction="#clearLogs" text="Clear">
                      <tooltip>
                         <Tooltip text="Removes the current logs from display (does not affect the file)" />
                      </tooltip>
