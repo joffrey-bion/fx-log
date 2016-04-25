@@ -37,8 +37,10 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
         if (empty || item == null) {
+            setGraphic(null);
             return;
         }
+        setGraphic(text);
         text.setText(item);
         if (colorizer.getValue() != null) {
             TableRow row = getTableRow();
