@@ -461,6 +461,14 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Clears the current logs.
+     */
+    @FXML
+    public void clearLogs() {
+        columnizedLogs.clear();
+    }
+
+    /**
      * Closes the currently opened file.
      */
     @FXML
