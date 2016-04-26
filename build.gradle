@@ -21,7 +21,7 @@ description = 'A JavaFX program to view log files in a beautiful way.'
 def mainClassName = "org.hildan.fxlog.FXLog"
 
 // access to the git repository API
-def gitRepo = Grgit.open(project.file('.'))
+def gitRepo = Grgit.open()
 
 repositories { mavenCentral() }
 
