@@ -34,6 +34,13 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
+// to inject the project version in main.fxml
+processResources {
+    filesMatching('**/main.fxml') {
+        f -> f.expand projectVersion: project.version
+    }
+}
+
 // to build a fat jar with all dependencies included
 jar {
     manifest { attributes "Main-Class": mainClassName }

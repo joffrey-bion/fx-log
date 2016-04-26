@@ -75,6 +75,7 @@
                         <Menu text="_Help">
                             <items>
                                 <MenuItem onAction="#openUserManual" text="User _manual" />
+                        <MenuItem mnemonicParsing="false" text="Version ${projectVersion}" />
                             </items>
                         </Menu>
                     </menus>
