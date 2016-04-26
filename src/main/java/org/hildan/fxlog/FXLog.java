@@ -3,10 +3,8 @@ package org.hildan.fxlog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.Properties;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,6 +18,7 @@ import javafx.stage.Stage;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.controllers.MainController;
 import org.hildan.fxlog.errors.ErrorDialog;
+import org.hildan.fxlog.version.VersionChecker;
 import org.jetbrains.annotations.NotNull;
 
 public class FXLog extends Application {
@@ -29,8 +28,6 @@ public class FXLog extends Application {
     public static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
 
     private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
-
-    private static final String VERSION_PROPERTIES = "version.properties";
 
     @Override
     public void start(Stage stage) {
@@ -46,6 +43,9 @@ public class FXLog extends Application {
             stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
+            System.out.println("Current version: " + VersionChecker.getCurrentVersion());
+            System.out.println("Latest version:  " + VersionChecker.getLatestVersion());
+            System.out.println("Update available: " + VersionChecker.isUpdateAvailable());
             MainController controller = loader.getController();
             configureDragAndDrop(scene, controller);
             autoOpenFile(controller);
@@ -131,25 +131,5 @@ public class FXLog extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    /**
-     * Returns the current version of the project. The version is taken from the resource version.properties, which in
-     * turn is fed by gradle.
-     *
-     * @return the current version of the project, as a SemVer string
-     */
-    public static String getVersion() {
-        Properties prop = new Properties();
-        try {
-            InputStream is = FXLog.class.getResourceAsStream(VERSION_PROPERTIES);
-            if (is == null) {
-                throw new RuntimeException("Couldn't find " + VERSION_PROPERTIES);
-            }
-            prop.load(is);
-            return prop.getProperty("version");
-        } catch (IOException e) {
-            throw new RuntimeException("Couldn't read " + VERSION_PROPERTIES, e);
-        }
     }
 }
