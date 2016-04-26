@@ -36,8 +36,10 @@ dependencies {
 
 // to inject the project version in main.fxml
 processResources {
-    filesMatching('**/main.fxml') {
-        f -> f.expand projectVersion: project.version
+    ['**/*.properties', '**/main.fxml'].each {
+        filesMatching(it) {
+            f -> f.expand projectVersion: project.version
+        }
     }
 }
 
