@@ -20,13 +20,13 @@ public class MockLogger {
 
     private static final String[] levels = {"VERBOSE", "DEBUG", "INFO", "WARN", "ERROR"};
 
-    private static final String[] classes =
-            {"com.amadeus.DataMap", "org.bigfoot.Toe", "java.util.Map", "com.fizzy.Twizzer", "org.whynot.Question",
-                    "com.enterprise.Business"};
+    private static final String[] classes = {"com.amadeus.DataMap", "org.bigfoot.Toe", "java.util.Map",
+            "com.fizzy.Twizzer", "org.whynot.Question", "com.enterprise.Business"};
 
     private static final String[] nouns = {"file", "message", "id", "PNR", "reservation", "service", "class", "object"};
 
-    private static final String[] participates = {"found", "deleted", "inserted", "retrieved", "read", "downloaded", "accessed", "returned"};
+    private static final String[] participates = {"found", "deleted", "inserted", "retrieved", "read", "downloaded",
+            "accessed", "returned"};
 
     private static final String[] verbs = {"cannot be", "was", "has been", "could not be"};
 
@@ -48,14 +48,17 @@ public class MockLogger {
     }
 
     /**
-     * Writes mock lines to the file at the given path. It writes line by line. Speed depends on delayBetweenLines. The file is cleaned at the beginning of each call.
+     * Writes mock lines to the file at the given path. It writes line by line. Speed depends on delayBetweenLines. The
+     * file is cleaned at the beginning of each call.
      *
-     * @param path              the path to the target file
-     * @param delayBetweenLines the delay between line writes, in milliseconds
+     * @param filename
+     *         the path to the target file
+     * @param delayBetweenLines
+     *         the delay between line writes, in milliseconds
      */
-    private static void streamMockLogsToFile(String path, int delayBetweenLines) {
-        Path p = Paths.get(path);
-        try (BufferedWriter writer = Files.newBufferedWriter(p, UTF_8, TRUNCATE_EXISTING, SYNC)) {
+    private static void streamMockLogsToFile(String filename, int delayBetweenLines) {
+        Path path = Paths.get(filename);
+        try (BufferedWriter writer = Files.newBufferedWriter(path, UTF_8, TRUNCATE_EXISTING, SYNC)) {
             while (true) {
                 writer.write(mockLogLine());
                 writer.flush();
