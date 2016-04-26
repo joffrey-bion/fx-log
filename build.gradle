@@ -36,11 +36,17 @@ dependencies {
 
 // to inject the project version in main.fxml
 processResources {
-    ['**/*.properties', '**/main.fxml'].each {
+    ['**/*.properties', '**/about.fxml'].each {
         filesMatching(it) {
-            f -> f.expand projectVersion: project.version
+            f -> f.expand(projectVersion: project.version, buildDate: getDate())
         }
     }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('MMM d, yyyy')
+    return formattedDate
 }
 
 // to build a fat jar with all dependencies included

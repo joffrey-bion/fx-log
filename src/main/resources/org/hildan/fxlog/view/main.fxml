@@ -76,7 +76,7 @@
                             <items>
                                 <MenuItem onAction="#openUserManual" text="User _manual" />
                         <MenuItem onAction="#checkForUpdates" text="Check for _updates" />
-                        <MenuItem mnemonicParsing="false" text="Version ${projectVersion}" />
+                        <MenuItem onAction="#about" text="_About FX Log" />
                             </items>
                         </Menu>
                     </menus>

@@ -72,6 +72,8 @@ public class MainController implements Initializable {
 
     private Stage preferencesStage;
 
+    private Stage aboutStage;
+
     @FXML
     private BorderPane mainPane;
 
@@ -307,6 +309,7 @@ public class MainController implements Initializable {
         colorizersStage = UIUtils.createStage("colorizers.fxml", "Customize Colorizers", theme);
         columnizersStage = UIUtils.createStage("columnizers.fxml", "Customize Columnizers", theme);
         preferencesStage = UIUtils.createStage("preferences.fxml", "Preferences", theme);
+        aboutStage = UIUtils.createStage("about.fxml", "About FX Log", theme);
     }
 
     private void configureAutoScroll() {
@@ -389,6 +392,18 @@ public class MainController implements Initializable {
             preferencesStage.showAndWait();
         } else {
             preferencesStage.toFront();
+        }
+    }
+
+    /**
+     * Opens the about window.
+     */
+    @FXML
+    public void about() {
+        if (!aboutStage.isShowing()) {
+            aboutStage.showAndWait();
+        } else {
+            aboutStage.toFront();
         }
     }
 
