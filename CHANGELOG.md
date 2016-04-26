@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.7](https://bintray.com/joffrey-bion/applications/fx-log/1.7) (2016-04-26)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.6...v1.7)
+
+**Implemented enhancements:**
+
+- Log clear feature [\#59](https://github.com/joffrey-bion/fx-log/issues/59)
+- Secondary windows: bring to front instead of disabling button [\#55](https://github.com/joffrey-bion/fx-log/issues/55)
+- Add the version number in the Help menu [\#42](https://github.com/joffrey-bion/fx-log/issues/42)
+- FX Log updates notification mechanism [\#33](https://github.com/joffrey-bion/fx-log/issues/33)
+
+**Merged pull requests:**
+
+- Added a new Columnizer for Amadeus input.log files [\#58](https://github.com/joffrey-bion/fx-log/pull/58) ([lwouis](https://github.com/lwouis))
+
 ## [v1.6](https://bintray.com/joffrey-bion/applications/fx-log/1.6) (2016-04-04)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.5...v1.6)
 
