@@ -43,9 +43,9 @@ public class FXLog extends Application {
             stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
-            System.out.println("Current version: " + VersionChecker.getCurrentVersion());
-            System.out.println("Latest version:  " + VersionChecker.getLatestVersion());
-            System.out.println("Update available: " + VersionChecker.isUpdateAvailable());
+
+            VersionChecker.checkForUpdates(false);
+
             MainController controller = loader.getController();
             configureDragAndDrop(scene, controller);
             autoOpenFile(controller);

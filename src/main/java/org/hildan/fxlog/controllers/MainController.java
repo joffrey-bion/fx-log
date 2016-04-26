@@ -57,6 +57,7 @@ import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
+import org.hildan.fxlog.version.VersionChecker;
 import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
@@ -576,5 +577,13 @@ public class MainController implements Initializable {
         } catch (IOException | URISyntaxException e) {
             ErrorDialog.uncaughtException(e);
         }
+    }
+
+    /**
+     * Checks for available updates of FX Log.
+     */
+    @FXML
+    public void checkForUpdates() {
+        VersionChecker.checkForUpdates(true);
     }
 }
