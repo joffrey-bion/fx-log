@@ -6,13 +6,13 @@
   "openLastFileAtStartup": true,
   "skipEmptyLogs": true,
   "wrapLogsText": false,
-  "logsFont": "SansSerif,Regular,11.0",
+  "logsFont": "SansSerif,Regular,12.0",
   "recentFiles": [],
   "columnizers": [
     {
       "name": "Weblogic Server Log",
       "patterns": [
-        "####<(?<datetime>[^>]*?)> <(?<severity>[^>]*?)> <(?<subsystem>[^>]*?)> <(?<machine>[^>]*?)> <(?<server>[^>]*?)> <(?<thread>[^>]*?)> <(?<user>.*?)> <(?<transaction>[^>]*?)> <(?<context>[^>]*?)> <(?<timestamp>[^>]*?)> <(?<msgId>[^>]*?)>( <(?<class>[^>]*?)>)? <(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?",
+        "####<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)> ?<(?<user>.*?)> ?<(?<transaction>[^>]*?)> ?<(?<context>[^>]*?)> ?<(?<timestamp>[^>]*?)> ?<(?<msgId>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?<(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?",
         "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>",
         "(?<msg>.*)"
       ],
@@ -20,20 +20,20 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 155.419921875,
+          "width": 219.419921875,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 34.52734375,
+          "width": 64.52734375,
           "visible": true
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
           "width": 55.14501953125,
-          "visible": true
+          "visible": false
         },
         {
           "headerLabel": "Machine Name",
@@ -51,7 +51,7 @@
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
           "width": 201.68798828125,
-          "visible": true
+          "visible": false
         },
         {
           "headerLabel": "User ID",
@@ -86,19 +86,83 @@
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 163.0,
+          "width": 149.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 2124.0,
+          "width": 1572.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 486.0,
+          "width": 338.0,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Weblogic (processed by EasyTrace)",
+      "patterns": [
+        "<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?<(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?",
+        "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>",
+        "(?<msg>.*)"
+      ],
+      "columnDefinitions": [
+        {
+          "headerLabel": "Date/Time",
+          "capturingGroupName": "datetime",
+          "width": 159.419921875,
+          "visible": true
+        },
+        {
+          "headerLabel": "Severity",
+          "capturingGroupName": "severity",
+          "width": 64.52734375,
+          "visible": true
+        },
+        {
+          "headerLabel": "Subsystem",
+          "capturingGroupName": "subsystem",
+          "width": 55.14501953125,
+          "visible": false
+        },
+        {
+          "headerLabel": "Machine Name",
+          "capturingGroupName": "machine",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Server Name",
+          "capturingGroupName": "server",
+          "width": 80.0,
+          "visible": false
+        },
+        {
+          "headerLabel": "Thread ID",
+          "capturingGroupName": "thread",
+          "width": 201.68798828125,
+          "visible": false
+        },
+        {
+          "headerLabel": "Class",
+          "capturingGroupName": "class",
+          "width": 447.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "Message",
+          "capturingGroupName": "msg",
+          "width": 739.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "JSessionID",
+          "capturingGroupName": "sessionid",
+          "width": 338.0,
           "visible": true
         }
       ]
