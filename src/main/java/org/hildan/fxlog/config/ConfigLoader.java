@@ -85,7 +85,7 @@ class ConfigLoader {
     }
 
     private static Config readConfigFrom(Reader source) throws JsonIOException, JsonSyntaxException {
-        return FxGson.builder().create().fromJson(source, Config.class);
+        return ConfigGson.create().fromJson(source, Config.class);
     }
 
     private static void writeConfigTo(String filename, Config config) throws IOException {
@@ -95,7 +95,7 @@ class ConfigLoader {
             Files.createDirectories(parentDir);
         }
         // html escaping disabled to see <> in regexps in the JSON
-        Gson gson = FxGson.builder().disableHtmlEscaping().setPrettyPrinting().create();
+        Gson gson = ConfigGson.builder().disableHtmlEscaping().setPrettyPrinting().create();
         List<String> lines = Collections.singletonList(gson.toJson(config));
         Files.write(filePath, lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
                 StandardOpenOption.TRUNCATE_EXISTING);

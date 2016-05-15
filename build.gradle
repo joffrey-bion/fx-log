@@ -23,12 +23,16 @@ def mainClassName = "org.hildan.fxlog.FXLog"
 // access to the git repository API
 def gitRepo = Grgit.open()
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+    jcenter()
+}
 
 dependencies {
     compile 'org.controlsfx:controlsfx:8.40.10'
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'org.hildan.fxgson:fx-gson:1.0'
     compile 'org.jetbrains:annotations:15.0'
     compile 'com.google.code.findbugs:jsr305:3.0.1'
     testCompile 'junit:junit:4.+'
