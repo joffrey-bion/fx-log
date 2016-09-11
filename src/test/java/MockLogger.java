@@ -1,4 +1,3 @@
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +14,6 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 /**
  * Tool to simulate a running Weblogic server. It streams mock log lines to a file on the disk.
  */
-@ParametersAreNonnullByDefault
 public class MockLogger {
 
     private static final String[] levels = {"VERBOSE", "DEBUG", "INFO", "WARN", "ERROR"};
