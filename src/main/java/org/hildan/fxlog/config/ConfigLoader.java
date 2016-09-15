@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import org.hildan.fxlog.errors.ErrorDialog;
@@ -35,6 +36,10 @@ class ConfigLoader {
      */
     private static final String BUILTIN_RESOURCE = "default_config.json";
 
+    private static final class ConfigVersion {
+        int version;
+    }
+
     /**
      * Retrieves the user config, or the built-in config if the user config does not exist.
      *
@@ -44,16 +49,17 @@ class ConfigLoader {
      */
     static Config getUserConfig() throws JsonSyntaxException {
         try {
-            Config config = readConfigFrom(new FileReader(USER_CONFIG_PATH));
-            if (config.getVersion() == Config.FORMAT_VERSION) {
-                return config;
+            int version = readConfigVersionFrom(new FileReader(USER_CONFIG_PATH));
+            if (version == Config.FORMAT_VERSION) {
+                return readConfigFrom(new FileReader(USER_CONFIG_PATH));
             } else {
                 System.err.println("User config outdated");
-                ErrorDialog.configOutdated();
+                ErrorDialog.configOutdated(USER_CONFIG_PATH, version, Config.FORMAT_VERSION);
             }
         } catch (FileNotFoundException e) {
             System.out.println("User config not found, falling back to built-in config");
-        } catch (Exception e) {
+        } catch (JsonSyntaxException e) {
+            // the user will decide whether to stop here or continue with default (and overwrite)
             ErrorDialog.configReadException(USER_CONFIG_PATH, e);
         }
         return getBuiltinConfig();
@@ -66,11 +72,14 @@ class ConfigLoader {
             return DefaultConfig.generate();
         }
         try {
-            Config config = readConfigFrom(new InputStreamReader(jsonConfigStream));
-            if (config.getVersion() == Config.FORMAT_VERSION) {
-                return config;
+            int version = readConfigVersionFrom(new InputStreamReader(jsonConfigStream));
+            if (version == Config.FORMAT_VERSION) {
+                jsonConfigStream = ConfigLoader.class.getResourceAsStream(BUILTIN_RESOURCE);
+                return readConfigFrom(new InputStreamReader(jsonConfigStream));
+            } else {
+                System.err.println("Built-in config version does not match the current config version");
+                ErrorDialog.configOutdated(BUILTIN_RESOURCE, version, Config.FORMAT_VERSION);
             }
-            System.err.println("Built-in config version does not match the current config version");
         } catch (JsonSyntaxException e) {
             System.err.println("Syntax error in built-in config. SHAME.");
         } catch (JsonIOException e) {
@@ -82,6 +91,11 @@ class ConfigLoader {
 
     static void writeUserConfig(Config config) throws IOException {
         writeConfigTo(USER_CONFIG_PATH, config);
+    }
+
+    private static int readConfigVersionFrom(Reader source) throws JsonIOException, JsonSyntaxException {
+        ConfigVersion configVersion =  new GsonBuilder().create().fromJson(source, ConfigVersion.class);
+        return configVersion.version;
     }
 
     private static Config readConfigFrom(Reader source) throws JsonIOException, JsonSyntaxException {

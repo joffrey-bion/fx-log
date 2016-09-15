@@ -1,5 +1,7 @@
 package org.hildan.fxlog.errors;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -18,17 +20,24 @@ public class ErrorDialog {
 
     private static final ButtonType BTN_I_WILL_FIX = new ButtonType("I'll fix it", ButtonData.NO);
 
-    private static Alert createExceptionDialog(AlertType type, String title, String header, String content,
-                                               Throwable e) {
-        // useful to have it in the console output for debugging
-        e.printStackTrace();
+    private static final ButtonType BTN_LATER = new ButtonType("Later", ButtonData.CANCEL_CLOSE);
 
+    private static Alert createBaseDialog(AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
         if (content != null) {
             alert.setContentText(content);
         }
+        return alert;
+    }
+
+    private static Alert createExceptionDialog(AlertType type, String title, String header, String content,
+                                               Throwable e) {
+        // useful to have it in the console output for debugging
+        e.printStackTrace();
+
+        Alert alert = createBaseDialog(type, title, header, content);
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -54,19 +63,35 @@ public class ErrorDialog {
         return alert;
     }
 
-    public static void configOutdated() {
-        Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle("Outdated Configuration");
-        alert.setHeaderText("The format of your config file is too old for this version of FX-Log.");
-        alert.setContentText("As of now, there is no automatic way to convert your file to the new config format."
-                + " Your config file needs to be deleted and replaced by the new default config, or you can exit and"
-                + " change it manually to try and keep your custom stuff. Sorry for the inconvenience.");
+    private static void showConfigOverwriteDialog(AlertType type, String filename, String title, String header,
+                                                  String content, Throwable e) {
+        Alert alert;
+        if (e == null) {
+            alert = createBaseDialog(type, title, header, content);
+        } else {
+            alert = createExceptionDialog(type, title, header, content, e);
+        }
         alert.getButtonTypes().clear();
         alert.getButtonTypes().add(BTN_OVERWRITE);
         alert.getButtonTypes().add(BTN_I_WILL_FIX);
-        alert.showAndWait()
-             .filter(response -> response == BTN_I_WILL_FIX)
-             .ifPresent(response -> System.exit(0));
+        alert.getButtonTypes().add(BTN_LATER);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == BTN_I_WILL_FIX) {
+                exitAndOpenConfig(filename);
+            } else if (response == BTN_LATER) {
+                System.exit(0);
+            }
+        });
+    }
+
+    public static void configOutdated(String filename, int actualVersion, int expectedVersion) {
+        String title = "Outdated Configuration";
+        String header = "The format of your config file is too old for this version of FX-Log.";
+        String content = String.format("Your config file %s is in version %d, while the current version is %d."
+                        + " Your config file needs to be deleted and replaced by the new default config,"
+                        + " or you can exit and change it manually to try and keep your custom stuff.", filename, actualVersion,
+                expectedVersion);
+        showConfigOverwriteDialog(AlertType.WARNING, filename, title, header, content, null);
     }
 
     public static void configReadException(String filename, Throwable e) {
@@ -75,13 +100,20 @@ public class ErrorDialog {
         String header = "Messing up much with the config?";
         String content = String.format("There was an error while reading your config file '%s'. You can either "
                 + "replace your config with the default, or exit and fix the config file yourself", filename);
-        Alert alert = createExceptionDialog(AlertType.WARNING, title, header, content, e);
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().add(BTN_OVERWRITE);
-        alert.getButtonTypes().add(BTN_I_WILL_FIX);
-        alert.showAndWait()
-             .filter(response -> response == BTN_I_WILL_FIX)
-             .ifPresent(response -> System.exit(0));
+        showConfigOverwriteDialog(AlertType.WARNING, filename, title, header, content, e);
+    }
+
+    private static void exitAndOpenConfig(String configFilename) {
+        System.out.println("Opening config file " + configFilename);
+        File configFileToOpen = new File(configFilename);
+        if (configFileToOpen.exists()) {
+            try {
+                Desktop.getDesktop().open(configFileToOpen);
+            } catch (Exception e1) {
+                System.err.println("Failed to open config file " + configFilename);
+            }
+        }
+        System.exit(0);
     }
 
     public static void configWriteException(Throwable e) {
