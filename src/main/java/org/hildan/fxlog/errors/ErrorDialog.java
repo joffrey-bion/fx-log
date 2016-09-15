@@ -33,7 +33,7 @@ public class ErrorDialog {
     }
 
     private static Alert createExceptionDialog(AlertType type, String title, String header, String content,
-                                               Throwable e) {
+            Throwable e) {
         // useful to have it in the console output for debugging
         e.printStackTrace();
 
@@ -64,7 +64,7 @@ public class ErrorDialog {
     }
 
     private static void showConfigOverwriteDialog(AlertType type, String filename, String title, String header,
-                                                  String content, Throwable e) {
+            String content, Throwable e) {
         Alert alert;
         if (e == null) {
             alert = createBaseDialog(type, title, header, content);
@@ -87,10 +87,10 @@ public class ErrorDialog {
     public static void configOutdated(String filename, int actualVersion, int expectedVersion) {
         String title = "Outdated Configuration";
         String header = "The format of your config file is too old for this version of FX-Log.";
-        String content = String.format("Your config file %s is in version %d, while the current version is %d."
-                        + " Your config file needs to be deleted and replaced by the new default config,"
-                        + " or you can exit and change it manually to try and keep your custom stuff.", filename, actualVersion,
-                expectedVersion);
+        String contentTemplate = "Your config file %s is in version %d, while the current version is %d."
+                + " Your config file needs to be deleted and replaced by the new default config,"
+                + " or you can exit and change it manually to try and keep your custom stuff.";
+        String content = String.format(contentTemplate, filename, actualVersion, expectedVersion);
         showConfigOverwriteDialog(AlertType.WARNING, filename, title, header, content, null);
     }
 
