@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.controlsfx:controlsfx:8.40.11'
+    compile 'org.controlsfx:controlsfx:8.40.12'
     compile 'commons-io:commons-io:2.5'
     compile 'com.google.code.gson:gson:2.7'
     compile 'org.hildan.fxgson:fx-gson:1.2.2'
