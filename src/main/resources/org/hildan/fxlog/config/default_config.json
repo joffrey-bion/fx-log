@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "selectedColumnizerIndex": 0,
   "selectedColorizerIndex": 2,
   "currentTheme": "DARK",
@@ -326,7 +326,7 @@
             "pattern": "[Ee]rror"
           },
           "foregroundColor": "#ca1d1dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Warn",
@@ -335,7 +335,7 @@
             "pattern": "[Ww]arn(ing)?"
           },
           "foregroundColor": "#e6994dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Info",
@@ -344,7 +344,7 @@
             "pattern": "[Ii]nfo"
           },
           "foregroundColor": "#10c14bff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Debug",
@@ -353,7 +353,7 @@
             "pattern": "[Dd]ebug"
           },
           "foregroundColor": "#334db3ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Notice",
@@ -362,7 +362,7 @@
             "pattern": "[Nn]otice"
           },
           "foregroundColor": "#ccccccff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Stacktrace",
@@ -371,7 +371,7 @@
             "pattern": "(at \\S.*)|(Caused By.*)"
           },
           "foregroundColor": "#ca1d1dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Default",
@@ -380,7 +380,7 @@
             "pattern": ".*"
           },
           "foregroundColor": "#e6e6e6ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         }
       ]
     },
@@ -394,7 +394,7 @@
             "pattern": "[Ee]rror"
           },
           "foregroundColor": "#aa0000ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Warn",
@@ -403,7 +403,7 @@
             "pattern": "[Ww]arn(ing)?"
           },
           "foregroundColor": "#b27200ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Info",
@@ -412,7 +412,7 @@
             "pattern": "[Ii]nfo"
           },
           "foregroundColor": "#008100ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Debug",
@@ -421,7 +421,7 @@
             "pattern": "[Dd]ebug"
           },
           "foregroundColor": "#0000bbff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Notice",
@@ -429,8 +429,8 @@
             "columnName": "severity",
             "pattern": "[Nn]otice"
           },
-          "foregroundColor": "null",
-          "backgroundColor": "null"
+          "foregroundColor": null,
+          "backgroundColor": null
         },
         {
           "name": "Stacktrace",
@@ -439,7 +439,7 @@
             "pattern": "(at \\S.*)|(Caused By.*)"
           },
           "foregroundColor": "#990000ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Default",
@@ -448,7 +448,7 @@
             "pattern": ".*"
           },
           "foregroundColor": "#1a1a1aff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         }
       ]
     },
@@ -471,7 +471,7 @@
             "pattern": "[Ee]rror"
           },
           "foregroundColor": "#ca1d1dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Warn",
@@ -480,7 +480,7 @@
             "pattern": "[Ww]arn(ing)?"
           },
           "foregroundColor": "#e6994dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Info",
@@ -489,7 +489,7 @@
             "pattern": "[Ii]nfo"
           },
           "foregroundColor": "#10c14bff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Debug",
@@ -498,7 +498,7 @@
             "pattern": "[Dd]ebug"
           },
           "foregroundColor": "#334db3ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Notice",
@@ -507,7 +507,7 @@
             "pattern": "[Nn]otice"
           },
           "foregroundColor": "#ccccccff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Stacktrace",
@@ -516,7 +516,7 @@
             "pattern": "(at \\S.*)|(Caused By.*)|((\\S+\\.)+\\S+.*)"
           },
           "foregroundColor": "#ca1d1dff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         },
         {
           "name": "Default",
@@ -525,7 +525,7 @@
             "pattern": ".*"
           },
           "foregroundColor": "#e6e6e6ff",
-          "backgroundColor": "null"
+          "backgroundColor": null
         }
       ]
     },
