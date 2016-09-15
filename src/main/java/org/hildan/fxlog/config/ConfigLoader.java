@@ -52,9 +52,10 @@ class ConfigLoader {
             int version = readConfigVersionFrom(new FileReader(USER_CONFIG_PATH));
             if (version == Config.FORMAT_VERSION) {
                 return readConfigFrom(new FileReader(USER_CONFIG_PATH));
-            } else {
-                System.err.println("User config outdated");
+            } else if (version < Config.FORMAT_VERSION) {
                 ErrorDialog.configOutdated(USER_CONFIG_PATH, version, Config.FORMAT_VERSION);
+            } else {
+                ErrorDialog.configTooRecent(USER_CONFIG_PATH, version, Config.FORMAT_VERSION);
             }
         } catch (FileNotFoundException e) {
             System.out.println("User config not found, falling back to built-in config");
@@ -76,9 +77,10 @@ class ConfigLoader {
             if (version == Config.FORMAT_VERSION) {
                 jsonConfigStream = ConfigLoader.class.getResourceAsStream(BUILTIN_RESOURCE);
                 return readConfigFrom(new InputStreamReader(jsonConfigStream));
-            } else {
-                System.err.println("Built-in config version does not match the current config version");
+            } else if (version < Config.FORMAT_VERSION) {
                 ErrorDialog.configOutdated(BUILTIN_RESOURCE, version, Config.FORMAT_VERSION);
+            } else {
+                ErrorDialog.configTooRecent(BUILTIN_RESOURCE, version, Config.FORMAT_VERSION);
             }
         } catch (JsonSyntaxException e) {
             System.err.println("Syntax error in built-in config. SHAME.");

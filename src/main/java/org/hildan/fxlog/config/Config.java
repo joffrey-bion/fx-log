@@ -46,7 +46,7 @@ public class Config {
      * The version of the format of the config. This needs to be increased each time the serialization format of this
      * class is changed.
      */
-    static final int FORMAT_VERSION = 2;
+    static final int FORMAT_VERSION = 1;
 
     private static final int MAX_RECENT_FILES = 10;
 
@@ -54,7 +54,7 @@ public class Config {
      * The version of the format of this config object. This value is changed during the JSON deserialization of the
      * config. It stays 0 if the JSON file does not contain the version field.
      */
-    private final Integer version = 0;
+    private final Integer version;
 
     private final IntegerProperty selectedColumnizerIndex;
 
@@ -80,6 +80,7 @@ public class Config {
      * Creates an empty configuration.
      */
     Config() {
+        this.version = 0;
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);

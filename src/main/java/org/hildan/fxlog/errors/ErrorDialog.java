@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.hildan.fxlog.FXLog;
+
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -17,6 +19,10 @@ import javafx.scene.layout.Priority;
 public class ErrorDialog {
 
     private static final ButtonType BTN_OVERWRITE = new ButtonType("Overwrite", ButtonData.YES);
+
+    private static final ButtonType BTN_UPDATE = new ButtonType("Update " + FXLog.APP_NAME, ButtonData.YES);
+
+    private static final ButtonType BTN_ROLLBACK = new ButtonType("Rollback", ButtonData.NO);
 
     private static final ButtonType BTN_I_WILL_FIX = new ButtonType("I'll fix it", ButtonData.NO);
 
@@ -84,9 +90,32 @@ public class ErrorDialog {
         });
     }
 
+    public static void configTooRecent(String filename, int actualVersion, int expectedVersion) {
+        String title = "Cutting-edge Configuration";
+        String header = "Did you get the new config before everyone?";
+        String contentTemplate = "Your config file %1$ss is in version %3$d, while version expected by %2$s is %4$d. "
+                + "You are ahead of your time, and %2$s did not follow. You should update to the last version of the "
+                + "program to be able to use this new config version. You may also rollback your config to the "
+                + "former default one";
+        String content = String.format(contentTemplate, filename, FXLog.APP_NAME, actualVersion, expectedVersion);
+        Alert alert = createBaseDialog(AlertType.WARNING, title, header, content);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(BTN_UPDATE);
+        alert.getButtonTypes().add(BTN_ROLLBACK);
+        alert.getButtonTypes().add(BTN_LATER);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == BTN_UPDATE) {
+                exitAndOpenConfig(filename);
+            } else if (response == BTN_LATER) {
+                System.exit(0);
+            }
+        });
+    }
+
     public static void configOutdated(String filename, int actualVersion, int expectedVersion) {
         String title = "Outdated Configuration";
-        String header = "The format of your config file is too old for this version of FX-Log.";
+        String headerTemplate = "The format of your config file is too old for this version of %s.";
+        String header = String.format(headerTemplate, FXLog.APP_NAME);
         String contentTemplate = "Your config file %s is in version %d, while the current version is %d."
                 + " Your config file needs to be deleted and replaced by the new default config,"
                 + " or you can exit and change it manually to try and keep your custom stuff.";
@@ -98,8 +127,9 @@ public class ErrorDialog {
         e.printStackTrace();
         String title = "Config Load Error";
         String header = "Messing up much with the config?";
-        String content = String.format("There was an error while reading your config file '%s'. You can either "
-                + "replace your config with the default, or exit and fix the config file yourself", filename);
+        String contentTemplate = "There was an error while reading your config file '%s'. You can either "
+                + "replace your config with the default, or exit and fix the config file yourself";
+        String content = String.format(contentTemplate, filename);
         showConfigOverwriteDialog(AlertType.WARNING, filename, title, header, content, e);
     }
 
@@ -119,7 +149,8 @@ public class ErrorDialog {
     public static void configWriteException(Throwable e) {
         String title = "Config Save Error";
         String header = "Error when saving your configuration";
-        String content = "The next time your start FX Log, you might not find all your settings as you left them.";
+        String contentTemplate = "The next time your start %s, you might not find all your settings as you left them.";
+        String content = String.format(contentTemplate, FXLog.APP_NAME);
         Alert alert = createExceptionDialog(AlertType.ERROR, title, header, content, e);
         alert.showAndWait();
     }
@@ -128,8 +159,7 @@ public class ErrorDialog {
         e.printStackTrace();
         String title = "Uncaught Exception";
         String header = "Oops! We have a bug here...";
-        String content = "An uncaught exception occurred. To help solve the problem, "
-                + "please take a look a the stacktrace below.";
+        String content = "An uncaught exception occurred. To help solve the problem, here is the stacktrace.";
         Alert alert = createExceptionDialog(AlertType.ERROR, title, header, content, e);
         alert.showAndWait();
     }
@@ -145,10 +175,11 @@ public class ErrorDialog {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("File Not Found");
         alert.setHeaderText("Your file has disappeared!");
+
         String pathMention = path != null ? String.format("('%s') ", path) : "";
-        alert.setContentText(
-                String.format("The file you selected %swas somehow deleted right before I opened it. Unlucky you.",
-                        pathMention));
+        String contentTemplate = "The file you selected %swas somehow deleted right before %s opened it. Unlucky you.";
+        String content = String.format(contentTemplate, pathMention, FXLog.APP_NAME);
+        alert.setContentText(content);
         alert.showAndWait();
     }
 
