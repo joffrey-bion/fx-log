@@ -107,7 +107,7 @@ public class ColorizersController implements Initializable {
         colorizersList.setCellFactory(TextFieldListCell.forListView(new StringConverter<Colorizer>() {
             @Override
             public String toString(Colorizer colorizer) {
-                return colorizer.toString();
+                return colorizer.getName();
             }
 
             @Override
@@ -144,8 +144,8 @@ public class ColorizersController implements Initializable {
         rulesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         rulesList.setCellFactory(TextFieldListCell.forListView(new StringConverter<StyleRule>() {
             @Override
-            public String toString(StyleRule columnizer) {
-                return columnizer.toString();
+            public String toString(StyleRule styleRule) {
+                return styleRule.getName();
             }
 
             @Override
