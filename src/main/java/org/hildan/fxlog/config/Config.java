@@ -46,7 +46,7 @@ public class Config {
      * The version of the format of the config. This needs to be increased each time the serialization format of this
      * class is changed.
      */
-    static final int FORMAT_VERSION = 1;
+    static final int FORMAT_VERSION = 2;
 
     private static final int MAX_RECENT_FILES = 10;
 
