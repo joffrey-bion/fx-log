@@ -13,6 +13,8 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -88,6 +90,8 @@ public class ColorizersController implements Initializable {
     @FXML
     private Button removeRuleButton;
 
+    private Property<Pattern> filterRegexFieldPatternBinding;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
@@ -157,20 +161,40 @@ public class ColorizersController implements Initializable {
     }
 
     private void initializeSelectedRulePane() {
-        BooleanBinding isEmpty = Bindings.isEmpty(rulesList.getSelectionModel().getSelectedItems());
-        selectedRulePane.disableProperty().bind(isEmpty);
+        BooleanBinding noRuleSelected = Bindings.isEmpty(rulesList.getSelectionModel().getSelectedItems());
+        selectedRulePane.disableProperty().bind(noRuleSelected);
+
         configureActivableColorPicker(foregroundColorPicker, overrideTextForeground);
         configureActivableColorPicker(backgroundColorPicker, overrideTextBackground);
+
+        filterRegexFieldPatternBinding = new SimpleObjectProperty<>();
+        createRegexFieldPatternBinding(filterRegexField, filterRegexFieldPatternBinding);
+
         bindRuleToUI(null); // initialize pane with empty values
         rulesList.getSelectionModel().selectedItemProperty().addListener((obsRule, oldRule, newRule) -> {
             unbindRuleFromUI(oldRule);
             bindRuleToUI(newRule);
         });
+
         filterColumnNameField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
     }
 
-    private void configureActivableColorPicker(@NotNull ColorPicker picker, @NotNull CheckBox checkbox) {
+    private static void configureActivableColorPicker(@NotNull ColorPicker picker, @NotNull CheckBox checkbox) {
         picker.disableProperty().bind(checkbox.selectedProperty().not());
+    }
+
+    private static void createRegexFieldPatternBinding(TextField regexField, Property<Pattern> patternProperty) {
+        ChangeListener<String> patternCreationListener = (obs, oldVal, newVal) -> {
+            System.out.println("Creating new pattern from '" + newVal + "'");
+            regexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
+            try {
+                patternProperty.setValue(Pattern.compile(newVal));
+            } catch (PatternSyntaxException e) {
+                System.out.println("Invalid pattern, using the old one");
+                regexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
+            }
+        };
+        regexField.textProperty().addListener(patternCreationListener);
     }
 
     private void bindRuleToUI(@Nullable StyleRule rule) {
@@ -188,24 +212,9 @@ public class ColorizersController implements Initializable {
         Filter ruleFilter = rule.getFilter();
         boolean isRawFilter = ruleFilter.getColumnName() == null;
         filterType.selectToggle(isRawFilter ? matchRawButton : matchColumnButton);
-        filterRegexField.setText(ruleFilter.getPattern().toString());
+        filterRegexField.setText(ruleFilter.getPattern().pattern());
         filterColumnNameField.setText(isRawFilter ? "" : rule.getFilter().getColumnName());
-
-        Callable<Pattern> createPattern = () -> {
-            filterRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
-            try {
-                System.out.println("pattern compiling..");
-                return Pattern.compile(filterRegexField.getText());
-            } catch (PatternSyntaxException e) {
-                System.out.println("pattern invalid");
-                filterRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
-                // return current pattern to avoid changing it
-                return Pattern.compile("^$");
-            }
-        };
-        Binding<Pattern> filterPatternBinding =
-                Bindings.createObjectBinding(createPattern, filterRegexField.textProperty());
-        ruleFilter.patternProperty().bind(filterPatternBinding);
+        ruleFilter.patternProperty().bind(filterRegexFieldPatternBinding);
 
         Callable<String> getColumnName = () -> {
             if (filterType.getSelectedToggle() == matchRawButton) {
@@ -214,6 +223,7 @@ public class ColorizersController implements Initializable {
                 return filterColumnNameField.getText();
             }
         };
+
         StringBinding filterColumnBinding =
                 Bindings.createStringBinding(getColumnName, filterColumnNameField.textProperty(),
                         filterType.selectedToggleProperty());
