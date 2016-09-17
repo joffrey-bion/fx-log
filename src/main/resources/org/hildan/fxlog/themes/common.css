@@ -25,7 +25,6 @@
     -fx-background-color: transparent ,-fx-box-border,-fx-control-inner-background;
     -fx-background-insets: -1.4, 0, 1;
     -fx-background-radius: 1.4, 0, 0;
-    /*....*/
     -fx-padding: 1; /* 0.083333em; */
 }
 
@@ -34,6 +33,5 @@
     -fx-background-color: transparent ,-fx-box-border,-fx-control-inner-background;
     -fx-background-insets: -1.4, 0, 1;
     -fx-background-radius: 1.4, 0, 0;
-    /*....*/
     -fx-padding: 1; /* 0.083333em; */
 }
