@@ -60,4 +60,9 @@ public class LogEntry {
                                 .map(col -> getColumnValues().get(col))
                                 .collect(Collectors.joining("\t"));
     }
+
+    @Override
+    public String toString() {
+        return rawLine();
+    }
 }
