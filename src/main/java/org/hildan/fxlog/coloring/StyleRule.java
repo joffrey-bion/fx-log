@@ -1,9 +1,6 @@
 package org.hildan.fxlog.coloring;
 
-import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.filtering.Filter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.regex.Pattern;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -11,20 +8,30 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Labeled;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+
+import org.fxmisc.easybind.EasyBind;
+import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.filtering.Filter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A rule that can apply a style to a {@link Node} based on a log {@link Filter}.
  */
 public class StyleRule {
+
+    static final StyleRule DEFAULT = new StyleRule("DEFAULT", Filter.findInRawLog("."), Color.LIGHTGRAY, null);
 
     private final StringProperty name;
 
@@ -35,6 +42,8 @@ public class StyleRule {
     private final Property<Color> backgroundColor;
 
     private transient Binding<Background> backgroundBinding;
+
+    private transient Binding[] matchingInternalsObservable;
 
     /**
      * Creates a StyleRule with no style override.
@@ -59,22 +68,26 @@ public class StyleRule {
      *         the background color to apply
      */
     public StyleRule(@NotNull String name, @NotNull Filter filter, @Nullable Color foregroundColor,
-            @Nullable Color backgroundColor) {
+                     @Nullable Color backgroundColor) {
         this.name = new SimpleStringProperty(name);
         this.filter = new SimpleObjectProperty<>(filter);
         this.foregroundColor = new SimpleObjectProperty<>(foregroundColor);
         this.backgroundColor = new SimpleObjectProperty<>(backgroundColor);
+        // cannot instantiate the transient bindings here as Gson does not use this constructor
     }
 
     private Binding<Background> getBackgroundBinding() {
         if (backgroundBinding == null) {
-            backgroundBinding = Bindings.createObjectBinding(this::createColoredBackground, this.backgroundColor);
+            backgroundBinding = createBackgroundBinding(this.backgroundColor);
         }
         return backgroundBinding;
     }
 
-    private Background createColoredBackground() {
-        Color color = backgroundColor.getValue();
+    private static Binding<Background> createBackgroundBinding(@NotNull ObservableValue<? extends Paint> color) {
+        return Bindings.createObjectBinding(() -> createColoredBackground(color.getValue()), color);
+    }
+
+    private static Background createColoredBackground(Paint color) {
         if (color == null) {
             return null;
         }
@@ -83,63 +96,58 @@ public class StyleRule {
     }
 
     /**
-     * Binds this node's style to this rule's style if the given log matches this rule's filter. Removes bindings if the
-     * log doesn't match.
+     * Returns whether the given log matches this rule.
      *
-     * @param node
-     *         the node to style
      * @param log
      *         the log to test
      *
      * @return true if the log matched this rule
      */
-    boolean bindStyleIfMatches(@NotNull Node node, @NotNull LogEntry log) {
-        boolean match = filter.getValue().test(log);
-        if (match) {
-            bindNodeForeground(node);
-            bindNodeBackground(node);
-        } else {
-            unbindNodeForeground(node);
-            unbindNodeBackground(node);
-        }
-        return match;
+    boolean matches(@NotNull LogEntry log) {
+        return filter.getValue().test(log);
     }
 
-    private void bindNodeForeground(@NotNull Node node) {
+    /**
+     * Binds this rule's style to the given {@link Node}'s style.
+     *
+     * @param node
+     *         the node to drive the style of
+     */
+    void bindNodeStyle(@NotNull Node node) {
+        bindNodeForeground(node, foregroundColor);
+        bindNodeBackground(node, getBackgroundBinding());
+    }
+
+    private static void bindNodeForeground(@NotNull Node node,
+                                           @NotNull ObservableValue<? extends Paint> observableColor) {
         if (node instanceof Labeled) {
             // this includes javafx.scene.control.Label
-            ((Labeled)node).textFillProperty().bind(foregroundColor);
+            ((Labeled) node).textFillProperty().bind(observableColor);
         } else if (node instanceof Shape) {
             // this includes javafx.scene.Text
-            ((Shape)node).fillProperty().bind(foregroundColor);
+            ((Shape) node).fillProperty().bind(observableColor);
         }
     }
 
-    private void unbindNodeForeground(@NotNull Node node) {
-        if (node instanceof Labeled) {
-            // this includes javafx.scene.control.Label
-            ((Labeled)node).textFillProperty().unbind();
-            ((Labeled)node).setTextFill(null);
-        } else if (node instanceof Shape) {
-            // this includes javafx.scene.Text
-            ((Shape)node).fillProperty().unbind();
-            ((Shape)node).setFill(null);
-        }
-    }
-
-    private void bindNodeBackground(@NotNull Node node) {
+    private static void bindNodeBackground(@NotNull Node node,
+                                           @NotNull ObservableValue<? extends Background> observableBackground) {
         if (node instanceof Region) {
             // this includes javafx.scene.control.Label
-            ((Region)node).backgroundProperty().bind(getBackgroundBinding());
+            ((Region) node).backgroundProperty().bind(observableBackground);
         }
     }
 
-    private void unbindNodeBackground(@NotNull Node node) {
-        if (node instanceof Region) {
-            // this includes javafx.scene.control.Label
-            ((Region)node).backgroundProperty().unbind();
-            ((Region)node).setBackground(null);
+    Binding[] getMatchingInternalsObservable() {
+        if (matchingInternalsObservable == null) {
+            matchingInternalsObservable = createMatchingInternalsObservable();
         }
+        return matchingInternalsObservable;
+    }
+
+    private Binding[] createMatchingInternalsObservable() {
+        Binding<Pattern> pat = EasyBind.select(filterProperty()).selectObject(Filter::patternProperty);
+        Binding<String> col = EasyBind.select(filterProperty()).selectObject(Filter::columnNameProperty);
+        return new Binding[] {pat, col};
     }
 
     public String getName() {
@@ -192,6 +200,6 @@ public class StyleRule {
 
     @Override
     public String toString() {
-        return name.get();
+        return getClass().getSimpleName() + " '" + name.get() + "'";
     }
 }

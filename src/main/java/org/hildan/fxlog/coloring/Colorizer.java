@@ -1,11 +1,14 @@
 package org.hildan.fxlog.coloring;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
+import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.core.LogEntry;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,23 +61,23 @@ public class Colorizer {
     }
 
     /**
-     * Applies a style to the given Node according to the StyleRules of this Colorizer.
+     * Binds the style of the given Node to the given log and colorizer observables. If one of them changes, the rule
+     * matching is re-computed to update the style of the node accordingly.
      *
      * @param node
      *         the node to style
-     * @param log
-     *         the log on which to test the rules
+     * @param colorizer
+     *         the observable colorizer to apply
+     * @param logEntry
+     *         the observable log on which to test the rules
      */
-    public void bindStyle(@NotNull Node node, @NotNull LogEntry log) {
-        for (StyleRule rule : styleRules) {
-            if (rule.bindStyleIfMatches(node, log)) {
-                return;
-            }
-        }
+    public static void bindStyle(Node node, ObservableValue<Colorizer> colorizer, ObservableValue<LogEntry> logEntry) {
+        Binding<StyleRule> matchingRuleBinding = new FirstMatchingRuleBinding(colorizer, logEntry);
+        EasyBind.subscribe(matchingRuleBinding, r -> r.bindNodeStyle(node));
     }
 
     @Override
     public String toString() {
-        return name.get();
+        return getClass().getSimpleName() + " '" + name.get() + "'";
     }
 }

@@ -8,11 +8,12 @@ import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
+import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.core.LogEntry;
 
 /**
- * A table cell that can be styled.
+ * A table cell that can be styled using a {@link Colorizer}.
  */
 public class StyledTableCell extends TableCell<LogEntry, String> {
 
@@ -26,6 +27,16 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
         setGraphic(text);
         setText(null);
+
+        EasyBind.subscribe(tableRowProperty(), row -> {
+            if (row == null) {
+                return;
+            }
+            //noinspection unchecked
+            Colorizer.bindStyle(text, colorizerProperty(), row.itemProperty()); // for foreground style
+            //noinspection unchecked
+            Colorizer.bindStyle(this, colorizerProperty(), row.itemProperty()); // for background style
+        });
     }
 
     private DoubleBinding wrappingWidthBinding(ObservableDoubleValue columnWidth) {
@@ -42,14 +53,6 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         }
         setGraphic(text);
         text.setText(item);
-        if (colorizer.getValue() != null) {
-            TableRow row = getTableRow();
-            if (row != null && row.getItem() != null) {
-                LogEntry log = (LogEntry) row.getItem();
-                colorizer.getValue().bindStyle(text, log); // for the foreground
-                colorizer.getValue().bindStyle(this, log); // for the background
-            }
-        }
     }
 
     public Colorizer getColorizer() {
