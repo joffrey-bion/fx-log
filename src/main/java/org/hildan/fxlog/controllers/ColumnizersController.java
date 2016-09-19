@@ -126,7 +126,7 @@ public class ColumnizersController implements Initializable {
                 if (!isEditing()) {
                     return;
                 }
-                pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, pattern == null);
+                pseudoClassStateChanged(Css.INVALID, pattern == null);
                 if (pattern != null) {
                     // only if the pattern is valid, otherwise we stay in edit state
                     super.commitEdit(pattern);
@@ -217,9 +217,9 @@ public class ColumnizersController implements Initializable {
             selectedColumnizer.getPatterns().add(newRule);
             newPatternRegexField.setText("");
             patternList.getSelectionModel().select(newRule);
-            newPatternRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
+            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, false);
         } catch (PatternSyntaxException e) {
-            newPatternRegexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
+            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, true);
         }
     }
 

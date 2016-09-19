@@ -4,6 +4,6 @@ import javafx.css.PseudoClass;
 
 public class Css {
 
-    public static final PseudoClass PSEUDO_CLASS_INVALID = PseudoClass.getPseudoClass("invalid");
+    public static final PseudoClass INVALID = PseudoClass.getPseudoClass("invalid");
 
 }

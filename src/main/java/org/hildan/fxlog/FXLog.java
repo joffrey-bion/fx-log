@@ -94,7 +94,7 @@ public class FXLog extends Application {
         }
     }
 
-    private void configureDragAndDrop(@NotNull Scene scene, @NotNull MainController controller) {
+    private static void configureDragAndDrop(@NotNull Scene scene, @NotNull MainController controller) {
         scene.setOnDragOver(event -> {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {

@@ -1,6 +1,5 @@
 package org.hildan.fxlog.coloring;
 
-import javafx.beans.Observable;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableValue;

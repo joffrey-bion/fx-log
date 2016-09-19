@@ -186,12 +186,12 @@ public class ColorizersController implements Initializable {
     private static void createRegexFieldPatternBinding(TextField regexField, Property<Pattern> patternProperty) {
         ChangeListener<String> patternCreationListener = (obs, oldVal, newVal) -> {
             System.out.println("Creating new pattern from '" + newVal + "'");
-            regexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
+            regexField.pseudoClassStateChanged(Css.INVALID, false);
             try {
                 patternProperty.setValue(Pattern.compile(newVal));
             } catch (PatternSyntaxException e) {
                 System.out.println("Invalid pattern, using the old one");
-                regexField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
+                regexField.pseudoClassStateChanged(Css.INVALID, true);
             }
         };
         regexField.textProperty().addListener(patternCreationListener);
@@ -233,7 +233,7 @@ public class ColorizersController implements Initializable {
         bindActivableColorPicker(rule.foregroundColorProperty(), foregroundColorPicker, overrideTextForeground);
     }
 
-    private void unbindRuleFromUI(@Nullable StyleRule rule) {
+    private static void unbindRuleFromUI(@Nullable StyleRule rule) {
         if (rule == null) {
             return;
         }
@@ -244,8 +244,8 @@ public class ColorizersController implements Initializable {
         rule.getFilter().patternProperty().unbind();
     }
 
-    private void bindActivableColorPicker(@NotNull Property<Color> colorProperty, @NotNull ColorPicker picker,
-                                          @NotNull CheckBox checkbox) {
+    private static void bindActivableColorPicker(@NotNull Property<Color> colorProperty, @NotNull ColorPicker picker,
+                                                 @NotNull CheckBox checkbox) {
         // initial values
         Color currentValue = colorProperty.getValue();
         picker.setValue(currentValue == null ? Color.WHITE : currentValue);

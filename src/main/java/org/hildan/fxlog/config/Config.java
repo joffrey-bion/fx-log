@@ -97,17 +97,38 @@ public class Config {
         return version;
     }
 
+    public int getSelectedColumnizerIndex() {
+        return selectedColumnizerIndex.get();
+    }
+
     public IntegerProperty selectedColorizerIndexProperty() {
         return selectedColorizerIndex;
+    }
+
+    public void setSelectedColumnizerIndex(int selectedColumnizerIndex) {
+        this.selectedColumnizerIndex.set(selectedColumnizerIndex);
+    }
+
+    public int getSelectedColorizerIndex() {
+        return selectedColorizerIndex.get();
     }
 
     public IntegerProperty selectedColumnizerIndexProperty() {
         return selectedColumnizerIndex;
     }
 
+    public void setSelectedColorizerIndex(int selectedColorizerIndex) {
+        this.selectedColorizerIndex.set(selectedColorizerIndex);
+    }
+
     @NotNull
     public Theme getCurrentTheme() {
         return currentTheme.getValue();
+    }
+
+    @NotNull
+    public Property<Theme> currentThemeProperty() {
+        return currentTheme;
     }
 
     public void setCurrentTheme(@NotNull Theme currentTheme) {
@@ -162,7 +183,7 @@ public class Config {
         return logsFont;
     }
 
-    public void setLogsFont(Font logsFont) {
+    public void setLogsFont(@NotNull Font logsFont) {
         this.logsFont.setValue(logsFont);
     }
 

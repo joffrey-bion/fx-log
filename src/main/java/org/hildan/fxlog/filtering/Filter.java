@@ -85,7 +85,7 @@ public class Filter implements Predicate<LogEntry> {
      */
     @NotNull
     public static Filter findInColumn(@NotNull String columnName, @NotNull String regex) throws PatternSyntaxException {
-        return new Filter(columnName, regex, 0);
+        return findInColumn(columnName, regex, 0);
     }
 
     /**

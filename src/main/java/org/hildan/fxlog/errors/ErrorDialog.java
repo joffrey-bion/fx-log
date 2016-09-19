@@ -141,7 +141,7 @@ public class ErrorDialog {
         try {
             Desktop.getDesktop().browse(new URI(FXLog.LAST_VERSION_URL));
         } catch (IOException | URISyntaxException e) {
-            ErrorDialog.uncaughtException(e);
+            uncaughtException(e);
         }
         System.exit(0);
     }

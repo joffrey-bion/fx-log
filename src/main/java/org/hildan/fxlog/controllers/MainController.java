@@ -220,14 +220,14 @@ public class MainController implements Initializable {
     private void configureFiltering() {
         Callable<Predicate<LogEntry>> createFilter = () -> {
             try {
-                filterField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, false);
+                filterField.pseudoClassStateChanged(Css.INVALID, false);
                 if (filterField.getText().isEmpty()) {
                     return log -> true;
                 }
                 int flags = caseSensitiveFilterCheckbox.isSelected() ? 0 : Pattern.CASE_INSENSITIVE;
                 return Filter.findInRawLog(filterField.getText(), flags);
             } catch (PatternSyntaxException e) {
-                filterField.pseudoClassStateChanged(Css.PSEUDO_CLASS_INVALID, true);
+                filterField.pseudoClassStateChanged(Css.INVALID, true);
                 return log -> false;
             }
         };

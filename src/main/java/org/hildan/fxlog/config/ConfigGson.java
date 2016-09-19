@@ -21,12 +21,10 @@ import com.google.gson.JsonSerializer;
 class ConfigGson {
 
     static Gson create() {
-        // serialization of nulls is necessary to have properties with null values deserialized properly
         return builder().create();
     }
 
     static GsonBuilder builder() {
-        // serialization of nulls is necessary to have properties with null values deserialized properly
         return FxGson.fullBuilder().registerTypeAdapter(Pattern.class, new PatternSerializer());
     }
 
