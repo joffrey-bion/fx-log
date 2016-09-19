@@ -3,6 +3,7 @@ package org.hildan.fxlog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
@@ -40,11 +42,13 @@ public class FXLog extends Application {
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> ErrorDialog.uncaughtException(e));
         try {
             URL url = getClass().getResource(BASE_PACKAGE + "/view/main.fxml");
+            InputStream icon = getClass().getResourceAsStream(BASE_PACKAGE + "/fx-log.png");
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Config.getInstance().getCurrentTheme().apply(scene);
             stage.setTitle(APP_NAME);
+            stage.getIcons().add(new Image(icon));
             stage.setScene(scene);
             stage.setOnCloseRequest(event -> {
                 Platform.exit();
