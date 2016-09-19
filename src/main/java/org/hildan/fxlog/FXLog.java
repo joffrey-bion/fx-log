@@ -46,6 +46,10 @@ public class FXLog extends Application {
             Config.getInstance().getCurrentTheme().apply(scene);
             stage.setTitle(APP_NAME);
             stage.setScene(scene);
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
             stage.show();
 
             VersionChecker.checkForUpdates(false);
