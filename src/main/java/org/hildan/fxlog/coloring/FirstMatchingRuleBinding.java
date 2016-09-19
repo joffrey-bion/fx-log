@@ -1,5 +1,6 @@
 package org.hildan.fxlog.coloring;
 
+import javafx.beans.Observable;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableValue;
@@ -29,7 +30,6 @@ public class FirstMatchingRuleBinding extends ObjectBinding<StyleRule> {
         Colorizer currentColorizer = colorizer.getValue();
         bindRulesList(currentColorizer);
         colorizer.addListener((obs, oldColorizer, newColorizer) -> {
-            System.out.println("Colorizer changed to " + newColorizer.getName());
             unbindRulesList(oldColorizer);
             bindRulesList(newColorizer);
             invalidate();
@@ -57,12 +57,9 @@ public class FirstMatchingRuleBinding extends ObjectBinding<StyleRule> {
     }
 
     private void bindRuleContent(StyleRule styleRule) {
-        System.out.println("Binding to rule " + styleRule.getName());
         Binding[] observables = styleRule.getMatchingInternalsObservable();
 
-        // this is crazy, but required to get instant updates
-        // for some reason, this binding does not get invalidated if these dependencies are not re-computed
-        // TODO find a way to get invalidated without forcing re-computation like this
+        // TODO see issue https://github.com/joffrey-bion/fx-log/issues/67
         for (Binding observable : observables) {
             observable.addListener(o -> observable.getValue());
         }
@@ -81,7 +78,6 @@ public class FirstMatchingRuleBinding extends ObjectBinding<StyleRule> {
 
     @NotNull
     private static StyleRule getMatchingRule(@Nullable Colorizer colorizer, @Nullable LogEntry log) {
-        System.out.println("Recomputing matching rule for log: " + (log == null ? null : log.toString()));
         if (colorizer == null || log == null) {
             return StyleRule.DEFAULT;
         }
