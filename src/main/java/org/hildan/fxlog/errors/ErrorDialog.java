@@ -2,8 +2,11 @@ package org.hildan.fxlog.errors;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.hildan.fxlog.FXLog;
 
@@ -105,7 +108,7 @@ public class ErrorDialog {
         alert.getButtonTypes().add(BTN_LATER);
         alert.showAndWait().ifPresent(response -> {
             if (response == BTN_UPDATE) {
-                exitAndOpenConfig(filename);
+                exitAndOpenLatestVersionDownload();
             } else if (response == BTN_LATER) {
                 System.exit(0);
             }
@@ -131,6 +134,16 @@ public class ErrorDialog {
                 + "replace your config with the default, or exit and fix the config file yourself";
         String content = String.format(contentTemplate, filename);
         showConfigOverwriteDialog(AlertType.WARNING, filename, title, header, content, e);
+    }
+
+    private static void exitAndOpenLatestVersionDownload() {
+        System.out.println("Redirecting user to " + FXLog.LAST_VERSION_URL);
+        try {
+            Desktop.getDesktop().browse(new URI(FXLog.LAST_VERSION_URL));
+        } catch (IOException | URISyntaxException e) {
+            ErrorDialog.uncaughtException(e);
+        }
+        System.exit(0);
     }
 
     private static void exitAndOpenConfig(String configFilename) {

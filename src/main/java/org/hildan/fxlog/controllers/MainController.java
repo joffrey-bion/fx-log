@@ -588,7 +588,7 @@ public class MainController implements Initializable {
     @FXML
     public void openUserManual() {
         try {
-            Desktop.getDesktop().browse(new URI("https://github.com/joffrey-bion/fx-log"));
+            Desktop.getDesktop().browse(new URI(FXLog.GITHUB_URL));
         } catch (IOException | URISyntaxException e) {
             ErrorDialog.uncaughtException(e);
         }

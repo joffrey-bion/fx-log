@@ -25,6 +25,10 @@ public class FXLog extends Application {
 
     public static final String APP_NAME = "FX Log";
 
+    public static final String LAST_VERSION_URL = "https://bintray.com/joffrey-bion/applications/fx-log/_latestVersion";
+
+    public static final String GITHUB_URL = "https://github.com/joffrey-bion/fx-log";
+
     public static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
 
     private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
@@ -59,6 +63,7 @@ public class FXLog extends Application {
      *
      * @param viewFilename
      *         the name of the view. It can be a path relative to the views package.
+     *
      * @return the Parent returned by the FXMLLoader
      * @throws IOException
      *         if the resource couldn't be loaded for some reason
