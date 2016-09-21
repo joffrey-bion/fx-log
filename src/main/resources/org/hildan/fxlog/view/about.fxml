@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
 <BorderPane prefHeight="280.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1">
     <padding>
@@ -12,31 +11,23 @@
     </padding>
     <center>
         <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-            <content>
-                <VBox spacing="15.0">
-                    <children>
-                        <VBox spacing="8.0">
-                            <children>
-                                <Label styleClass="title" text="FX Log ${projectVersion}"/>
-                                <Label text="Version ${projectVersion}"/>
-                                <Label text="Released on ${buildDate}"/>
-                                <Label text="Under the MIT license"/>
-                                <Label text="Powered by JavaFX 8"/>
-                            </children>
-                        </VBox>
-                        <Separator prefWidth="200.0"/>
-                        <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
-                            <children>
-                                <Label text="Copyright (c) 2016, Joffrey Bion"/>
-                                <Label text="Contact: joffrey.bion@gmail.com"/>
-                            </children>
-                        </VBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
+            <VBox spacing="15.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+                <VBox spacing="8.0">
+                    <Label styleClass="title" text="FX Log ${projectVersion}"/>
+                    <Label text="Version ${projectVersion}"/>
+                    <Label text="Released on ${buildDate}"/>
+                    <Label text="Under the MIT license"/>
+                    <Label text="Powered by JavaFX 8"/>
                 </VBox>
-            </content>
+                <Separator prefWidth="200.0"/>
+                <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
+                    <Label text="Copyright (c) 2016, Joffrey Bion"/>
+                    <Label text="Contact: joffrey.bion@gmail.com"/>
+                </VBox>
+            </VBox>
         </ScrollPane>
     </center>
 </BorderPane>
