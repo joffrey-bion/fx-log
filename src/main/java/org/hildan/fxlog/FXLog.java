@@ -33,6 +33,8 @@ public class FXLog extends Application {
 
     public static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
 
+    public static final String APP_ICON_PATH = BASE_PACKAGE + "/fx-log.png";
+
     private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
 
     @Override
@@ -42,12 +44,12 @@ public class FXLog extends Application {
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> ErrorDialog.uncaughtException(e));
         try {
             URL url = getClass().getResource(BASE_PACKAGE + "/view/main.fxml");
-            InputStream icon = getClass().getResourceAsStream(BASE_PACKAGE + "/fx-log.png");
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Config.getInstance().getCurrentTheme().apply(scene);
             stage.setTitle(APP_NAME);
+            InputStream icon = getClass().getResourceAsStream(APP_ICON_PATH);
             stage.getIcons().add(new Image(icon));
             stage.setScene(scene);
             stage.setOnCloseRequest(event -> {

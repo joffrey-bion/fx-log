@@ -1,6 +1,7 @@
 package org.hildan.fxlog.view;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.errors.ErrorDialog;
@@ -8,6 +9,7 @@ import org.hildan.fxlog.themes.Theme;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class UIUtils {
@@ -34,6 +36,8 @@ public class UIUtils {
             Parent root = FXLog.loadView(fxmlFile);
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            InputStream icon = UIUtils.class.getResourceAsStream(FXLog.APP_ICON_PATH);
+            stage.getIcons().add(new Image(icon));
             theme.apply(scene);
         } catch (IOException e) {
             ErrorDialog.uncaughtException(e);
