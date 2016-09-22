@@ -78,6 +78,6 @@ public class Colorizer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " '" + name.get() + "'";
+        return name.get();
     }
 }
