@@ -16,8 +16,7 @@
                 <Menu text="_File">
                     <MenuItem onAction="#openFile" text="_Open…">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP"
-                                                shortcut="UP"/>
+                            <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                         </accelerator>
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="folder_open"/>
@@ -37,16 +36,14 @@
                     </MenuItem>
                     <MenuItem onAction="#quit" text="_Quit">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP"
-                                                shortcut="UP"/>
+                            <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                         </accelerator>
                     </MenuItem>
                 </Menu>
                 <Menu text="_Edit">
                     <MenuItem onAction="#copyRaw" text="Copy _raw log">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
-                                                shortcut="UP"/>
+                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                         </accelerator>
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="copy"/>
@@ -54,8 +51,7 @@
                     </MenuItem>
                     <MenuItem onAction="#copyPretty" text="Copy with _columns">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN"
-                                                shortcut="UP"/>
+                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN" shortcut="UP"/>
                         </accelerator>
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="copy"/>
@@ -64,8 +60,7 @@
                     <SeparatorMenuItem mnemonicParsing="false"/>
                     <MenuItem onAction="#selectAll" text="Select _All">
                         <accelerator>
-                            <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
-                                                shortcut="UP"/>
+                            <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                         </accelerator>
                     </MenuItem>
                     <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
@@ -106,6 +101,7 @@
                         <Tooltip text="Edit columnizers"/>
                     </tooltip>
                 </Button>
+                <Separator orientation="VERTICAL"/>
                 <Label text="Colors"/>
                 <ChoiceBox fx:id="colorizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColorizers">
@@ -116,8 +112,10 @@
                         <Tooltip text="Edit colorizers"/>
                     </tooltip>
                 </Button>
+                <Separator orientation="VERTICAL"/>
                 <TextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS"/>
                 <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Case Sensitive"/>
+                <Separator orientation="VERTICAL"/>
                 <Button mnemonicParsing="false" onAction="#clearLogs">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
