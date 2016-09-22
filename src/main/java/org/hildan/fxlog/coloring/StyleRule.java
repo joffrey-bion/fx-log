@@ -1,7 +1,5 @@
 package org.hildan.fxlog.coloring;
 
-import java.util.regex.Pattern;
-
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -20,8 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
-import org.fxmisc.easybind.EasyBind;
-import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.filtering.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,8 +38,6 @@ public class StyleRule {
     private final Property<Color> backgroundColor;
 
     private transient Binding<Background> backgroundBinding;
-
-    private transient Binding[] matchingInternalsObservable;
 
     /**
      * Creates a StyleRule with no style override.
@@ -96,18 +90,6 @@ public class StyleRule {
     }
 
     /**
-     * Returns whether the given log matches this rule.
-     *
-     * @param log
-     *         the log to test
-     *
-     * @return true if the log matched this rule
-     */
-    boolean matches(@NotNull LogEntry log) {
-        return filter.getValue().test(log);
-    }
-
-    /**
      * Binds this rule's style to the given {@link Node}'s style.
      *
      * @param node
@@ -135,19 +117,6 @@ public class StyleRule {
             // this includes javafx.scene.control.Label
             ((Region) node).backgroundProperty().bind(observableBackground);
         }
-    }
-
-    Binding[] getMatchingInternalsObservable() {
-        if (matchingInternalsObservable == null) {
-            matchingInternalsObservable = createMatchingInternalsObservable();
-        }
-        return matchingInternalsObservable;
-    }
-
-    private Binding[] createMatchingInternalsObservable() {
-        Binding<Pattern> pat = EasyBind.select(filterProperty()).selectObject(Filter::patternProperty);
-        Binding<String> col = EasyBind.select(filterProperty()).selectObject(Filter::columnNameProperty);
-        return new Binding[] {pat, col};
     }
 
     public String getName() {

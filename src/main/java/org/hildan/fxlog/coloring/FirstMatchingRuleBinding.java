@@ -1,5 +1,8 @@
 package org.hildan.fxlog.coloring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableValue;
@@ -7,8 +10,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import org.hildan.fxlog.core.LogEntry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A binding that computes the first {@link StyleRule} of a {@link Colorizer} that matches a {@link LogEntry}. It stays
@@ -22,9 +23,12 @@ public class FirstMatchingRuleBinding extends ObjectBinding<StyleRule> {
 
     private final ObservableValue<LogEntry> logEntryObservableValue;
 
+    private final Map<StyleRule, Binding<Boolean>> ruleMatchBindings;
+
     FirstMatchingRuleBinding(ObservableValue<Colorizer> colorizer, ObservableValue<LogEntry> logEntry) {
         colorizerObservableValue = colorizer;
         logEntryObservableValue = logEntry;
+        ruleMatchBindings = new HashMap<>();
 
         Colorizer currentColorizer = colorizer.getValue();
         bindRulesList(currentColorizer);
@@ -56,31 +60,35 @@ public class FirstMatchingRuleBinding extends ObjectBinding<StyleRule> {
     }
 
     private void bindRuleContent(StyleRule styleRule) {
-        Binding[] observables = styleRule.getMatchingInternalsObservable();
+        Binding<Boolean> currentBinding = styleRule.getFilter().matchesBinding(logEntryObservableValue);
+        ruleMatchBindings.put(styleRule, currentBinding);
+        bind(currentBinding);
 
-        // TODO see issue https://github.com/joffrey-bion/fx-log/issues/67
-        for (Binding observable : observables) {
-            observable.addListener(o -> observable.getValue());
-        }
+        styleRule.filterProperty().addListener((observable, oldValue, newValue) -> {
+            Binding<Boolean> oldBinding = ruleMatchBindings.remove(styleRule);
+            unbind(oldBinding);
 
-        bind(observables);
+            Binding<Boolean> newBinding = newValue.matchesBinding(logEntryObservableValue);
+            ruleMatchBindings.put(styleRule, newBinding);
+            bind(newBinding);
+        });
     }
 
     private void unbindRuleContent(StyleRule styleRule) {
-        unbind(styleRule.getMatchingInternalsObservable());
+        unbind(ruleMatchBindings.remove(styleRule));
     }
 
     @Override
     protected StyleRule computeValue() {
-        return getMatchingRule(colorizerObservableValue.getValue(), logEntryObservableValue.getValue());
-    }
-
-    @NotNull
-    private static StyleRule getMatchingRule(@Nullable Colorizer colorizer, @Nullable LogEntry log) {
-        if (colorizer == null || log == null) {
+        Colorizer colorizer = colorizerObservableValue.getValue();
+        if (colorizer == null || logEntryObservableValue.getValue() == null) {
             return StyleRule.DEFAULT;
         }
-        return colorizer.getRules().stream().filter(r -> r.matches(log)).findFirst().orElse(StyleRule.DEFAULT);
+        return colorizer.getRules()
+                        .stream()
+                        .filter(r -> ruleMatchBindings.get(r).getValue())
+                        .findFirst()
+                        .orElse(StyleRule.DEFAULT);
     }
 
     private class RuleContentBinder implements ListChangeListener<StyleRule> {

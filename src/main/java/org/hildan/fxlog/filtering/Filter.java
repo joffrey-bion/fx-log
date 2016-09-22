@@ -1,16 +1,22 @@
 package org.hildan.fxlog.filtering;
 
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
+import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.core.LogEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A log filter based on a regexp matching the raw log entry or a column in a log.
@@ -134,12 +140,19 @@ public class Filter implements Predicate<LogEntry> {
     }
 
     @Override
-    public boolean test(LogEntry log) {
+    public boolean test(@Nullable LogEntry log) {
+        if (log == null) {
+            return false;
+        }
         if (columnName.get() == null) {
             return pattern.getValue().matcher(log.rawLine()).find();
         } else {
             String columnValue = log.getColumnValues().get(columnName.get());
             return columnValue != null && pattern.getValue().matcher(columnValue).find();
         }
+    }
+
+    public Binding<Boolean> matchesBinding(ObservableValue<LogEntry> logObservable) {
+        return Bindings.createBooleanBinding(() -> test(logObservable.getValue()), logObservable, pattern, columnName);
     }
 }
