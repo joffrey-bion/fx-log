@@ -209,11 +209,11 @@ public class ColorizersController implements Initializable {
             return;
         }
 
-        Filter ruleFilter = rule.getFilter();
+        Filter ruleFilter = rule.getMatcher();
         boolean isRawFilter = ruleFilter.getColumnName() == null;
         filterType.selectToggle(isRawFilter ? matchRawButton : matchColumnButton);
         filterRegexField.setText(ruleFilter.getPattern().pattern());
-        filterColumnNameField.setText(isRawFilter ? "" : rule.getFilter().getColumnName());
+        filterColumnNameField.setText(isRawFilter ? "" : rule.getMatcher().getColumnName());
         ruleFilter.patternProperty().bind(filterRegexFieldPatternBinding);
 
         Callable<String> getColumnName = () -> {
@@ -229,8 +229,10 @@ public class ColorizersController implements Initializable {
                         filterType.selectedToggleProperty());
         ruleFilter.columnNameProperty().bind(filterColumnBinding);
 
-        bindActivableColorPicker(rule.backgroundColorProperty(), backgroundColorPicker, overrideTextBackground);
-        bindActivableColorPicker(rule.foregroundColorProperty(), foregroundColorPicker, overrideTextForeground);
+        bindActivableColorPicker(rule.getResult().backgroundColorProperty(), backgroundColorPicker,
+                overrideTextBackground);
+        bindActivableColorPicker(rule.getResult().foregroundColorProperty(), foregroundColorPicker,
+                overrideTextForeground);
     }
 
     private static void unbindRuleFromUI(@Nullable StyleRule rule) {
@@ -238,10 +240,10 @@ public class ColorizersController implements Initializable {
             return;
         }
         rule.nameProperty().unbind();
-        rule.backgroundColorProperty().unbind();
-        rule.foregroundColorProperty().unbind();
-        rule.getFilter().columnNameProperty().unbind();
-        rule.getFilter().patternProperty().unbind();
+        rule.getResult().backgroundColorProperty().unbind();
+        rule.getResult().foregroundColorProperty().unbind();
+        rule.getMatcher().columnNameProperty().unbind();
+        rule.getMatcher().patternProperty().unbind();
     }
 
     private static void bindActivableColorPicker(@NotNull Property<Color> colorProperty, @NotNull ColorPicker picker,

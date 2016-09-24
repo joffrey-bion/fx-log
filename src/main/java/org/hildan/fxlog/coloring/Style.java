@@ -22,9 +22,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class Style {
 
-    static final Style DEFAULT = new Style("DEFAULT", Color.LIGHTGRAY, null);
+    public static final Style DEFAULT = new Style("DEFAULT", Color.LIGHTGRAY);
 
-    private final StringProperty nameProperty;
+    public static final Style HIGHLIGHT = new Style("Highlight", Color.web("#50e6ffff"), Color.web("#002042ff"));
+    public static final Style RED = new Style("Red", Color.web("#ca1d1dff"));
+    public static final Style ORANGE = new Style("Orange", Color.web("#e6994dff"));
+    public static final Style GREEN = new Style("Green", Color.web("#10c14bff"));
+    public static final Style BLUE = new Style("Blue", Color.web("#334db3ff"));
+    public static final Style LIGHT_GRAY = new Style("Light Gray", Color.LIGHTGRAY);
+
+    public static final Style DARK_RED = new Style("Dark Red", Color.web("#aa0000ff"));
+    public static final Style DARK_ORANGE = new Style("Dark Orange", Color.web("#b27200ff"));
+    public static final Style DARK_GREEN = new Style("Dark Green", Color.web("#008100ff"));
+    public static final Style DARK_BLUE = new Style("Dark Blue", Color.web("#0000bbff"));
+    public static final Style BLACK = new Style("Black", Color.web("#000000ff"));
+
+    private final StringProperty name;
 
     private final Property<Color> foregroundColor;
 
@@ -32,10 +45,20 @@ public class Style {
 
     private transient Binding<Background> backgroundBinding;
 
+    public Style(String name, Color foregroundColor) {
+        this.name = new SimpleStringProperty(name);
+        this.foregroundColor = new SimpleObjectProperty<>(foregroundColor);
+        this.backgroundColor = new SimpleObjectProperty<>();
+    }
+
     public Style(String name, Color foregroundColor, Color backgroundColor) {
-        this.nameProperty = new SimpleStringProperty(name);
+        this.name = new SimpleStringProperty(name);
         this.foregroundColor = new SimpleObjectProperty<>(foregroundColor);
         this.backgroundColor = new SimpleObjectProperty<>(backgroundColor);
+    }
+
+    public Style(Style source) {
+        this(source.getName(), source.getForegroundColor(), source.getBackgroundColor());
     }
 
     /**
@@ -68,16 +91,16 @@ public class Style {
         }
     }
 
-    public String getNameProperty() {
-        return nameProperty.get();
+    public String getName() {
+        return name.get();
     }
 
-    public StringProperty namePropertyProperty() {
-        return nameProperty;
+    public StringProperty nameProperty() {
+        return name;
     }
 
-    public void setNameProperty(String nameProperty) {
-        this.nameProperty.set(nameProperty);
+    public void setName(String nameProperty) {
+        this.name.set(nameProperty);
     }
 
     public Color getForegroundColor() {

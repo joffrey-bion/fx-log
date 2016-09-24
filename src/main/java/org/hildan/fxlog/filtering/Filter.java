@@ -1,7 +1,5 @@
 package org.hildan.fxlog.filtering;
 
-import java.util.concurrent.Callable;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -13,15 +11,31 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
-import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.rulesets.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A log filter based on a regexp matching the raw log entry or a column in a log.
  */
-public class Filter implements Predicate<LogEntry> {
+public class Filter implements Matcher<LogEntry> {
+
+    public static final Filter MATCH_ALL = findInRawLog(".*");
+
+    public static final Filter ERROR_SEVERITY = findInColumn("severity", "[Ee]rror");
+
+    public static final Filter WARN_SEVERITY = findInColumn("severity", "[Ww]arn(ing)?");
+
+    public static final Filter INFO_SEVERITY = findInColumn("severity", "[Ii]nfo");
+
+    public static final Filter DEBUG_SEVERITY = findInColumn("severity", "[Dd]ebug");
+
+    public static final Filter NOTICE_SEVERITY = findInColumn("severity", "[Nn]otice");
+
+    public static final Filter STACKTRACE_HEAD = findInColumn("msg", "(^\\s*Caused By.*)|^((\\S+\\.)+\\S*Exception.*)");
+
+    public static final Filter STACKTRACE_BODY = findInColumn("msg", "^\\s*at \\S.*");
 
     private final StringProperty columnName;
 
@@ -152,7 +166,8 @@ public class Filter implements Predicate<LogEntry> {
         }
     }
 
-    public Binding<Boolean> matchesBinding(ObservableValue<LogEntry> logObservable) {
+    @Override
+    public Binding<Boolean> matches(ObservableValue<LogEntry> logObservable) {
         return Bindings.createBooleanBinding(() -> test(logObservable.getValue()), logObservable, pattern, columnName);
     }
 }
