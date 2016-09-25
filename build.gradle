@@ -1,10 +1,5 @@
-import org.ajoberstar.grgit.Grgit
-
 plugins {
-    // used to upload artifacts to the bintray repo
-    id "com.jfrog.bintray" version "1.6"
-    // used to create and push a git tag automatically when releasing
-    id "org.ajoberstar.grgit" version "1.4.2"
+    id "com.jfrog.bintray" version "1.7.1"
 }
 
 apply plugin: 'java'
@@ -17,11 +12,9 @@ group = 'org.hildan'
 version = '2.0.0'
 sourceCompatibility = 1.8
 description = 'A JavaFX program to view log files in a beautiful way.'
+ext.labels = ['log', 'viewer']
 
 def mainClassName = "org.hildan.fxlog.FXLog"
-
-// access to the git repository API
-def gitRepo = Grgit.open()
 
 repositories {
     mavenCentral()
@@ -38,7 +31,7 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
-// to inject the project version in main.fxml
+// to inject the project version in about.fxml and .properties files
 processResources {
     ['**/*.properties', '**/about.fxml'].each {
         filesMatching(it) {
@@ -84,94 +77,6 @@ javafx {
     shortcut = true
 }
 
-bintrayUpload.dependsOn tasks.jfxDeploy
-
-bintray {
-    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
-    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
-    configurations = ['archives']
-
-    publish = true // the version should be auto published after an upload
-
-    pkg {
-        repo = project.hasProperty('bintrayRepoApps') ? project.bintrayRepoApps : ''
-        name = project.name
-        desc = project.description
-        labels = ['log', 'viewer']
-
-        String githubRepoName = project.name
-        websiteUrl = 'https://github.com/joffrey-bion/' + githubRepoName
-        issueTrackerUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '/issues'
-        vcsUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '.git'
-
-        licenses = ['MIT']
-        version {
-            vcsTag = 'v' + project.version
-            gpg { sign = true }
-        }
-    }
-}
-
-task commitRelease << {
-    gitRepo.add(patterns: ['build.gradle'])
-    gitRepo.commit(message: "Version ${project.version}")
-    gitRepo.push()
-}
-
-task tagRelease << {
-    gitRepo.tag.add {
-        name = "v${project.version}"
-        message = "Version ${project.version}"
-    }
-    gitRepo.push(tags: true)
-    println "Generated tag for version ${project.version}"
-}
-tagRelease.mustRunAfter(commitRelease)
-
-task generateChangeLog(type: Exec) {
-    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
-        commandLine 'cmd', '/c', 'github_changelog_generator', '--exclude-labels=wontfix,on hold,duplicate'
-    } else {
-        commandLine 'github_changelog_generator', '--exclude-labels=wontfix,on hold,duplicate'
-    }
-
-    doLast {
-        // fix the bintray links (remove V prefix)
-        String changelogFile = 'CHANGELOG.md'
-        String changelogContents = new File(changelogFile).getText('UTF-8')
-        changelogContents = changelogContents.replaceAll('applications/fx-log/v', 'applications/fx-log/')
-        new File(changelogFile).write(changelogContents, 'UTF-8')
-    }
-}
-
-task commitChangeLog(dependsOn: 'generateChangeLog') {
-    doLast {
-        gitRepo.add(patterns: ['CHANGELOG.md'])
-        gitRepo.commit(message: "Changelog for version ${project.version}")
-        gitRepo.push()
-    }
-}
-
-commitChangeLog.mustRunAfter(tagRelease)
-bintrayUpload.mustRunAfter(tagRelease)
-
-task release(dependsOn: ['commitRelease', 'tagRelease', 'bintrayUpload', 'commitChangeLog'])
-
-checkstyle {
-    toolVersion = '6.15'
-}
-
-// Fail build on Checkstyle warnings
-// https://issues.gradle.org/browse/GRADLE-2888
-def checkstyleWarningsFile = 'build/reports/checkstyle/main.xml'
-
-task verifyNoCheckstyleWarnings(type: GradleBuild) {
-    doLast {
-        File warningsFile = file(checkstyleWarningsFile)
-        if (warningsFile.exists() && warningsFile.text.contains("<error ")) {
-            throw new GradleException("There were checkstyle warnings! For more info check $warningsFile")
-        }
-    }
-}
-
-checkstyleMain.finalizedBy verifyNoCheckstyleWarnings
+apply from: 'gradle/scripts/bintray.gradle'
+apply from: 'gradle/scripts/release.gradle'
+apply from: 'gradle/scripts/checkstyle.gradle'

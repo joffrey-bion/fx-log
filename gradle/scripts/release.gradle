@@ -1,0 +1,68 @@
+def execute = { String command ->
+    exec {
+        workingDir rootProject.projectDir
+        commandLine command.split()
+    }
+}
+
+task commitRelease << {
+    execute("git add build.gradle")
+    execute("git commit -m \"Version ${project.version}\"")
+    execute("git push")
+}
+
+task tagRelease << {
+    execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
+    execute("git push -a v${project.version} -m \"Version ${project.version}\"")
+    execute("git push v${project.version}")
+    println "Generated tag for version ${project.version}"
+}
+tagRelease.mustRunAfter(commitRelease)
+
+def getChangelogReleaseUrlBeginning = {
+    try {
+        Properties props = new Properties()
+        props.load(new FileInputStream('.github_changelog_generator'))
+        String versionUrlTemplate = props.getProperty('release-url')
+        int versionIndex = versionUrlTemplate.indexOf('%s')
+        if (versionIndex == null) {
+            return null
+        }
+        return versionUrlTemplate.substring(0, versionIndex)
+    }
+    catch (Exception e) {
+        return null
+    }
+}
+
+task generateChangeLog(type: Exec) {
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'github_changelog_generator', '--no-verbose', '--future-release', "v${project.version}"
+    } else {
+        commandLine 'github_changelog_generator', '--no-verbose', '--future-release', "v${project.version}"
+    }
+
+    doLast {
+        // fix the bintray links (remove V prefix)
+        String changelogFile = 'CHANGELOG.md'
+        String changelogContents = new File(changelogFile).getText('UTF-8')
+        String releaseUrlStart = getChangelogReleaseUrlBeginning()
+        if (releaseUrlStart != null) {
+            changelogContents = changelogContents.replaceAll(releaseUrlStart + 'v', releaseUrlStart)
+            new File(changelogFile).write(changelogContents, 'UTF-8')
+        }
+    }
+}
+
+task commitChangeLog(dependsOn: 'generateChangeLog') {
+    doLast {
+        execute("git add CHANGELOG.md")
+        execute("git commit -m \"Changelog for version ${project.version}\"")
+        execute("git push")
+    }
+}
+
+commitChangeLog.mustRunAfter(tagRelease)
+bintrayUpload.mustRunAfter(tagRelease)
+
+task release(dependsOn: ['commitRelease', 'tagRelease', 'bintrayUpload', 'commitChangeLog'])

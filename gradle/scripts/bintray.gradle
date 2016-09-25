@@ -1,0 +1,34 @@
+bintrayUpload.dependsOn tasks.jfxDeploy
+
+ext {
+    githubUser = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
+    githubRepoName = project.name
+    githubRepoUrl = 'https://github.com/' + githubUser + '/' + githubRepoName
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    publish = true // the version should be auto published after an upload
+
+    pkg {
+        repo = project.hasProperty('bintrayRepoApps') ? project.bintrayRepoApps : System.getenv('BINTRAY_REPO_APPS')
+        name = project.name
+        desc = project.description
+        labels = project.labels
+        licenses = ['MIT']
+
+        websiteUrl = githubRepoUrl
+        issueTrackerUrl = githubRepoUrl + '/issues'
+        vcsUrl = githubRepoUrl + '.git'
+        githubRepo = githubUser + '/' + githubRepoName
+        githubReleaseNotesFile = 'README.md'
+
+        version {
+            desc = project.description
+            vcsTag = 'v' + project.version
+            gpg { sign = true }
+        }
+    }
+}
