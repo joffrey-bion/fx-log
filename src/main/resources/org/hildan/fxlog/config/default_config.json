@@ -1,12 +1,12 @@
 {
-  "version": 2,
+  "version": 3,
   "selectedColumnizerIndex": 0,
-  "selectedColorizerIndex": 2,
-  "currentTheme": "DARK",
+  "selectedColorizerIndex": 1,
+  "currentTheme": "LIGHT",
   "openLastFileAtStartup": true,
   "skipEmptyLogs": true,
   "wrapLogsText": false,
-  "logsFont": "SansSerif,Regular,12.0",
+  "logsFont": "Arial,Regular,14.0",
   "recentFiles": [],
   "columnizers": [
     {
@@ -20,19 +20,19 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 219.419921875,
+          "width": 207.0,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 64.52734375,
-          "visible": true
+          "width": 80.0,
+          "visible": false
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
-          "width": 55.14501953125,
+          "width": 80.0,
           "visible": false
         },
         {
@@ -50,7 +50,7 @@
         {
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
-          "width": 201.68798828125,
+          "width": 80.0,
           "visible": false
         },
         {
@@ -86,19 +86,19 @@
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 149.0,
+          "width": 432.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 1572.0,
+          "width": 721.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 338.0,
+          "width": 308.0,
           "visible": true
         }
       ]
@@ -114,19 +114,19 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 159.419921875,
+          "width": 195.0,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 64.52734375,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Subsystem",
           "capturingGroupName": "subsystem",
-          "width": 55.14501953125,
+          "width": 80.0,
           "visible": false
         },
         {
@@ -144,25 +144,25 @@
         {
           "headerLabel": "Thread ID",
           "capturingGroupName": "thread",
-          "width": 201.68798828125,
+          "width": 80.0,
           "visible": false
         },
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 447.0,
+          "width": 427.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 739.0,
+          "width": 742.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 338.0,
+          "width": 291.0,
           "visible": true
         }
       ]
@@ -176,55 +176,55 @@
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 125.1171875,
+          "width": 205.9306640625,
           "visible": true
         },
         {
           "headerLabel": "User",
           "capturingGroupName": "user",
-          "width": 49.224609375,
+          "width": 79.783203125,
           "visible": true
         },
         {
           "headerLabel": "Username",
           "capturingGroupName": "username",
-          "width": 80.42578125,
+          "width": 73.291015625,
           "visible": true
         },
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 165.794921875,
+          "width": 191.341796875,
           "visible": true
         },
         {
           "headerLabel": "Request",
           "capturingGroupName": "request",
-          "width": 618.0,
+          "width": 694.744140625,
           "visible": true
         },
         {
           "headerLabel": "Resp. Code",
           "capturingGroupName": "rstatus",
-          "width": 80.0,
+          "width": 79.291015625,
           "visible": true
         },
         {
           "headerLabel": "Resp. Size (bytes)",
           "capturingGroupName": "rsize",
-          "width": 122.49609375,
+          "width": 111.294921875,
           "visible": true
         },
         {
           "headerLabel": "Referer",
           "capturingGroupName": "referer",
-          "width": 201.0,
+          "width": 58.103515625,
           "visible": true
         },
         {
           "headerLabel": "User-Agent",
           "capturingGroupName": "useragent",
-          "width": 360.0,
+          "width": 80.521484375,
           "visible": true
         }
       ]
@@ -241,25 +241,25 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 157.580078125,
+          "width": 187.341796875,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 69.52734375,
+          "width": 73.625,
           "visible": true
         },
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 133.205078125,
+          "width": 75.375,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 752.0,
+          "width": 1084.70703125,
           "visible": true
         }
       ]
@@ -273,43 +273,43 @@
         {
           "headerLabel": "HH",
           "capturingGroupName": "hh",
-          "width": 31.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "MM",
           "capturingGroupName": "mm",
-          "width": 38.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "SS",
           "capturingGroupName": "ss",
-          "width": 30.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "MS",
           "capturingGroupName": "ms",
-          "width": 30.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Domain",
           "capturingGroupName": "domain",
-          "width": 96.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Action",
           "capturingGroupName": "action",
-          "width": 96.0,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Parameters",
           "capturingGroupName": "params",
-          "width": 1325.0,
+          "width": 80.0,
           "visible": true
         }
       ]
@@ -317,221 +317,230 @@
   ],
   "colorizers": [
     {
-      "name": "Severity (dark)",
-      "styleRules": [
-        {
-          "name": "Error",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ee]rror"
-          },
-          "foregroundColor": "#ca1d1dff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Warn",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ww]arn(ing)?"
-          },
-          "foregroundColor": "#e6994dff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Info",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ii]nfo"
-          },
-          "foregroundColor": "#10c14bff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Debug",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Dd]ebug"
-          },
-          "foregroundColor": "#334db3ff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Notice",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Nn]otice"
-          },
-          "foregroundColor": "#ccccccff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Stacktrace",
-          "filter": {
-            "columnName": "msg",
-            "pattern": "(at \\S.*)|(Caused By.*)"
-          },
-          "foregroundColor": "#ca1d1dff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Default",
-          "filter": {
-            "columnName": 0,
-            "pattern": ".*"
-          },
-          "foregroundColor": "#e6e6e6ff",
-          "backgroundColor": null
-        }
-      ]
-    },
-    {
-      "name": "Severity (light)",
-      "styleRules": [
-        {
-          "name": "Error",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ee]rror"
-          },
-          "foregroundColor": "#aa0000ff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Warn",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ww]arn(ing)?"
-          },
-          "foregroundColor": "#b27200ff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Info",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Ii]nfo"
-          },
-          "foregroundColor": "#008100ff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Debug",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Dd]ebug"
-          },
-          "foregroundColor": "#0000bbff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Notice",
-          "filter": {
-            "columnName": "severity",
-            "pattern": "[Nn]otice"
-          },
-          "foregroundColor": null,
-          "backgroundColor": null
-        },
-        {
-          "name": "Stacktrace",
-          "filter": {
-            "columnName": "msg",
-            "pattern": "(at \\S.*)|(Caused By.*)"
-          },
-          "foregroundColor": "#990000ff",
-          "backgroundColor": null
-        },
-        {
-          "name": "Default",
-          "filter": {
-            "columnName": 0,
-            "pattern": ".*"
-          },
-          "foregroundColor": "#1a1a1aff",
-          "backgroundColor": null
-        }
-      ]
-    },
-    {
-      "name": "Weblogic (dark)",
-      "styleRules": [
+      "name": "Severity (for dark theme)",
+      "rules": [
         {
           "name": "Highlight",
-          "filter": {
+          "matcher": {
             "columnName": "msg",
             "pattern": "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)"
           },
-          "foregroundColor": "#50e6ffff",
-          "backgroundColor": "#002042ff"
+          "result": {
+            "name": "Highlight",
+            "foregroundColor": "#50e6ffff",
+            "backgroundColor": "#002042ff"
+          }
         },
         {
           "name": "Error",
-          "filter": {
+          "matcher": {
             "columnName": "severity",
             "pattern": "[Ee]rror"
           },
-          "foregroundColor": "#ca1d1dff",
-          "backgroundColor": null
+          "result": {
+            "name": "Red",
+            "foregroundColor": "#ff2020ff",
+            "backgroundColor": null
+          }
         },
         {
           "name": "Warn",
-          "filter": {
+          "matcher": {
             "columnName": "severity",
             "pattern": "[Ww]arn(ing)?"
           },
-          "foregroundColor": "#e6994dff",
-          "backgroundColor": null
+          "result": {
+            "name": "Orange",
+            "foregroundColor": "#e99d51ff",
+            "backgroundColor": null
+          }
         },
         {
           "name": "Info",
-          "filter": {
+          "matcher": {
             "columnName": "severity",
             "pattern": "[Ii]nfo"
           },
-          "foregroundColor": "#10c14bff",
-          "backgroundColor": null
+          "result": {
+            "name": "Green",
+            "foregroundColor": "#28ca5eff",
+            "backgroundColor": null
+          }
         },
         {
           "name": "Debug",
-          "filter": {
+          "matcher": {
             "columnName": "severity",
             "pattern": "[Dd]ebug"
           },
-          "foregroundColor": "#334db3ff",
-          "backgroundColor": null
+          "result": {
+            "name": "Blue",
+            "foregroundColor": "#425fd3ff",
+            "backgroundColor": null
+          }
         },
         {
           "name": "Notice",
-          "filter": {
+          "matcher": {
             "columnName": "severity",
             "pattern": "[Nn]otice"
           },
-          "foregroundColor": "#ccccccff",
-          "backgroundColor": null
+          "result": {
+            "name": "DEFAULT",
+            "foregroundColor": "#d3d3d3ff",
+            "backgroundColor": null
+          }
         },
         {
-          "name": "Stacktrace",
-          "filter": {
+          "name": "Stacktrace Head",
+          "matcher": {
             "columnName": "msg",
-            "pattern": "(at \\S.*)|(Caused By.*)|((\\S+\\.)+\\S+.*)"
+            "pattern": "(^\\s*Caused By.*)|^((\\S+\\.)+\\S*Exception.*)"
           },
-          "foregroundColor": "#ca1d1dff",
-          "backgroundColor": null
+          "result": {
+            "name": "Red",
+            "foregroundColor": "#ff2020ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Stacktrace Body",
+          "matcher": {
+            "columnName": "msg",
+            "pattern": "^\\s*at \\S.*"
+          },
+          "result": {
+            "name": "Red",
+            "foregroundColor": "#ff2020ff",
+            "backgroundColor": null
+          }
         },
         {
           "name": "Default",
-          "filter": {
-            "columnName": 0,
+          "matcher": {
+            "columnName": null,
             "pattern": ".*"
           },
-          "foregroundColor": "#e6e6e6ff",
-          "backgroundColor": null
+          "result": {
+            "name": "Light Gray",
+            "foregroundColor": "#d3d3d3ff",
+            "backgroundColor": null
+          }
         }
       ]
     },
     {
-      "name": "None",
-      "styleRules": []
+      "name": "Severity (for light theme)",
+      "rules": [
+        {
+          "name": "Highlight",
+          "matcher": {
+            "columnName": "msg",
+            "pattern": "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)"
+          },
+          "result": {
+            "name": "Highlight",
+            "foregroundColor": "#50e6ffff",
+            "backgroundColor": "#002042ff"
+          }
+        },
+        {
+          "name": "Error",
+          "matcher": {
+            "columnName": "severity",
+            "pattern": "[Ee]rror"
+          },
+          "result": {
+            "name": "Dark Red",
+            "foregroundColor": "#aa0000ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Warn",
+          "matcher": {
+            "columnName": "severity",
+            "pattern": "[Ww]arn(ing)?"
+          },
+          "result": {
+            "name": "Dark Orange",
+            "foregroundColor": "#b27200ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Info",
+          "matcher": {
+            "columnName": "severity",
+            "pattern": "[Ii]nfo"
+          },
+          "result": {
+            "name": "Dark Green",
+            "foregroundColor": "#008100ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Debug",
+          "matcher": {
+            "columnName": "severity",
+            "pattern": "[Dd]ebug"
+          },
+          "result": {
+            "name": "Dark Blue",
+            "foregroundColor": "#0000bbff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Notice",
+          "matcher": {
+            "columnName": "severity",
+            "pattern": "[Nn]otice"
+          },
+          "result": {
+            "name": "DEFAULT",
+            "foregroundColor": "#333333ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Stacktrace Head",
+          "matcher": {
+            "columnName": "msg",
+            "pattern": "(^\\s*Caused By.*)|^((\\S+\\.)+\\S*Exception.*)"
+          },
+          "result": {
+            "name": "Dark Red",
+            "foregroundColor": "#aa0000ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Stacktrace Body",
+          "matcher": {
+            "columnName": "msg",
+            "pattern": "^\\s*at \\S.*"
+          },
+          "result": {
+            "name": "Dark Red",
+            "foregroundColor": "#aa0000ff",
+            "backgroundColor": null
+          }
+        },
+        {
+          "name": "Default",
+          "matcher": {
+            "columnName": null,
+            "pattern": ".*"
+          },
+          "result": {
+            "name": "Black",
+            "foregroundColor": "#333333ff",
+            "backgroundColor": null
+          }
+        }
+      ]
     }
   ]
 }
