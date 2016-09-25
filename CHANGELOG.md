@@ -1,5 +1,24 @@
 # Change Log
 
+## [v2.0.0](https://bintray.com/joffrey-bion/applications/fx-log/2.0.0) (2016-09-25)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.7...v2.0.0)
+
+**Implemented enhancements:**
+
+- Separate styles from style rules [\#63](https://github.com/joffrey-bion/fx-log/issues/63)
+- Use icons for buttons like "add"/"delete" [\#22](https://github.com/joffrey-bion/fx-log/issues/22)
+
+**Fixed bugs:**
+
+- Exiting the program does not close secondary windows [\#65](https://github.com/joffrey-bion/fx-log/issues/65)
+- Regex editing is not instantly taken into account anymore [\#64](https://github.com/joffrey-bion/fx-log/issues/64)
+
+**Closed issues:**
+
+- Improve rule matching binding between colorizer and log [\#67](https://github.com/joffrey-bion/fx-log/issues/67)
+- View not updated when changing selected colorizer [\#66](https://github.com/joffrey-bion/fx-log/issues/66)
+- View not updated when changing color rule regex [\#62](https://github.com/joffrey-bion/fx-log/issues/62)
+
 ## [v1.7](https://bintray.com/joffrey-bion/applications/fx-log/1.7) (2016-04-26)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.6...v1.7)
 
