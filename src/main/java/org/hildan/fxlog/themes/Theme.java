@@ -11,8 +11,8 @@ import org.hildan.fxlog.config.Config;
 
 public enum Theme {
 
-    DARK("dark_theme.css", "common.css"),
-    LIGHT("common.css");
+    DARK( "common.css", "dark_base.css", "dark_theme.css"),
+    LIGHT("common.css", "light_theme.css");
 
     private static final String CSS_PATH = FXLog.BASE_PACKAGE + "/themes";
 
