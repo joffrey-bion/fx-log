@@ -41,7 +41,7 @@ Custom columnizer                                                   |  Select in
 
 Use regular expressions on raw log lines or column values to change the style of some logs:
 
-![Customize Colorizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_colorizers.png)
+<img alt="Customize Colorizers" src="https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_colorizers.png" height="500"/>
 
 ## Report issues - Suggest improvements
 
