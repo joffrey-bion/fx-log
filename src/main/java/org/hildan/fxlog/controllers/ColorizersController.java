@@ -185,7 +185,6 @@ public class ColorizersController implements Initializable {
 
     private static void createRegexFieldPatternBinding(TextField regexField, Property<Pattern> patternProperty) {
         ChangeListener<String> patternCreationListener = (obs, oldVal, newVal) -> {
-            System.out.println("Creating new pattern from '" + newVal + "'");
             regexField.pseudoClassStateChanged(Css.INVALID, false);
             try {
                 patternProperty.setValue(Pattern.compile(newVal));
