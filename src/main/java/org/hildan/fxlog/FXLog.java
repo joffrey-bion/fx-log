@@ -52,10 +52,7 @@ public class FXLog extends Application {
             InputStream icon = getClass().getResourceAsStream(APP_ICON_PATH);
             stage.getIcons().add(new Image(icon));
             stage.setScene(scene);
-            stage.setOnCloseRequest(event -> {
-                Platform.exit();
-                System.exit(0);
-            });
+            stage.setOnCloseRequest(event -> Platform.exit());
             stage.show();
 
             VersionChecker.checkForUpdates(false);
@@ -137,6 +134,8 @@ public class FXLog extends Application {
     public void stop() {
         try {
             Config.getInstance().persist();
+            System.out.println("Config saved");
+            System.exit(0);
         } catch (IOException e) {
             ErrorDialog.configWriteException(e);
         } catch (Exception e) {
