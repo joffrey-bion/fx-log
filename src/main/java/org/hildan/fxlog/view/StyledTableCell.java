@@ -28,14 +28,15 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         setGraphic(text);
         setText(null);
 
+        // this is usually called only once (when this cell is attached to a row)
         EasyBind.subscribe(tableRowProperty(), row -> {
             if (row == null) {
                 return;
             }
+
+            // bind the text for the foreground, and this cell for the background
             //noinspection unchecked
-            Colorizer.bindStyle(text, colorizerProperty(), row.itemProperty()); // for foreground style
-            //noinspection unchecked
-            Colorizer.bindStyle(this, colorizerProperty(), row.itemProperty()); // for background style
+            Colorizer.bindStyle(colorizerProperty(), row.itemProperty(), text, this);
         });
     }
 

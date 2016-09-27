@@ -60,16 +60,16 @@ public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> {
      * Binds the style of the given Node to the given log and colorizer observables. If one of them changes, the rule
      * matching is re-computed to update the style of the node accordingly.
      *
-     * @param node
-     *         the node to style
      * @param colorizer
      *         the observable colorizer to apply
-     * @param logEntry
+     * @param log
      *         the observable log on which to test the rules
+     * @param nodes
+     *         the nodes to style with this colorizer
      */
-    public static void bindStyle(Node node, ObservableValue<Colorizer> colorizer, ObservableValue<LogEntry> logEntry) {
-        Binding<Style> matchingRuleBinding = RuleSet.outputFor(colorizer, logEntry, Style.DEFAULT);
-        EasyBind.subscribe(matchingRuleBinding, r -> r.bindNode(node));
+    public static void bindStyle(ObservableValue<Colorizer> colorizer, ObservableValue<LogEntry> log, Node... nodes) {
+        Binding<Style> matchingRuleStyleBinding = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
+        EasyBind.subscribe(matchingRuleStyleBinding, style -> style.bindNodes(nodes));
     }
 
     @Override

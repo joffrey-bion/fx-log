@@ -62,6 +62,18 @@ public class Style {
     }
 
     /**
+     * Binds the given {@link Node}s' styles to this style.
+     *
+     * @param nodes
+     *         the nodes to drive the style of
+     */
+    void bindNodes(@NotNull Node... nodes) {
+        for (Node node : nodes) {
+            bindNode(node);
+        }
+    }
+
+    /**
      * Binds the given {@link Node}'s style to this style.
      *
      * @param node
