@@ -301,10 +301,10 @@ public class MainController implements Initializable {
      */
     private void configureSecondaryStages() {
         Theme theme = config.getCurrentTheme();
-        colorizersStage = UIUtils.createStage("colorizers.fxml", "Customize Colorizers", theme);
-        columnizersStage = UIUtils.createStage("columnizers.fxml", "Customize Columnizers", theme);
-        preferencesStage = UIUtils.createStage("preferences.fxml", "Preferences", theme);
-        aboutStage = UIUtils.createStage("about.fxml", "About FX Log", theme);
+        colorizersStage = UIUtils.createStage("popups/colorizers.fxml", "Customize Colorizers", theme);
+        columnizersStage = UIUtils.createStage("popups/columnizers.fxml", "Customize Columnizers", theme);
+        preferencesStage = UIUtils.createStage("popups/preferences.fxml", "Preferences", theme);
+        aboutStage = UIUtils.createStage("popups/about.fxml", "About FX Log", theme);
     }
 
     private void configureAutoScroll() {
