@@ -46,6 +46,7 @@ import javafx.stage.Stage;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
+import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.columns.ColumnDefinition;
@@ -112,8 +113,6 @@ public class MainController implements Initializable {
 
     private FilteredList<LogEntry> filteredLogs;
 
-    private Property<Predicate<LogEntry>> filter;
-
     private StringProperty tailedFileName;
 
     private BooleanProperty followingTail;
@@ -129,7 +128,6 @@ public class MainController implements Initializable {
         config = Config.getInstance();
         columnizedLogs = FXCollections.observableArrayList();
         filteredLogs = new FilteredList<>(columnizedLogs);
-        filter = new SimpleObjectProperty<>();
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
         followingTail = new SimpleBooleanProperty(false);
@@ -235,9 +233,7 @@ public class MainController implements Initializable {
                 Bindings.createObjectBinding(createFilter, filterField.textProperty(),
                         caseSensitiveFilterCheckbox.selectedProperty());
         filterField.setText("");
-        filter.setValue(log -> true);
-        filter.bind(filterBinding);
-        filteredLogs.predicateProperty().bind(filter);
+        filteredLogs.predicateProperty().bind(filterBinding);
         filteredLogs.predicateProperty().addListener((obs, before, now) -> {
             if (followingTail.get()) {
                 scrollToBottom();
@@ -250,12 +246,11 @@ public class MainController implements Initializable {
      */
     private void configureLogsTable() {
         logsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        if (columnizer.getValue() != null) {
-            logsTable.getColumns().addAll(getConfiguredColumns(columnizer.getValue()));
-        }
-        columnizer.addListener((observable, oldValue, newValue) -> {
+        EasyBind.subscribe(columnizer, c -> {
             logsTable.getColumns().clear();
-            logsTable.getColumns().addAll(getConfiguredColumns(newValue));
+            if (c != null) {
+                logsTable.getColumns().addAll(getConfiguredColumns(c));
+            }
         });
         logsTable.setItems(filteredLogs);
     }
