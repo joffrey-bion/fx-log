@@ -90,7 +90,7 @@ public class Config {
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
         this.checkForUpdates = new SimpleBooleanProperty(true);
-        this.limitNumberOfLogs = new SimpleBooleanProperty(false);
+        this.limitNumberOfLogs = new SimpleBooleanProperty(true);
         this.maxNumberOfLogs = new SimpleObjectProperty<>(100000);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
         this.tailingDelayInMillis = new SimpleObjectProperty<>(500);
