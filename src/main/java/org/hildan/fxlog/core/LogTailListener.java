@@ -4,7 +4,9 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
@@ -22,6 +24,10 @@ public class LogTailListener implements TailerListener {
 
     protected final BooleanProperty skipEmptyLogs;
 
+    protected final BooleanProperty limitNumberOfLogs;
+
+    protected final Property<Integer> maxNumberOfLogs;
+
     protected volatile boolean running;
 
     /**
@@ -35,7 +41,9 @@ public class LogTailListener implements TailerListener {
     public LogTailListener(Columnizer columnizer, List<LogEntry> logs) {
         this.columnizer = columnizer;
         this.logs = logs;
-        this.skipEmptyLogs = new SimpleBooleanProperty();
+        this.skipEmptyLogs = new SimpleBooleanProperty(false);
+        this.limitNumberOfLogs = new SimpleBooleanProperty(false);
+        this.maxNumberOfLogs = new SimpleObjectProperty<>(0);
     }
 
     @Override
@@ -76,10 +84,19 @@ public class LogTailListener implements TailerListener {
             Platform.runLater(() -> {
                 // we need to check again here because the listener may have been stopped in the meantime
                 if (running) {
-                    logs.add(log);
+                    appendLog(log);
                 }
             });
         }
+    }
+
+    private void appendLog(LogEntry log) {
+        if (limitNumberOfLogs.get()) {
+            while (logs.size() >= maxNumberOfLogs.getValue()) {
+                logs.remove(0);
+            }
+        }
+        logs.add(log);
     }
 
     @Override
@@ -100,5 +117,29 @@ public class LogTailListener implements TailerListener {
 
     public void setSkipEmptyLogs(boolean skipEmptyLogs) {
         this.skipEmptyLogs.set(skipEmptyLogs);
+    }
+
+    public boolean isLimitNumberOfLogs() {
+        return limitNumberOfLogs.get();
+    }
+
+    public BooleanProperty limitNumberOfLogsProperty() {
+        return limitNumberOfLogs;
+    }
+
+    public void setLimitNumberOfLogs(boolean limitNumberOfLogs) {
+        this.limitNumberOfLogs.set(limitNumberOfLogs);
+    }
+
+    public Integer getMaxNumberOfLogs() {
+        return maxNumberOfLogs.getValue();
+    }
+
+    public Property<Integer> maxNumberOfLogsProperty() {
+        return maxNumberOfLogs;
+    }
+
+    public void setMaxNumberOfLogs(Integer maxNumberOfLogs) {
+        this.maxNumberOfLogs.setValue(maxNumberOfLogs);
     }
 }

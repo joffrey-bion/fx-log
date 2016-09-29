@@ -449,6 +449,8 @@ public class MainController implements Initializable {
         config.addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         logTailListener.skipEmptyLogsProperty().bind(config.skipEmptyLogsProperty());
+        logTailListener.limitNumberOfLogsProperty().bind(config.limitNumberOfLogsProperty());
+        logTailListener.maxNumberOfLogsProperty().bind(config.maxNumberOfLogsProperty());
         tailer = Tailer.create(file, logTailListener, 500);
         tailingFile.set(true);
         tailedFileName.set(file.getAbsolutePath());

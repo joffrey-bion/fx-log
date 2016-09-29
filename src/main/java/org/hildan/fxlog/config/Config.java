@@ -60,6 +60,10 @@ public class Config {
 
     private final BooleanProperty openLastFileAtStartup;
 
+    private final BooleanProperty limitNumberOfLogs;
+
+    private final Property<Integer> maxNumberOfLogs;
+
     private final BooleanProperty skipEmptyLogs;
 
     private final BooleanProperty wrapLogsText;
@@ -81,6 +85,8 @@ public class Config {
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
+        this.limitNumberOfLogs = new SimpleBooleanProperty(false);
+        this.maxNumberOfLogs = new SimpleObjectProperty<>(100000);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
         this.wrapLogsText = new SimpleBooleanProperty(false);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
@@ -142,6 +148,30 @@ public class Config {
 
     public void setOpenLastFileAtStartup(boolean openLastFileAtStartup) {
         this.openLastFileAtStartup.set(openLastFileAtStartup);
+    }
+
+    public boolean isLimitNumberOfLogs() {
+        return limitNumberOfLogs.get();
+    }
+
+    public BooleanProperty limitNumberOfLogsProperty() {
+        return limitNumberOfLogs;
+    }
+
+    public void setLimitNumberOfLogs(boolean limitNumberOfLogs) {
+        this.limitNumberOfLogs.set(limitNumberOfLogs);
+    }
+
+    public int getMaxNumberOfLogs() {
+        return maxNumberOfLogs.getValue();
+    }
+
+    public Property<Integer> maxNumberOfLogsProperty() {
+        return maxNumberOfLogs;
+    }
+
+    public void setMaxNumberOfLogs(int maxNumberOfLogs) {
+        this.maxNumberOfLogs.setValue(maxNumberOfLogs);
     }
 
     public boolean getSkipEmptyLogs() {

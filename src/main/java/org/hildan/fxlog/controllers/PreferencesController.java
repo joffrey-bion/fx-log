@@ -8,6 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.text.Font;
 
 import org.controlsfx.dialog.FontSelectorDialog;
@@ -30,6 +31,12 @@ public class PreferencesController implements Initializable {
     private CheckBox wrapLogsTextCheckbox;
 
     @FXML
+    private CheckBox limitNumberOfLogsCheckbox;
+
+    @FXML
+    private Spinner<Integer> numberOfLogsLimit;
+
+    @FXML
     private TextField logsFontField;
 
     @Override
@@ -38,7 +45,19 @@ public class PreferencesController implements Initializable {
         reopenLastFileCheckbox.selectedProperty().bindBidirectional(config.openLastFileAtStartupProperty());
         skipEmptyLogsCheckbox.selectedProperty().bindBidirectional(config.skipEmptyLogsProperty());
         wrapLogsTextCheckbox.selectedProperty().bindBidirectional(config.wrapLogsTextProperty());
+        limitNumberOfLogsCheckbox.selectedProperty().bindBidirectional(config.limitNumberOfLogsProperty());
+        configureLogLimitSpinner();
+        configureFontSelector();
+    }
 
+    private void configureLogLimitSpinner() {
+        numberOfLogsLimit.disableProperty().bind(limitNumberOfLogsCheckbox.selectedProperty().not());
+        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE);
+        factory.valueProperty().bindBidirectional(config.maxNumberOfLogsProperty());
+        numberOfLogsLimit.setValueFactory(factory);
+    }
+
+    private void configureFontSelector() {
         Callable<String> configFontString = () -> {
             Font font = config.getLogsFont();
             return font.getName() + ", " + font.getSize();
