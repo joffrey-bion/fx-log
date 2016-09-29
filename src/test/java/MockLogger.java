@@ -8,8 +8,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.SYNC;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.*;
 
 /**
  * Tool to simulate a running Weblogic server. It streams mock log lines to a file on the disk.
@@ -32,7 +31,7 @@ public class MockLogger {
 
     public static void main(String[] args) {
         // TODO: Use a command line lib? See http://commons.apache.org/proper/commons-cli/index.html
-        streamMockLogsToFile("mock.log", 0);
+        streamMockLogsToFile("mock.log", 200);
     }
 
     /**
@@ -41,7 +40,7 @@ public class MockLogger {
      * @return the mock log line
      */
     private static String mockLogLine() {
-        String format = "####<%s> <%s> <%s> <> <%s;jsessionid=%s>%n";
+        String format = "####<%s> <%s> <> <> <> <> <> <> <> <> <> <%s> <%s;jsessionid=%s>%n";
         return String.format(format, LocalDateTime.now(), rand(levels), rand(classes), randMsg(), randSID());
     }
 
@@ -51,18 +50,20 @@ public class MockLogger {
      *
      * @param filename
      *         the path to the target file
-     * @param delayBetweenLines
+     * @param maxDelayBetweenLines
      *         the delay between line writes, in milliseconds
      */
-    private static void streamMockLogsToFile(String filename, int delayBetweenLines) {
+    private static void streamMockLogsToFile(String filename, int maxDelayBetweenLines) {
         Path path = Paths.get(filename);
-        try (BufferedWriter writer = Files.newBufferedWriter(path, UTF_8, TRUNCATE_EXISTING, SYNC)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path, UTF_8, CREATE, TRUNCATE_EXISTING, WRITE, SYNC)) {
+            Random rand = new Random();
             while (true) {
                 writer.write(mockLogLine());
                 writer.flush();
+                int delay = rand.nextInt(maxDelayBetweenLines);
                 // Thread.sleep(0) is not neutral. See http://stackoverflow.com/a/17494898
-                if (delayBetweenLines > 0) {
-                    Thread.sleep(delayBetweenLines);
+                if (delay > 0) {
+                    Thread.sleep(delay);
                 }
             }
         } catch (IOException | InterruptedException e) {
