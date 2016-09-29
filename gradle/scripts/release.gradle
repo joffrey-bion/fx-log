@@ -50,7 +50,6 @@ commitRelease.dependsOn(generateChangeLog)
 
 task tagRelease << {
     execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
-    execute("git push -a v${project.version} -m \"Version ${project.version}\"")
     execute("git push v${project.version}")
     println "Generated tag for version ${project.version}"
 }
