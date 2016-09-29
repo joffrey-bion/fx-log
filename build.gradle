@@ -9,7 +9,7 @@ apply plugin: 'idea'
 apply plugin: 'checkstyle'
 
 group = 'org.hildan'
-version = '2.0.0'
+version = '2.1.0'
 sourceCompatibility = 1.8
 description = 'A JavaFX program to view log files in a beautiful way.'
 ext.labels = ['log', 'viewer']

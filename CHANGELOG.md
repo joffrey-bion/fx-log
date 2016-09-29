@@ -1,5 +1,15 @@
 # Change Log
 
+## [v2.1.0](https://bintray.com/joffrey-bion/applications/fx-log/2.1.0) (2016-09-29)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- Limit number of logs displayed [\#61](https://github.com/joffrey-bion/fx-log/issues/61)
+- Add context menu on logs with basic options [\#51](https://github.com/joffrey-bion/fx-log/issues/51)
+- Add clear button in the filter [\#50](https://github.com/joffrey-bion/fx-log/issues/50)
+- Provide parameters to override tailing settings [\#31](https://github.com/joffrey-bion/fx-log/issues/31)
+
 ## [v2.0.0](https://bintray.com/joffrey-bion/applications/fx-log/2.0.0) (2016-09-25)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.7...v2.0.0)
 
