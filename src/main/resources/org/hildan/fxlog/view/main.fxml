@@ -2,12 +2,14 @@
 
 <?scenebuilder-stylesheet org/hildan/fxlog/themes/common.css?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.glyphfont.Glyph?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<?import org.controlsfx.glyphfont.*?>
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="48.0" minWidth="128.0"
             prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.MainController">
@@ -114,7 +116,15 @@
                     </tooltip>
                 </Button>
                 <Separator orientation="VERTICAL"/>
-                <TextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS"/>
+                <CustomTextField fx:id="filterField" promptText="regexp filter on raw logs" HBox.hgrow="ALWAYS">
+                    <left>
+                        <Glyph fontFamily="FontAwesome" icon="FILTER">
+                            <padding>
+                                <Insets left="3"/>
+                            </padding>
+                        </Glyph>
+                    </left>
+                </CustomTextField>
                 <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Case Sensitive"/>
                 <Separator orientation="VERTICAL"/>
                 <Button mnemonicParsing="false" onAction="#clearLogs">

@@ -2,15 +2,21 @@ package org.hildan.fxlog.view;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.themes.Theme;
-
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 public class UIUtils {
 
@@ -45,4 +51,20 @@ public class UIUtils {
         return stage;
     }
 
+    /**
+     * Adds a clear button to the right of the text field. The little cross appears only when the field is not empty.
+     *
+     * @param customTextField
+     *         the text field to decorate
+     */
+    public static void makeClearable(CustomTextField customTextField) {
+        try {
+            Method method =
+                    TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            method.setAccessible(true);
+            method.invoke(null, customTextField, customTextField.rightProperty());
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }

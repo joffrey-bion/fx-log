@@ -46,6 +46,8 @@ import javafx.stage.Stage;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.Colorizer;
@@ -88,7 +90,7 @@ public class MainController implements Initializable {
     private ChoiceBox<Colorizer> colorizerSelector;
 
     @FXML
-    private TextField filterField;
+    private CustomTextField filterField;
 
     @FXML
     private CheckBox caseSensitiveFilterCheckbox;
@@ -148,7 +150,7 @@ public class MainController implements Initializable {
     private void configureTitleBinding() {
         mainPane.sceneProperty().addListener((obsScene, oldScene, newScene) -> {
             newScene.windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
-                Stage stage = (Stage)newWindow;
+                Stage stage = (Stage) newWindow;
                 StringBinding titleBinding = createTitleBinding(tailingFile, tailedFileName);
                 stage.titleProperty().bind(titleBinding);
             });
@@ -233,6 +235,8 @@ public class MainController implements Initializable {
                 Bindings.createObjectBinding(createFilter, filterField.textProperty(),
                         caseSensitiveFilterCheckbox.selectedProperty());
         filterField.setText("");
+        UIUtils.makeClearable(filterField);
+        TextFields.createClearableTextField();
         filteredLogs.predicateProperty().bind(filterBinding);
         filteredLogs.predicateProperty().addListener((obs, before, now) -> {
             if (followingTail.get()) {
@@ -438,6 +442,7 @@ public class MainController implements Initializable {
      *
      * @param file
      *         the file to tail
+     *
      * @throws FileNotFoundException
      *         if the file was not found
      */
