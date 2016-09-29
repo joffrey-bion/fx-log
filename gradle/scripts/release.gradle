@@ -5,20 +5,6 @@ def execute = { String command ->
     }
 }
 
-task commitRelease << {
-    execute("git add build.gradle")
-    execute("git commit -m \"Version ${project.version}\"")
-    execute("git push")
-}
-
-task tagRelease << {
-    execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
-    execute("git push -a v${project.version} -m \"Version ${project.version}\"")
-    execute("git push v${project.version}")
-    println "Generated tag for version ${project.version}"
-}
-tagRelease.mustRunAfter(commitRelease)
-
 def getChangelogReleaseUrlBeginning = {
     try {
         Properties props = new Properties()
@@ -54,15 +40,20 @@ task generateChangeLog(type: Exec) {
     }
 }
 
-task commitChangeLog(dependsOn: 'generateChangeLog') {
-    doLast {
-        execute("git add CHANGELOG.md")
-        execute("git commit -m \"Changelog for version ${project.version}\"")
-        execute("git push")
-    }
+task commitRelease << {
+    execute("git add build.gradle")
+    execute("git add CHANGELOG.md")
+    execute("git commit -m \"Version ${project.version}\"")
+    execute("git push")
 }
+commitRelease.dependsOn(generateChangeLog)
 
-commitChangeLog.mustRunAfter(tagRelease)
-bintrayUpload.mustRunAfter(tagRelease)
+task tagRelease << {
+    execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
+    execute("git push -a v${project.version} -m \"Version ${project.version}\"")
+    execute("git push v${project.version}")
+    println "Generated tag for version ${project.version}"
+}
+tagRelease.mustRunAfter(commitRelease)
 
-task release(dependsOn: ['commitRelease', 'tagRelease', 'bintrayUpload', 'commitChangeLog'])
+task release(dependsOn: ['commitRelease', 'tagRelease'])
