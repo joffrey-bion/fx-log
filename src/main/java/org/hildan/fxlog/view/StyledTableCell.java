@@ -1,16 +1,24 @@
 package org.hildan.fxlog.view;
 
+import org.fxmisc.easybind.EasyBind;
+import org.hildan.fxlog.coloring.Colorizer;
+import org.hildan.fxlog.coloring.Style;
+import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.rulesets.RuleSet;
+
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableDoubleValue;
-import javafx.scene.control.*;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.text.Text;
-
-import org.fxmisc.easybind.EasyBind;
-import org.hildan.fxlog.coloring.Colorizer;
-import org.hildan.fxlog.core.LogEntry;
 
 /**
  * A table cell that can be styled using a {@link Colorizer}.
@@ -20,6 +28,16 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     private final Text text = new Text();
 
     private final Property<Colorizer> colorizer = new SimpleObjectProperty<>();
+
+    private final Property<Style> searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
+
+    private final StringProperty searchText = new SimpleStringProperty("");
+
+    private Binding<Style> colorizerStyle;
+
+    // this is to prevent the binding from being garbage collected
+    @SuppressWarnings("FieldCanBeLocal")
+    private Binding<Style> cellStyleBinding;
 
     public StyledTableCell(TableColumn<LogEntry, String> column) {
         text.wrappingWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
@@ -36,8 +54,35 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
             // bind the text for the foreground, and this cell for the background
             //noinspection unchecked
-            Colorizer.bindStyle(colorizerProperty(), row.itemProperty(), text, this);
+            bindStyle(row.itemProperty(), text, this);
         });
+    }
+
+    /**
+     * Binds the style of the given Node to the given log observable. If it changes, the rule matching is re-computed to
+     * update the style of the node accordingly.
+     *
+     * @param log
+     *         the observable log on which to test the rules
+     * @param nodes
+     *         the nodes to style
+     */
+    private void bindStyle(ObservableValue<LogEntry> log, Node... nodes) {
+        colorizerStyle = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
+        // cannot be a local variable or it will be garbage collected
+        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, colorizerStyle, itemProperty(),
+                searchText, searchHighlightStyle);
+        EasyBind.subscribe(cellStyleBinding, style -> style.bindNodes(nodes));
+    }
+
+    private Style computeCellStyle() {
+        String search = searchText.getValue();
+        String cellText = getItem();
+        if (cellText != null && !search.isEmpty() && cellText.contains(search)) {
+            return searchHighlightStyle.getValue();
+        } else {
+            return colorizerStyle.getValue();
+        }
     }
 
     private DoubleBinding wrappingWidthBinding(ObservableDoubleValue columnWidth) {
@@ -66,5 +111,29 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     public void setColorizer(Colorizer colorizer) {
         this.colorizer.setValue(colorizer);
+    }
+
+    public String getSearchText() {
+        return searchText.get();
+    }
+
+    public StringProperty searchTextProperty() {
+        return searchText;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText.set(searchText);
+    }
+
+    public Style getSearchHighlightStyle() {
+        return searchHighlightStyle.getValue();
+    }
+
+    public Property<Style> searchHighlightStyleProperty() {
+        return searchHighlightStyle;
+    }
+
+    public void setSearchHighlightStyle(Style searchHighlightStyle) {
+        this.searchHighlightStyle.setValue(searchHighlightStyle);
     }
 }

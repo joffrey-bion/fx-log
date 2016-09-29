@@ -37,6 +37,8 @@ public class Style {
     public static final Style DARK_BLUE = new Style("Dark Blue", Color.web("#0000bbff"));
     public static final Style BLACK = new Style("Black", Color.web("#000000ff"));
 
+    public static final Style HIGHLIGHT_SEARCH = new Style("Search highlight", Color.BLACK, Color.ORANGE);
+
     private final StringProperty name;
 
     private final Property<Color> foregroundColor;
@@ -67,7 +69,7 @@ public class Style {
      * @param nodes
      *         the nodes to drive the style of
      */
-    void bindNodes(@NotNull Node... nodes) {
+    public void bindNodes(@NotNull Node... nodes) {
         for (Node node : nodes) {
             bindNode(node);
         }
@@ -79,7 +81,7 @@ public class Style {
      * @param node
      *         the node to drive the style of
      */
-    void bindNode(@NotNull Node node) {
+    private void bindNode(@NotNull Node node) {
         bindNodeForeground(node, foregroundColorProperty());
         bindNodeBackground(node, backgroundBinding());
     }

@@ -47,7 +47,6 @@ import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
 import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
 import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.FXLog;
 import org.hildan.fxlog.coloring.Colorizer;
@@ -91,6 +90,9 @@ public class MainController implements Initializable {
 
     @FXML
     private CustomTextField filterField;
+
+    @FXML
+    private CustomTextField searchField;
 
     @FXML
     private CheckBox caseSensitiveFilterCheckbox;
@@ -141,6 +143,7 @@ public class MainController implements Initializable {
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
+        configureSearch();
         configureLogsTable();
         configureRecentFilesMenu();
         configureSecondaryStages();
@@ -236,13 +239,17 @@ public class MainController implements Initializable {
                         caseSensitiveFilterCheckbox.selectedProperty());
         filterField.setText("");
         UIUtils.makeClearable(filterField);
-        TextFields.createClearableTextField();
         filteredLogs.predicateProperty().bind(filterBinding);
         filteredLogs.predicateProperty().addListener((obs, before, now) -> {
             if (followingTail.get()) {
                 scrollToBottom();
             }
         });
+    }
+
+    private void configureSearch() {
+        searchField.setText("");
+        UIUtils.makeClearable(searchField);
     }
 
     /**
@@ -266,6 +273,8 @@ public class MainController implements Initializable {
             cell.fontProperty().bind(config.logsFontProperty());
             cell.wrapTextProperty().bind(config.wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
+            cell.searchTextProperty().bind(searchField.textProperty());
+            cell.searchHighlightStyleProperty().bind(config.searchHighlightStyleProperty());
             return cell;
         }));
         return columns;

@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.text.Font;
 
 import org.hildan.fxlog.coloring.Colorizer;
+import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.themes.Theme;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +59,8 @@ public class Config {
 
     private final Property<Theme> currentTheme;
 
+    private final Property<Style> searchHighlightStyle;
+
     private final BooleanProperty openLastFileAtStartup;
 
     private final BooleanProperty checkForUpdates;
@@ -88,6 +91,7 @@ public class Config {
         this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
+        this.searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
         this.checkForUpdates = new SimpleBooleanProperty(true);
         this.limitNumberOfLogs = new SimpleBooleanProperty(true);
@@ -141,6 +145,18 @@ public class Config {
 
     public void setCurrentTheme(@NotNull Theme currentTheme) {
         this.currentTheme.setValue(currentTheme);
+    }
+
+    public Style getSearchHighlightStyle() {
+        return searchHighlightStyle.getValue();
+    }
+
+    public Property<Style> searchHighlightStyleProperty() {
+        return searchHighlightStyle;
+    }
+
+    public void setSearchHighlightStyle(Style searchHighlightStyle) {
+        this.searchHighlightStyle.setValue(searchHighlightStyle);
     }
 
     public boolean getOpenLastFileAtStartup() {
