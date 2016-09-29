@@ -60,11 +60,15 @@ public class Config {
 
     private final BooleanProperty openLastFileAtStartup;
 
+    private final BooleanProperty checkForUpdates;
+
     private final BooleanProperty limitNumberOfLogs;
 
     private final Property<Integer> maxNumberOfLogs;
 
     private final BooleanProperty skipEmptyLogs;
+
+    private final Property<Integer> tailingDelayInMillis;
 
     private final BooleanProperty wrapLogsText;
 
@@ -85,9 +89,11 @@ public class Config {
         this.selectedColorizerIndex = new SimpleIntegerProperty(0);
         this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
+        this.checkForUpdates = new SimpleBooleanProperty(true);
         this.limitNumberOfLogs = new SimpleBooleanProperty(false);
         this.maxNumberOfLogs = new SimpleObjectProperty<>(100000);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
+        this.tailingDelayInMillis = new SimpleObjectProperty<>(500);
         this.wrapLogsText = new SimpleBooleanProperty(false);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.recentFiles = FXCollections.observableArrayList();
@@ -150,6 +156,18 @@ public class Config {
         this.openLastFileAtStartup.set(openLastFileAtStartup);
     }
 
+    public boolean isCheckForUpdates() {
+        return checkForUpdates.get();
+    }
+
+    public BooleanProperty checkForUpdatesProperty() {
+        return checkForUpdates;
+    }
+
+    public void setCheckForUpdates(boolean checkForUpdates) {
+        this.checkForUpdates.set(checkForUpdates);
+    }
+
     public boolean isLimitNumberOfLogs() {
         return limitNumberOfLogs.get();
     }
@@ -185,6 +203,18 @@ public class Config {
 
     public void setSkipEmptyLogs(boolean skipEmptyLogs) {
         this.skipEmptyLogs.set(skipEmptyLogs);
+    }
+
+    public Integer getTailingDelayInMillis() {
+        return tailingDelayInMillis.getValue();
+    }
+
+    public Property<Integer> tailingDelayInMillisProperty() {
+        return tailingDelayInMillis;
+    }
+
+    public void setTailingDelayInMillis(Integer tailingDelayInMillis) {
+        this.tailingDelayInMillis.setValue(tailingDelayInMillis);
     }
 
     public boolean getWrapLogsText() {

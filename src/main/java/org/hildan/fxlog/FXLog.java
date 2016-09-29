@@ -55,7 +55,9 @@ public class FXLog extends Application {
             stage.setOnCloseRequest(event -> Platform.exit());
             stage.show();
 
-            VersionChecker.checkForUpdates(false);
+            if (Config.getInstance().isCheckForUpdates()) {
+                VersionChecker.checkForUpdates(false);
+            }
 
             MainController controller = loader.getController();
             configureDragAndDrop(scene, controller);

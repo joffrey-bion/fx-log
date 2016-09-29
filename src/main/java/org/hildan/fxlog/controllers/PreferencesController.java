@@ -22,19 +22,25 @@ public class PreferencesController implements Initializable {
     private Config config;
 
     @FXML
-    private CheckBox reopenLastFileCheckbox;
+    private CheckBox reopenLastFile;
 
     @FXML
-    private CheckBox skipEmptyLogsCheckbox;
+    private CheckBox checkForUpdates;
 
     @FXML
-    private CheckBox wrapLogsTextCheckbox;
+    private CheckBox limitNumberOfLogs;
 
     @FXML
-    private CheckBox limitNumberOfLogsCheckbox;
+    private Spinner<Integer> maxNumberOfLogs;
 
     @FXML
-    private Spinner<Integer> numberOfLogsLimit;
+    private CheckBox skipEmptyLogs;
+
+    @FXML
+    private Spinner<Integer> tailingDelay;
+
+    @FXML
+    private CheckBox wrapLogsText;
 
     @FXML
     private TextField logsFontField;
@@ -42,19 +48,27 @@ public class PreferencesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
-        reopenLastFileCheckbox.selectedProperty().bindBidirectional(config.openLastFileAtStartupProperty());
-        skipEmptyLogsCheckbox.selectedProperty().bindBidirectional(config.skipEmptyLogsProperty());
-        wrapLogsTextCheckbox.selectedProperty().bindBidirectional(config.wrapLogsTextProperty());
-        limitNumberOfLogsCheckbox.selectedProperty().bindBidirectional(config.limitNumberOfLogsProperty());
+        reopenLastFile.selectedProperty().bindBidirectional(config.openLastFileAtStartupProperty());
+        checkForUpdates.selectedProperty().bindBidirectional(config.checkForUpdatesProperty());
+        skipEmptyLogs.selectedProperty().bindBidirectional(config.skipEmptyLogsProperty());
+        wrapLogsText.selectedProperty().bindBidirectional(config.wrapLogsTextProperty());
+        limitNumberOfLogs.selectedProperty().bindBidirectional(config.limitNumberOfLogsProperty());
         configureLogLimitSpinner();
+        configureTailingDelaySpinner();
         configureFontSelector();
     }
 
     private void configureLogLimitSpinner() {
-        numberOfLogsLimit.disableProperty().bind(limitNumberOfLogsCheckbox.selectedProperty().not());
-        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE);
+        maxNumberOfLogs.disableProperty().bind(limitNumberOfLogs.selectedProperty().not());
+        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
         factory.valueProperty().bindBidirectional(config.maxNumberOfLogsProperty());
-        numberOfLogsLimit.setValueFactory(factory);
+        maxNumberOfLogs.setValueFactory(factory);
+    }
+
+    private void configureTailingDelaySpinner() {
+        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(50, Integer.MAX_VALUE);
+        factory.valueProperty().bindBidirectional(config.tailingDelayInMillisProperty());
+        tailingDelay.setValueFactory(factory);
     }
 
     private void configureFontSelector() {
