@@ -43,8 +43,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import com.sun.javafx.scene.control.skin.TableViewSkin;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.apache.commons.io.input.Tailer;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.fxmisc.easybind.EasyBind;
@@ -60,6 +58,7 @@ import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
+import org.hildan.fxlog.view.ScrollBarMarkingModel;
 import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
@@ -145,6 +144,7 @@ public class MainController implements Initializable {
         configureFiltering();
         configureSearch();
         configureLogsTable();
+        configureScrollBarMarks();
         configureRecentFilesMenu();
         configureSecondaryStages();
         configureAutoScroll();
@@ -266,6 +266,32 @@ public class MainController implements Initializable {
         logsTable.setItems(filteredLogs);
     }
 
+    private void configureScrollBarMarks() {
+        ScrollBarMarkingModel markingModel = new ScrollBarMarkingModel(logsTable);
+        searchField.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                search(searchField.getText(), markingModel);
+            }
+        });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (searchField.getText().length() > 2) {
+                search(searchField.getText(), markingModel);
+            } else {
+                markingModel.clear();
+            }
+        });
+    }
+
+    private void search(String text, ScrollBarMarkingModel markingModel) {
+        markingModel.clear();
+        for (int i = 0; i < filteredLogs.size(); i++) {
+            LogEntry log = filteredLogs.get(i);
+            if (!text.isEmpty() && log.rawLine().contains(text)) {
+                markingModel.mark(i);
+            }
+         }
+    }
+
     private List<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
         List<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
@@ -328,7 +354,7 @@ public class MainController implements Initializable {
             if (newValue) {
                 scrollToBottom();
             } else {
-                int indexFirst = getFirstVisibleRowIndex(logsTable);
+                int indexFirst = UIUtils.getFirstVisibleRowIndex(logsTable);
                 if (indexFirst > 1 && !logsTable.getItems().isEmpty()) {
                     logsTable.scrollTo(indexFirst - 1);
                 }
@@ -339,26 +365,6 @@ public class MainController implements Initializable {
                 followingTail.set(!followingTail.get());
             }
         });
-    }
-
-    private static int getFirstVisibleRowIndex(TableView table) {
-        TableViewSkin<?> skin = (TableViewSkin) table.getSkin();
-        if (skin == null) {
-            return 0;
-        }
-        VirtualFlow<?> flow = (VirtualFlow) skin.getChildren().get(1);
-        if (flow == null) {
-            return 0;
-        }
-        if (flow.getFirstVisibleCellWithinViewPort() == null) {
-            return 0;
-        }
-        int indexFirst = flow.getFirstVisibleCellWithinViewPort().getIndex();
-        if (indexFirst >= table.getItems().size()) {
-            return table.getItems().size() - 1;
-        } else {
-            return indexFirst;
-        }
     }
 
     private void scrollToBottom() {
