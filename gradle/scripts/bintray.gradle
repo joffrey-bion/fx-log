@@ -1,19 +1,27 @@
 bintrayUpload.dependsOn tasks.jfxDeploy
 
+def getPropOrEnv = { String prop, String envVar, String defaultValue = null ->
+    if (project.hasProperty(prop)) {
+        return project.property(prop);
+    }
+    return System.getenv(envVar) ?: defaultValue;
+}
+
 ext {
-    githubUser = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
+    githubUser = getPropOrEnv('githubUser', 'GITHUB_USER')
     githubRepoName = project.name
-    githubRepoUrl = 'https://github.com/' + githubUser + '/' + githubRepoName
+    githubSlug = "$githubUser/$githubRepoName"
+    githubRepoUrl = "https://github.com/$githubSlug"
 }
 
 bintray {
-    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
+    user = getPropOrEnv('bintrayUser', 'BINTRAY_USER', githubUser)
+    key = getPropOrEnv('bintrayApiKey', 'BINTRAY_KEY')
     configurations = ['archives']
     publish = true // the version should be auto published after an upload
 
     pkg {
-        repo = project.hasProperty('bintrayRepoApps') ? project.bintrayRepoApps : System.getenv('BINTRAY_REPO_APPS')
+        repo = getPropOrEnv('bintrayRepoApps', 'BINTRAY_REPO_APPS')
         name = project.name
         desc = project.description
         labels = project.labels
@@ -22,8 +30,8 @@ bintray {
         websiteUrl = githubRepoUrl
         issueTrackerUrl = githubRepoUrl + '/issues'
         vcsUrl = githubRepoUrl + '.git'
-        githubRepo = githubUser + '/' + githubRepoName
-        githubReleaseNotesFile = 'README.md'
+        githubRepo = githubSlug
+        githubReleaseNotesFile = 'CHANGELOG.md'
 
         version {
             desc = project.description
