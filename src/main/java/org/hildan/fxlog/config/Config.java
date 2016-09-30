@@ -50,19 +50,11 @@ public class Config {
      */
     static final int FORMAT_VERSION = 3;
 
-    private static final int MAX_RECENT_FILES = 10;
-
     private final Integer version;
 
     private final Preferences preferences;
 
-    private final IntegerProperty selectedColumnizerIndex;
-
-    private final IntegerProperty selectedColorizerIndex;
-
-    private final Property<Theme> currentTheme;
-
-    private final ObservableList<String> recentFiles;
+    private final State state;
 
     private final ObservableList<Columnizer> columnizers;
 
@@ -74,10 +66,7 @@ public class Config {
     Config() {
         this.version = FORMAT_VERSION;
         this.preferences = new Preferences();
-        this.selectedColumnizerIndex = new SimpleIntegerProperty(0);
-        this.selectedColorizerIndex = new SimpleIntegerProperty(0);
-        this.currentTheme = new SimpleObjectProperty<>(Theme.LIGHT);
-        this.recentFiles = FXCollections.observableArrayList();
+        this.state = new State();
         this.columnizers = FXCollections.observableArrayList();
         this.colorizers = FXCollections.observableArrayList();
     }
@@ -90,52 +79,8 @@ public class Config {
         return preferences;
     }
 
-    public int getSelectedColumnizerIndex() {
-        return selectedColumnizerIndex.get();
-    }
-
-    public IntegerProperty selectedColorizerIndexProperty() {
-        return selectedColorizerIndex;
-    }
-
-    public void setSelectedColumnizerIndex(int selectedColumnizerIndex) {
-        this.selectedColumnizerIndex.set(selectedColumnizerIndex);
-    }
-
-    public int getSelectedColorizerIndex() {
-        return selectedColorizerIndex.get();
-    }
-
-    public IntegerProperty selectedColumnizerIndexProperty() {
-        return selectedColumnizerIndex;
-    }
-
-    public void setSelectedColorizerIndex(int selectedColorizerIndex) {
-        this.selectedColorizerIndex.set(selectedColorizerIndex);
-    }
-
-    @NotNull
-    public Theme getCurrentTheme() {
-        return currentTheme.getValue();
-    }
-
-    @NotNull
-    public Property<Theme> currentThemeProperty() {
-        return currentTheme;
-    }
-
-    public void setCurrentTheme(@NotNull Theme currentTheme) {
-        this.currentTheme.setValue(currentTheme);
-    }
-
-    /**
-     * Returns the list of recent files' absolute paths.
-     *
-     * @return the list of recent files' absolute paths, potentially empty.
-     */
-    @NotNull
-    public ObservableList<String> getRecentFiles() {
-        return recentFiles;
+    public State getState() {
+        return state;
     }
 
     /**
@@ -156,34 +101,6 @@ public class Config {
     @NotNull
     public ObservableList<Colorizer> getColorizers() {
         return colorizers;
-    }
-
-    /**
-     * Adds the given path to the list of recent files. This method takes care of duplicates and maximum recent files
-     * count.
-     *
-     * @param filename
-     *         the path to add
-     */
-    public void addToRecentFiles(@NotNull String filename) {
-        String absolutePath = Paths.get(filename).toAbsolutePath().toString();
-        recentFiles.removeIf(p -> p.equals(absolutePath));
-        recentFiles.add(0, absolutePath);
-        if (recentFiles.size() > MAX_RECENT_FILES) {
-            recentFiles.remove(recentFiles.size() - 1);
-        }
-    }
-
-    /**
-     * Removes the given path from the list of recent files. This is useful when a path is not valid anymore, for
-     * instance.
-     *
-     * @param filename
-     *         the path to remove
-     */
-    public void removeFromRecentFiles(@NotNull String filename) {
-        String absolutePath = Paths.get(filename).toAbsolutePath().toString();
-        recentFiles.remove(absolutePath);
     }
 
     /**

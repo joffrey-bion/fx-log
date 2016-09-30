@@ -182,7 +182,7 @@ public class ColumnizersController implements Initializable {
     }
 
     private void initializeDeleteButtons() {
-        IntegerExpression currentlyUsedColumnizer = config.selectedColumnizerIndexProperty();
+        IntegerExpression currentlyUsedColumnizer = config.getState().selectedColumnizerIndexProperty();
         IntegerExpression selectedColumnizer = columnizersList.getSelectionModel().selectedIndexProperty();
         BooleanBinding selectedColorizerIsUsed = selectedColumnizer.isEqualTo(currentlyUsedColumnizer);
         BooleanBinding noColumnizerSelected = columnizersList.getSelectionModel().selectedItemProperty().isNull();

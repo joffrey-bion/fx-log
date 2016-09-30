@@ -10,6 +10,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * Represents the user's preferences in terms of colors, fonts, size of things.
+ */
 public class Preferences {
 
     private final BooleanProperty openLastFileAtStartup;

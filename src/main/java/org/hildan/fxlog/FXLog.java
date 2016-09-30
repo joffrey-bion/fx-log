@@ -47,7 +47,7 @@ public class FXLog extends Application {
             FXMLLoader loader = new FXMLLoader(url);
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            Config.getInstance().getCurrentTheme().apply(scene);
+            Config.getInstance().getState().getCurrentTheme().apply(scene);
             stage.setTitle(APP_NAME);
             InputStream icon = getClass().getResourceAsStream(APP_ICON_PATH);
             stage.getIcons().add(new Image(icon));
@@ -96,7 +96,7 @@ public class FXLog extends Application {
                 ErrorDialog.fileNotFound(filename);
             }
         } else if (config.getPreferences().getOpenLastFileAtStartup()) {
-            List<String> recentFiles = config.getRecentFiles();
+            List<String> recentFiles = config.getState().getRecentFiles();
             if (!recentFiles.isEmpty()) {
                 controller.openRecentFile(recentFiles.get(0));
             }

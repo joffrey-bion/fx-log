@@ -33,7 +33,6 @@ public enum Theme {
             style.clear();
             cssFiles.stream().map(Theme::getCss).forEach(style::add);
         });
-        Config.getInstance().setCurrentTheme(this);
     }
 
     /**

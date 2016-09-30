@@ -174,14 +174,16 @@ public class MainController implements Initializable {
      * Binds the colorizer selector to the current colorizer property and the colorizers of the config.
      */
     private void configureColorizerSelector() {
-        bindSelector(colorizerSelector, config.getColorizers(), colorizer, config.selectedColorizerIndexProperty());
+        IntegerProperty selectedIndexProp = config.getState().selectedColorizerIndexProperty();
+        bindSelector(colorizerSelector, config.getColorizers(), colorizer, selectedIndexProp);
     }
 
     /**
      * Binds the columnizer selector to the current columnizer property and the columnizers of the config.
      */
     private void configureColumnizerSelector() {
-        bindSelector(columnizerSelector, config.getColumnizers(), columnizer, config.selectedColumnizerIndexProperty());
+        IntegerProperty selectedIndexProp = config.getState().selectedColumnizerIndexProperty();
+        bindSelector(columnizerSelector, config.getColumnizers(), columnizer, selectedIndexProp);
         columnizer.addListener(change -> {
             // re-columnizes the logs
             restartTailing();
@@ -315,12 +317,12 @@ public class MainController implements Initializable {
         ListChangeListener<String> updateRecentFilesMenu = change -> {
             ObservableList<MenuItem> items = recentFilesMenu.getItems();
             items.clear();
-            if (config.getRecentFiles().isEmpty()) {
+            if (config.getState().getRecentFiles().isEmpty()) {
                 MenuItem noItem = new MenuItem("No recent file");
                 noItem.setDisable(true);
                 items.add(noItem);
             } else {
-                config.getRecentFiles().stream().map(path -> {
+                config.getState().getRecentFiles().stream().map(path -> {
                     MenuItem menuItem = new MenuItem(path);
                     menuItem.setOnAction(event -> openRecentFile(path));
                     return menuItem;
@@ -328,11 +330,11 @@ public class MainController implements Initializable {
                 MenuItem sep = new SeparatorMenuItem();
                 items.add(sep);
                 MenuItem clearItem = new MenuItem("Clear recent files");
-                clearItem.setOnAction(event -> config.getRecentFiles().clear());
+                clearItem.setOnAction(event -> config.getState().getRecentFiles().clear());
                 items.add(clearItem);
             }
         };
-        config.getRecentFiles().addListener(updateRecentFilesMenu);
+        config.getState().getRecentFiles().addListener(updateRecentFilesMenu);
         // manual trigger the first time for initialization
         updateRecentFilesMenu.onChanged(null);
     }
@@ -341,7 +343,7 @@ public class MainController implements Initializable {
      * Configures the preferences and customization stages.
      */
     private void configureSecondaryStages() {
-        Theme theme = config.getCurrentTheme();
+        Theme theme = config.getState().getCurrentTheme();
         colorizersStage = UIUtils.createStage("popups/colorizers.fxml", "Customize Colorizers", theme);
         columnizersStage = UIUtils.createStage("popups/columnizers.fxml", "Customize Columnizers", theme);
         preferencesStage = UIUtils.createStage("popups/preferences.fxml", "Preferences", theme);
@@ -449,7 +451,7 @@ public class MainController implements Initializable {
         try {
             startTailingFile(new File(filename));
         } catch (FileNotFoundException e) {
-            config.removeFromRecentFiles(filename);
+            config.getState().removeFromRecentFiles(filename);
             ErrorDialog.recentFileNotFound(filename);
         }
     }
@@ -468,7 +470,7 @@ public class MainController implements Initializable {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
         closeCurrentFile();
-        config.addToRecentFiles(file.getAbsolutePath());
+        config.getState().addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
         logTailListener.skipEmptyLogsProperty().bind(config.getPreferences().skipEmptyLogsProperty());
         logTailListener.limitNumberOfLogsProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
@@ -599,6 +601,7 @@ public class MainController implements Initializable {
 
     private void selectTheme(Theme theme) {
         theme.apply(mainPane.getScene(), colorizersStage.getScene(), columnizersStage.getScene());
+        Config.getInstance().getState().setCurrentTheme(theme);
     }
 
     /**

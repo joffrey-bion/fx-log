@@ -260,7 +260,7 @@ public class ColorizersController implements Initializable {
     }
 
     private void initializeDeleteButtons() {
-        IntegerExpression currentlyUsedColorizer = config.selectedColorizerIndexProperty();
+        IntegerExpression currentlyUsedColorizer = config.getState().selectedColorizerIndexProperty();
         IntegerExpression selectedColorizer = colorizersList.getSelectionModel().selectedIndexProperty();
         BooleanBinding selectedColorizerIsUsed = selectedColorizer.isEqualTo(currentlyUsedColorizer);
         BooleanBinding noColorizerSelected = colorizersList.getSelectionModel().selectedItemProperty().isNull();
