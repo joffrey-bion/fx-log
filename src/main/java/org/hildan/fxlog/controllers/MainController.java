@@ -288,12 +288,12 @@ public class MainController implements Initializable {
 
     private void search(String text, ScrollBarMarkingModel markingModel) {
         markingModel.clear();
-        for (int i = 0; i < filteredLogs.size(); i++) {
-            LogEntry log = filteredLogs.get(i);
+        for (int index = 0; index < filteredLogs.size(); index++) {
+            LogEntry log = filteredLogs.get(index);
             if (!text.isEmpty() && log.rawLine().contains(text)) {
-                markingModel.mark(i);
+                markingModel.mark(index);
             }
-         }
+        }
     }
 
     private List<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {

@@ -1,5 +1,7 @@
 package org.hildan.fxlog.view;
 
+import java.util.concurrent.Callable;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -33,7 +35,18 @@ public class ScrollBarMark extends Rectangle {
         StackPane track = (StackPane)scrollBar.lookup(".track");
         bindSizeTo(track, scrollBar);
         track.getChildren().add(this);
-        layoutYProperty().bind(bindPositionWithin(track, scrollBar));
+        bindPosition(track, scrollBar);
+    }
+
+    public void detach() {
+        StackPane parent = (StackPane)getParent();
+        if (parent != null) {
+            parent.getChildren().remove(this);
+            widthProperty().unbind();
+            heightProperty().unbind();
+            layoutXProperty().unbind();
+            layoutYProperty().unbind();
+        }
     }
 
     private void bindSizeTo(StackPane track, ScrollBar scrollBar) {
@@ -58,43 +71,55 @@ public class ScrollBarMark extends Rectangle {
         heightProperty().bind(height);
     }
 
-    private DoubleBinding bindPositionWithin(StackPane track, ScrollBar scrollBar) {
-        return Bindings.createDoubleBinding(() -> {
-                double height = track.getLayoutBounds().getHeight();
-                double visibleAmout = scrollBar.getVisibleAmount();
-                double max = scrollBar.getMax();
-                double min = scrollBar.getMin();
-                double pos = position.get();
-                double delta = max - min;
+    private void bindPosition(StackPane track, ScrollBar scrollBar) {
+        Callable<Double> getX = () -> {
+            if (scrollBar.getOrientation() == Orientation.VERTICAL) {
+                return 0.0;
+            }
+            double width = track.getLayoutBounds().getWidth();
+            return scalePosition(position.get(), width, scrollBar);
+        };
 
-                height *= 1 - visibleAmout / delta;
+        Callable<Double> getY = () -> {
+            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
+                return 0.0;
+            }
+            double height = track.getLayoutBounds().getHeight();
+            return scalePosition(position.get(), height, scrollBar);
+        };
 
-                return height * (pos - min) / delta;
-            }, position, track.layoutBoundsProperty(), scrollBar.visibleAmountProperty(), scrollBar.minProperty(),
-            scrollBar.maxProperty());
+        DoubleBinding xPosition = Bindings.createDoubleBinding(getX, position, track.layoutBoundsProperty(),
+                scrollBar.visibleAmountProperty(), scrollBar.minProperty(), scrollBar.maxProperty(),
+                scrollBar.orientationProperty());
+        DoubleBinding yPosition = Bindings.createDoubleBinding(getY, position, track.layoutBoundsProperty(),
+                scrollBar.visibleAmountProperty(), scrollBar.minProperty(), scrollBar.maxProperty(),
+                scrollBar.orientationProperty());
+
+        layoutYProperty().bind(yPosition);
+        layoutXProperty().bind(xPosition);
     }
 
-    public void detach() {
-        StackPane parent = (StackPane)getParent();
-        if (parent != null) {
-            parent.getChildren().remove(this);
-            layoutXProperty().unbind();
-            layoutYProperty().unbind();
-            widthProperty().unbind();
-            heightProperty().unbind();
-        }
+    private static double scalePosition(double position, double total, ScrollBar scrollBar) {
+        double visibleAmout = scrollBar.getVisibleAmount();
+        double max = scrollBar.getMax();
+        double min = scrollBar.getMin();
+        double delta = max - min;
+
+        total *= 1 - visibleAmout / delta;
+
+        return total * (position - min) / delta;
     }
 
     public double getPosition() {
         return this.position.get();
     }
 
-    public void setPosition(double value) {
-        this.position.set(value);
-    }
-
     public DoubleProperty positionProperty() {
         return this.position;
+    }
+
+    public void setPosition(double value) {
+        this.position.set(value);
     }
 
     public double getThickness() {
