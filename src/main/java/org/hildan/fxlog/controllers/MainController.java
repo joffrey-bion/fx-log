@@ -273,9 +273,9 @@ public class MainController implements Initializable {
                 search(searchField.getText(), markingModel);
             }
         });
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (searchField.getText().length() > 2) {
-                search(searchField.getText(), markingModel);
+        searchField.textProperty().addListener((observable, oldSearch, newSearch) -> {
+            if (newSearch.length() > 2) {
+                search(newSearch, markingModel);
             } else {
                 markingModel.clear();
             }
