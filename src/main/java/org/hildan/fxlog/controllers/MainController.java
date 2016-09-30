@@ -268,6 +268,8 @@ public class MainController implements Initializable {
 
     private void configureScrollBarMarks() {
         ScrollBarMarkingModel markingModel = new ScrollBarMarkingModel(logsTable);
+        markingModel.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
+        markingModel.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
         searchField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 search(searchField.getText(), markingModel);
@@ -296,11 +298,11 @@ public class MainController implements Initializable {
         List<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
             StyledTableCell cell = new StyledTableCell(column);
-            cell.fontProperty().bind(config.logsFontProperty());
-            cell.wrapTextProperty().bind(config.wrapLogsTextProperty());
+            cell.fontProperty().bind(config.getPreferences().logsFontProperty());
+            cell.wrapTextProperty().bind(config.getPreferences().wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
             cell.searchTextProperty().bind(searchField.textProperty());
-            cell.searchHighlightStyleProperty().bind(config.searchHighlightStyleProperty());
+            cell.searchHighlightStyleProperty().bind(config.getPreferences().searchHighlightStyleProperty());
             return cell;
         }));
         return columns;
@@ -468,9 +470,9 @@ public class MainController implements Initializable {
         closeCurrentFile();
         config.addToRecentFiles(file.getAbsolutePath());
         logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
-        logTailListener.skipEmptyLogsProperty().bind(config.skipEmptyLogsProperty());
-        logTailListener.limitNumberOfLogsProperty().bind(config.limitNumberOfLogsProperty());
-        logTailListener.maxNumberOfLogsProperty().bind(config.maxNumberOfLogsProperty());
+        logTailListener.skipEmptyLogsProperty().bind(config.getPreferences().skipEmptyLogsProperty());
+        logTailListener.limitNumberOfLogsProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
+        logTailListener.maxNumberOfLogsProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
         tailer = Tailer.create(file, logTailListener, 500);
         tailingFile.set(true);
         tailedFileName.set(file.getAbsolutePath());

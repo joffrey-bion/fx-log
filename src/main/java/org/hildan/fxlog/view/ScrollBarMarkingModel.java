@@ -5,7 +5,9 @@ import java.util.Map;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollBar;
@@ -19,6 +21,8 @@ public class ScrollBarMarkingModel {
 
     private final Property<Paint> color = new SimpleObjectProperty<>(Color.ORANGE);
 
+    private final DoubleProperty thickness = new SimpleDoubleProperty(2);
+
     private final TableView tableView;
 
     public ScrollBarMarkingModel(TableView tableView) {
@@ -28,7 +32,7 @@ public class ScrollBarMarkingModel {
     private ScrollBarMark createMark() {
         ScrollBarMark mark = new ScrollBarMark();
         mark.fillProperty().bind(color);
-        mark.setThickness(3);
+        mark.thicknessProperty().bind(thickness);
         return mark;
     }
 
@@ -75,5 +79,17 @@ public class ScrollBarMarkingModel {
 
     public void setColor(Paint color) {
         this.color.setValue(color);
+    }
+
+    public double getThickness() {
+        return thickness.get();
+    }
+
+    public DoubleProperty thicknessProperty() {
+        return thickness;
+    }
+
+    public void setThickness(double thickness) {
+        this.thickness.set(thickness);
     }
 }

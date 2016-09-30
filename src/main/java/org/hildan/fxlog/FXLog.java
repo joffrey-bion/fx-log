@@ -55,7 +55,7 @@ public class FXLog extends Application {
             stage.setOnCloseRequest(event -> Platform.exit());
             stage.show();
 
-            if (Config.getInstance().isCheckForUpdates()) {
+            if (Config.getInstance().getPreferences().isCheckForUpdates()) {
                 VersionChecker.checkForUpdates(false);
             }
 
@@ -95,7 +95,7 @@ public class FXLog extends Application {
             } catch (FileNotFoundException e) {
                 ErrorDialog.fileNotFound(filename);
             }
-        } else if (config.getOpenLastFileAtStartup()) {
+        } else if (config.getPreferences().getOpenLastFileAtStartup()) {
             List<String> recentFiles = config.getRecentFiles();
             if (!recentFiles.isEmpty()) {
                 controller.openRecentFile(recentFiles.get(0));

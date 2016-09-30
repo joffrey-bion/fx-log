@@ -9,17 +9,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.text.Font;
 
 import org.controlsfx.dialog.FontSelectorDialog;
+import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.config.Config;
+import org.hildan.fxlog.config.Preferences;
 
 /**
  * Controller associated to the colorizers customization view.
  */
 public class PreferencesController implements Initializable {
 
-    private Config config;
+    private Preferences prefs;
 
     @FXML
     private CheckBox reopenLastFile;
@@ -45,44 +48,69 @@ public class PreferencesController implements Initializable {
     @FXML
     private TextField logsFontField;
 
+    @FXML
+    private ColorPicker searchMatchForegroundColor;
+
+    @FXML
+    private ColorPicker searchMatchBackgroundColor;
+
+    @FXML
+    private ColorPicker searchMatchMarkColor;
+
+    @FXML
+    private Spinner<Double> searchMatchMarkThickness;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        config = Config.getInstance();
-        reopenLastFile.selectedProperty().bindBidirectional(config.openLastFileAtStartupProperty());
-        checkForUpdates.selectedProperty().bindBidirectional(config.checkForUpdatesProperty());
-        skipEmptyLogs.selectedProperty().bindBidirectional(config.skipEmptyLogsProperty());
-        wrapLogsText.selectedProperty().bindBidirectional(config.wrapLogsTextProperty());
-        limitNumberOfLogs.selectedProperty().bindBidirectional(config.limitNumberOfLogsProperty());
+        prefs = Config.getInstance().getPreferences();
+        reopenLastFile.selectedProperty().bindBidirectional(prefs.openLastFileAtStartupProperty());
+        checkForUpdates.selectedProperty().bindBidirectional(prefs.checkForUpdatesProperty());
+        skipEmptyLogs.selectedProperty().bindBidirectional(prefs.skipEmptyLogsProperty());
+        wrapLogsText.selectedProperty().bindBidirectional(prefs.wrapLogsTextProperty());
+        limitNumberOfLogs.selectedProperty().bindBidirectional(prefs.limitNumberOfLogsProperty());
+
+        Style searchHighlightStyle = prefs.getSearchHighlightStyle();
+        searchMatchForegroundColor.valueProperty().bindBidirectional(searchHighlightStyle.foregroundColorProperty());
+        searchMatchBackgroundColor.valueProperty().bindBidirectional(searchHighlightStyle.backgroundColorProperty());
+        searchMatchMarkColor.valueProperty().bindBidirectional(prefs.searchMatchMarkColorProperty());
+
+        configureSearchMatchMarkThicknessSpinner();
         configureLogLimitSpinner();
         configureTailingDelaySpinner();
         configureFontSelector();
     }
 
+    private void configureSearchMatchMarkThicknessSpinner() {
+        DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(1, 20);
+        factory.valueProperty().bindBidirectional(prefs.searchMatchMarkThicknessProperty());
+        searchMatchMarkThickness.setValueFactory(factory);
+    }
+
     private void configureLogLimitSpinner() {
         maxNumberOfLogs.disableProperty().bind(limitNumberOfLogs.selectedProperty().not());
         IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
-        factory.valueProperty().bindBidirectional(config.maxNumberOfLogsProperty());
+        factory.valueProperty().bindBidirectional(prefs.maxNumberOfLogsProperty());
         maxNumberOfLogs.setValueFactory(factory);
     }
 
     private void configureTailingDelaySpinner() {
         IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(50, Integer.MAX_VALUE);
-        factory.valueProperty().bindBidirectional(config.tailingDelayInMillisProperty());
+        factory.valueProperty().bindBidirectional(prefs.tailingDelayInMillisProperty());
         tailingDelay.setValueFactory(factory);
     }
 
     private void configureFontSelector() {
         Callable<String> configFontString = () -> {
-            Font font = config.getLogsFont();
+            Font font = prefs.getLogsFont();
             return font.getName() + ", " + font.getSize();
         };
-        logsFontField.textProperty().bind(Bindings.createStringBinding(configFontString, config.logsFontProperty()));
+        logsFontField.textProperty().bind(Bindings.createStringBinding(configFontString, prefs.logsFontProperty()));
         logsFontField.setDisable(true);
     }
 
     @FXML
     public void chooseLogsTextFont() {
-        FontSelectorDialog fontDialog = new FontSelectorDialog(config.getLogsFont());
-        fontDialog.showAndWait().ifPresent(config::setLogsFont);
+        FontSelectorDialog fontDialog = new FontSelectorDialog(prefs.getLogsFont());
+        fontDialog.showAndWait().ifPresent(prefs::setLogsFont);
     }
 }
