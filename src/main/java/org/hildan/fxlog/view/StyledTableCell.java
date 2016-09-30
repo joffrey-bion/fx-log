@@ -8,6 +8,7 @@ import org.hildan.fxlog.rulesets.RuleSet;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,6 +34,8 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     private final StringProperty searchText = new SimpleStringProperty("");
 
+    private final BooleanBinding matchesSearch;
+
     private Binding<Style> colorizerStyle;
 
     // this is to prevent the binding from being garbage collected
@@ -42,9 +45,10 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     public StyledTableCell(TableColumn<LogEntry, String> column) {
         text.wrappingWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
         text.fontProperty().bind(fontProperty());
-
         setGraphic(text);
         setText(null);
+
+        matchesSearch = Bindings.createBooleanBinding(this::computeSearchMatch, itemProperty(), searchText);
 
         // this is usually called only once (when this cell is attached to a row)
         EasyBind.subscribe(tableRowProperty(), row -> {
@@ -56,6 +60,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
             //noinspection unchecked
             bindStyle(row.itemProperty(), text, this);
         });
+    }
+
+    private boolean computeSearchMatch() {
+        String search = searchText.getValue();
+        String cellText = getItem();
+        return cellText != null && !search.isEmpty() && cellText.contains(search);
     }
 
     /**
@@ -70,15 +80,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     private void bindStyle(ObservableValue<LogEntry> log, Node... nodes) {
         colorizerStyle = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
         // cannot be a local variable or it will be garbage collected
-        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, colorizerStyle, itemProperty(),
-                searchText, searchHighlightStyle);
+        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, matchesSearch, colorizerStyle, searchHighlightStyle);
         EasyBind.subscribe(cellStyleBinding, style -> style.bindNodes(nodes));
     }
 
     private Style computeCellStyle() {
-        String search = searchText.getValue();
-        String cellText = getItem();
-        if (cellText != null && !search.isEmpty() && cellText.contains(search)) {
+        if (matchesSearch.get()) {
             return searchHighlightStyle.getValue();
         } else {
             return colorizerStyle.getValue();
