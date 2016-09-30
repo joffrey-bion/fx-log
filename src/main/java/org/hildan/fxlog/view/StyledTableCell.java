@@ -80,7 +80,8 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     private void bindStyle(ObservableValue<LogEntry> log, Node... nodes) {
         colorizerStyle = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
         // cannot be a local variable or it will be garbage collected
-        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, matchesSearch, colorizerStyle, searchHighlightStyle);
+        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, matchesSearch, colorizerStyle,
+                searchHighlightStyle);
         EasyBind.subscribe(cellStyleBinding, style -> style.bindNodes(nodes));
     }
 
