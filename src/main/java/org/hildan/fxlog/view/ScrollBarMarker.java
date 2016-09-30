@@ -9,10 +9,11 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TableView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -40,8 +41,24 @@ public class ScrollBarMarker {
      */
     public ScrollBarMarker(TableView tableView, Orientation orientation) {
         this.tableView = tableView;
-        this.scrollBar = UIUtils.findScrollbar(tableView, orientation);
         this.orientation = orientation;
+
+        // get the scrollbar when ready
+        tableView.getChildrenUnmodifiable().addListener((Change<? extends Node> c) -> {
+            while (c.next() && scrollBar == null) {
+                this.scrollBar = findScrollBar(tableView, orientation);
+            }
+        });
+    }
+
+    private static ScrollBar findScrollBar(TableView tableView, Orientation orientation) {
+        return tableView.lookupAll(".scroll-bar")
+                        .stream()
+                        .filter(n -> n instanceof ScrollBar)
+                        .map(n -> (ScrollBar) n)
+                        .filter(sb -> sb.getOrientation() == orientation)
+                        .findFirst()
+                        .orElse(null);
     }
 
     private ScrollBarMark createMark() {
@@ -54,21 +71,19 @@ public class ScrollBarMarker {
     private DoubleBinding positionBinding(int index) {
         return Bindings.createDoubleBinding(() -> {
             int max = tableView.getItems().size();
-            return (double)index / (double)max;
+            return (double) index / (double) max;
         }, tableView.getItems());
     }
 
     public ScrollBarMark mark(int index) {
+        if (scrollBar == null) {
+            throw new IllegalStateException("Trying to mark a ScrollBar that does not exist yet");
+        }
         ScrollBarMark mark = createMark();
         mark.positionProperty().bind(positionBinding(index));
         mark.setOnMouseClicked(e -> UIUtils.scrollTo(tableView, index));
         mark.setCursor(Cursor.HAND);
-        if (scrollBar == null) {
-            scrollBar = UIUtils.findScrollbar(tableView, orientation);
-        }
-        if (scrollBar != null) {
-            mark.attach(scrollBar);
-        }
+        mark.attach(scrollBar);
         activeMarks.put(index, mark);
         return mark;
     }

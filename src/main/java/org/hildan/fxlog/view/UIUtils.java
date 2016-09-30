@@ -72,29 +72,6 @@ public class UIUtils {
     }
 
     /**
-     * Retrieves one of the {@link ScrollBar}s of a {@link TableView}. The table must be have been shown in the
-     * stage to have its scroll bar, but the scroll bar does not need to be visible. If this method is called prior
-     * to the {@link Stage#show()}, it will return null.
-     *
-     * @param table
-     *         the table view to get the ScrollBar of
-     * @param orientation
-     *         the orientation of the ScrollBar to get
-     *
-     * @return the {@link ScrollBar} of the given {@link TableView} that has the given orientation, or null if not
-     * found.
-     */
-    public static ScrollBar findScrollbar(TableView table, Orientation orientation) {
-        return table.lookupAll(".scroll-bar")
-                .stream()
-                .filter(n -> n instanceof ScrollBar)
-                .map(n -> (ScrollBar)n)
-                .filter(sb -> sb.getOrientation() == orientation)
-                .findFirst()
-                .orElse(null);
-    }
-
-    /**
      * Scrolls the given table view to the given item. This is nicer than {@link TableView#scrollTo(int)} because it
      * doesn't put the target item at the top, but rather at about a third of the screen.
      *
