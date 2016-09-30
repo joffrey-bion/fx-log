@@ -33,6 +33,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -58,7 +59,7 @@ import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
-import org.hildan.fxlog.view.ScrollBarMarkingModel;
+import org.hildan.fxlog.view.ScrollBarMarker;
 import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
@@ -269,29 +270,29 @@ public class MainController implements Initializable {
     }
 
     private void configureScrollBarMarks() {
-        ScrollBarMarkingModel markingModel = new ScrollBarMarkingModel(logsTable);
-        markingModel.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
-        markingModel.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
+        ScrollBarMarker marker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
+        marker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
+        marker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
         searchField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                search(searchField.getText(), markingModel);
+                search(searchField.getText(), marker);
             }
         });
         searchField.textProperty().addListener((observable, oldSearch, newSearch) -> {
             if (newSearch.length() > 2) {
-                search(newSearch, markingModel);
+                search(newSearch, marker);
             } else {
-                markingModel.clear();
+                marker.clear();
             }
         });
     }
 
-    private void search(String text, ScrollBarMarkingModel markingModel) {
-        markingModel.clear();
+    private void search(String text, ScrollBarMarker marker) {
+        marker.clear();
         for (int index = 0; index < filteredLogs.size(); index++) {
             LogEntry log = filteredLogs.get(index);
             if (!text.isEmpty() && log.rawLine().contains(text)) {
-                markingModel.mark(index);
+                marker.mark(index);
             }
         }
     }

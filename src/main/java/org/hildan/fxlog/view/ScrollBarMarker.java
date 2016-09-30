@@ -9,13 +9,14 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public class ScrollBarMarkingModel {
+public class ScrollBarMarker {
 
     private final Map<Integer, ScrollBarMark> activeMarks = new HashMap<>();
 
@@ -25,8 +26,22 @@ public class ScrollBarMarkingModel {
 
     private final TableView tableView;
 
-    public ScrollBarMarkingModel(TableView tableView) {
+    private final Orientation orientation;
+
+    private ScrollBar scrollBar;
+
+    /**
+     * Creates a marking model for the given table view.
+     *
+     * @param tableView
+     *         the {@link TableView} to mark the {@link ScrollBar} of
+     * @param orientation
+     *         the orientation of the {@link ScrollBar} to mark
+     */
+    public ScrollBarMarker(TableView tableView, Orientation orientation) {
         this.tableView = tableView;
+        this.scrollBar = UIUtils.findScrollbar(tableView, orientation);
+        this.orientation = orientation;
     }
 
     private ScrollBarMark createMark() {
@@ -48,9 +63,12 @@ public class ScrollBarMarkingModel {
         mark.positionProperty().bind(positionBinding(index));
         mark.setOnMouseClicked(e -> UIUtils.scrollTo(tableView, index));
         mark.setCursor(Cursor.HAND);
-
-        ScrollBar scrollBar = UIUtils.findVerticalScrollbar(tableView);
-        mark.attach(scrollBar);
+        if (scrollBar == null) {
+            scrollBar = UIUtils.findScrollbar(tableView, orientation);
+        }
+        if (scrollBar != null) {
+            mark.attach(scrollBar);
+        }
         activeMarks.put(index, mark);
         return mark;
     }

@@ -18,14 +18,6 @@ public class ScrollBarMark extends Rectangle {
 
     private final DoubleProperty thickness = new SimpleDoubleProperty(2);
 
-    // needs to be stored in a field to avoid garbage collection
-    @SuppressWarnings("FieldCanBeLocal")
-    private DoubleBinding width;
-
-    // needs to be stored in a field to avoid garbage collection
-    @SuppressWarnings("FieldCanBeLocal")
-    private DoubleBinding height;
-
     public ScrollBarMark() {
         setManaged(false);
         setFill(Color.web("#cc8800", 0.5));
@@ -50,64 +42,48 @@ public class ScrollBarMark extends Rectangle {
     }
 
     private void bindSizeTo(StackPane track, ScrollBar scrollBar) {
-        width = Bindings.createDoubleBinding(() -> {
-            if (scrollBar.getOrientation() == Orientation.VERTICAL) {
-                return track.getWidth();
-            } else {
-                return thickness.getValue();
-            }
-        }, track.widthProperty(), thickness, scrollBar.orientationProperty());
-
-        widthProperty().bind(width);
-
-        height = Bindings.createDoubleBinding(() -> {
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                return track.getHeight();
-            } else {
-                return thickness.getValue();
-            }
-        }, track.heightProperty(), thickness, scrollBar.orientationProperty());
-
-        heightProperty().bind(height);
+        if (scrollBar.getOrientation() == Orientation.VERTICAL) {
+            widthProperty().bind(track.widthProperty());
+            heightProperty().bind(thickness);
+        } else {
+            widthProperty().bind(thickness);
+            heightProperty().bind(track.widthProperty());
+        }
     }
 
     private void bindPosition(StackPane track, ScrollBar scrollBar) {
+        if (scrollBar.getOrientation() == Orientation.VERTICAL) {
+            layoutYProperty().bind(createYPositionBinding(track, scrollBar));
+        } else {
+            layoutXProperty().bind(createXPositionBinding(track, scrollBar));
+        }
+    }
+
+    private DoubleBinding createXPositionBinding(StackPane track, ScrollBar scrollBar) {
         Callable<Double> getX = () -> {
-            if (scrollBar.getOrientation() == Orientation.VERTICAL) {
-                return 0.0;
-            }
             double width = track.getLayoutBounds().getWidth();
             return scalePosition(position.get(), width, scrollBar);
         };
 
+        return Bindings.createDoubleBinding(getX, position, track.layoutBoundsProperty(), scrollBar.minProperty(),
+                scrollBar.maxProperty());
+    }
+
+    private DoubleBinding createYPositionBinding(StackPane track, ScrollBar scrollBar) {
         Callable<Double> getY = () -> {
-            if (scrollBar.getOrientation() == Orientation.HORIZONTAL) {
-                return 0.0;
-            }
             double height = track.getLayoutBounds().getHeight();
             return scalePosition(position.get(), height, scrollBar);
         };
 
-        DoubleBinding xPosition = Bindings.createDoubleBinding(getX, position, track.layoutBoundsProperty(),
-                scrollBar.visibleAmountProperty(), scrollBar.minProperty(), scrollBar.maxProperty(),
-                scrollBar.orientationProperty());
-        DoubleBinding yPosition = Bindings.createDoubleBinding(getY, position, track.layoutBoundsProperty(),
-                scrollBar.visibleAmountProperty(), scrollBar.minProperty(), scrollBar.maxProperty(),
-                scrollBar.orientationProperty());
-
-        layoutYProperty().bind(yPosition);
-        layoutXProperty().bind(xPosition);
+        return Bindings.createDoubleBinding(getY, position, track.layoutBoundsProperty(), scrollBar.minProperty(),
+                scrollBar.maxProperty());
     }
 
     private static double scalePosition(double position, double total, ScrollBar scrollBar) {
-        double visibleAmout = scrollBar.getVisibleAmount();
         double max = scrollBar.getMax();
         double min = scrollBar.getMin();
         double delta = max - min;
-
-        total *= 1 - visibleAmout / delta;
-
-        return total * (position - min) / delta;
+        return total * (position * delta - min) / delta;
     }
 
     public double getPosition() {
