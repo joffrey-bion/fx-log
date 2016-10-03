@@ -81,7 +81,7 @@ public class Style {
      * @param node
      *         the node to drive the style of
      */
-    private void bindNode(@NotNull Node node) {
+    public void bindNode(@NotNull Node node) {
         bindNodeForeground(node, foregroundColorProperty());
         bindNodeBackground(node, backgroundBinding());
     }
@@ -161,7 +161,8 @@ public class Style {
         if (color == null) {
             return null;
         }
-        BackgroundFill fill = new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY);
+        CornerRadii radii = new CornerRadii(2);
+        BackgroundFill fill = new BackgroundFill(color, radii, Insets.EMPTY);
         return new Background(fill);
     }
 }
