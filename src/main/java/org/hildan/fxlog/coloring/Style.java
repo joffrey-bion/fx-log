@@ -25,7 +25,7 @@ public class Style {
     public static final Style DEFAULT = new Style("DEFAULT", Color.LIGHTGRAY);
 
     public static final Style HIGHLIGHT = new Style("Highlight", Color.web("#50e6ffff"), Color.web("#002042ff"));
-    public static final Style RED = new Style("Red", Color.web("#ca1d1dff"));
+    public static final Style RED = new Style("Red", Color.web("#ff3232"));
     public static final Style ORANGE = new Style("Orange", Color.web("#e6994dff"));
     public static final Style GREEN = new Style("Green", Color.web("#10c14bff"));
     public static final Style BLUE = new Style("Blue", Color.web("#334db3ff"));
