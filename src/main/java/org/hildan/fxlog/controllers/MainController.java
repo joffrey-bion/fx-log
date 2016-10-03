@@ -273,6 +273,7 @@ public class MainController implements Initializable {
         ScrollBarMarker marker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
         marker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
         marker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
+        marker.alignmentProperty().bind(config.getPreferences().searchMatchMarkAlignmentProperty());
         searchField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 search(searchField.getText(), marker);

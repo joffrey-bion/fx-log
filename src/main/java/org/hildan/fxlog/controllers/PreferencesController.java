@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ import org.controlsfx.dialog.FontSelectorDialog;
 import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.config.Preferences;
+import org.hildan.fxlog.view.ScrollBarMark.Alignment;
 
 /**
  * Controller associated to the colorizers customization view.
@@ -60,6 +62,9 @@ public class PreferencesController implements Initializable {
     @FXML
     private Spinner<Double> searchMatchMarkThickness;
 
+    @FXML
+    private ChoiceBox<Alignment> searchMatchMarkAlignment;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         prefs = Config.getInstance().getPreferences();
@@ -75,6 +80,7 @@ public class PreferencesController implements Initializable {
         searchMatchMarkColor.valueProperty().bindBidirectional(prefs.searchMatchMarkColorProperty());
 
         configureSearchMatchMarkThicknessSpinner();
+        configureSearchMatchMarkAlignmentBox();
         configureLogLimitSpinner();
         configureTailingDelaySpinner();
         configureFontSelector();
@@ -84,6 +90,11 @@ public class PreferencesController implements Initializable {
         DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(1, 20);
         factory.valueProperty().bindBidirectional(prefs.searchMatchMarkThicknessProperty());
         searchMatchMarkThickness.setValueFactory(factory);
+    }
+
+    private void configureSearchMatchMarkAlignmentBox() {
+        searchMatchMarkAlignment.setItems(FXCollections.observableArrayList(Alignment.values()));
+        searchMatchMarkAlignment.valueProperty().bindBidirectional(prefs.searchMatchMarkAlignmentProperty());
     }
 
     private void configureLogLimitSpinner() {

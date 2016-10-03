@@ -1,6 +1,7 @@
 package org.hildan.fxlog.config;
 
 import org.hildan.fxlog.coloring.Style;
+import org.hildan.fxlog.view.ScrollBarMark.Alignment;
 import org.jetbrains.annotations.NotNull;
 
 import javafx.beans.property.BooleanProperty;
@@ -37,6 +38,8 @@ public class Preferences {
 
     private final Property<Double> searchMatchMarkThickness;
 
+    private final Property<Alignment> searchMatchMarkAlignment;
+
     Preferences() {
         this.openLastFileAtStartup = new SimpleBooleanProperty(true);
         this.checkForUpdates = new SimpleBooleanProperty(true);
@@ -49,6 +52,7 @@ public class Preferences {
         this.searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
         this.searchMatchMarkColor = new SimpleObjectProperty<>(Color.ORANGE.deriveColor(0, 1, 0.7, 0.5));
         this.searchMatchMarkThickness = new SimpleObjectProperty<>(3.0);
+        this.searchMatchMarkAlignment = new SimpleObjectProperty<>(Alignment.CENTER);
     }
 
     public boolean getOpenLastFileAtStartup() {
@@ -185,5 +189,17 @@ public class Preferences {
 
     public void setSearchMatchMarkThickness(Double searchMatchMarkThickness) {
         this.searchMatchMarkThickness.setValue(searchMatchMarkThickness);
+    }
+
+    public Alignment getSearchMatchMarkAlignment() {
+        return searchMatchMarkAlignment.getValue();
+    }
+
+    public Property<Alignment> searchMatchMarkAlignmentProperty() {
+        return searchMatchMarkAlignment;
+    }
+
+    public void setSearchMatchMarkAlignment(Alignment searchMatchMarkAlignment) {
+        this.searchMatchMarkAlignment.setValue(searchMatchMarkAlignment);
     }
 }

@@ -17,6 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import org.hildan.fxlog.view.ScrollBarMark.Alignment;
+
 public class ScrollBarMarker {
 
     private final Map<Integer, ScrollBarMark> activeMarks = new HashMap<>();
@@ -25,9 +27,9 @@ public class ScrollBarMarker {
 
     private final DoubleProperty thickness = new SimpleDoubleProperty(2);
 
-    private final TableView tableView;
+    private final Property<Alignment> alignment = new SimpleObjectProperty<>(Alignment.CENTER);
 
-    private final Orientation orientation;
+    private final TableView tableView;
 
     private ScrollBar scrollBar;
 
@@ -41,7 +43,6 @@ public class ScrollBarMarker {
      */
     public ScrollBarMarker(TableView tableView, Orientation orientation) {
         this.tableView = tableView;
-        this.orientation = orientation;
 
         // get the scrollbar when ready
         tableView.getChildrenUnmodifiable().addListener((Change<? extends Node> c) -> {
@@ -65,6 +66,7 @@ public class ScrollBarMarker {
         ScrollBarMark mark = new ScrollBarMark();
         mark.fillProperty().bind(color);
         mark.thicknessProperty().bind(thickness);
+        mark.alignmentProperty().bind(alignment);
         return mark;
     }
 
@@ -124,5 +126,17 @@ public class ScrollBarMarker {
 
     public void setThickness(double thickness) {
         this.thickness.set(thickness);
+    }
+
+    public Alignment getAlignment() {
+        return alignment.getValue();
+    }
+
+    public Property<Alignment> alignmentProperty() {
+        return alignment;
+    }
+
+    public void setAlignment(Alignment alignment) {
+        this.alignment.setValue(alignment);
     }
 }
