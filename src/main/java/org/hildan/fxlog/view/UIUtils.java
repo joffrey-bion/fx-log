@@ -5,16 +5,15 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.sun.javafx.scene.control.skin.TableViewSkin;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import javafx.beans.property.ObjectProperty;
-import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import com.sun.javafx.scene.control.skin.TableViewSkin;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import org.hildan.fxlog.FXLog;
@@ -81,7 +80,7 @@ public class UIUtils {
      *         the index to scroll to
      */
     public static void scrollTo(TableView table, int index) {
-        int numberOfVisibleItems = UIUtils.getNumberOfVisibleItems(table);
+        int numberOfVisibleItems = getNumberOfVisibleItems(table);
         table.scrollTo(index - numberOfVisibleItems / 3);
     }
 

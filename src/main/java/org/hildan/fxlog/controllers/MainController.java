@@ -29,13 +29,20 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -60,7 +67,6 @@ import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
-import org.hildan.fxlog.view.ScrollBarMarker;
 import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
@@ -128,6 +134,8 @@ public class MainController implements Initializable {
 
     private LogTailListener logTailListener;
 
+    // to avoid garbage collection
+    @SuppressWarnings("FieldCanBeLocal")
     private SearchMarksController searchMarksController;
 
     @Override
@@ -423,6 +431,9 @@ public class MainController implements Initializable {
 
     /**
      * Opens the given recent file and starts tailing it.
+     *
+     * @param filename
+     *         the recent file to tail
      */
     public void openRecentFile(String filename) {
         try {

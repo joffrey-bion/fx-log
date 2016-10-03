@@ -51,6 +51,9 @@ public class LogEntry {
     /**
      * Gets a tab-separated representation of this log used its columns values.
      *
+     * @param columnDefinitions
+     *         the column definitions of this logs, to be able to give the values in proper order
+     *
      * @return a tab-separated string of this log's column values
      */
     public String toColumnizedString(List<ColumnDefinition> columnDefinitions) {

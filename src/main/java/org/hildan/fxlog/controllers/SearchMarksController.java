@@ -14,11 +14,7 @@ import org.hildan.fxlog.view.ScrollBarMarker;
 
 public class SearchMarksController {
 
-    private final Config config;
-
     private final ObservableList<? extends LogEntry> logs;
-
-    private final TableView<LogEntry> logsTable;
 
     private final TextField searchField;
 
@@ -26,25 +22,16 @@ public class SearchMarksController {
 
     public SearchMarksController(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable,
                                  TextField searchField) {
-        this.config = config;
         this.logs = logs;
-        this.logsTable = logsTable;
         this.searchField = searchField;
 
-        scrollBarMarker = new ScrollBarMarker(this.logsTable, Orientation.VERTICAL);
+        scrollBarMarker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
         scrollBarMarker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
         scrollBarMarker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
         scrollBarMarker.alignmentProperty().bind(config.getPreferences().searchMatchMarkAlignmentProperty());
 
         configureSearchFieldUpdates();
         configureLogsListUpdates();
-    }
-
-    private void configureScrollBarMarker() {
-        scrollBarMarker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
-        scrollBarMarker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
-        scrollBarMarker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
-        scrollBarMarker.alignmentProperty().bind(config.getPreferences().searchMatchMarkAlignmentProperty());
     }
 
     private void configureSearchFieldUpdates() {

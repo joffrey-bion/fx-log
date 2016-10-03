@@ -7,7 +7,6 @@ import java.util.List;
 import javafx.scene.Scene;
 
 import org.hildan.fxlog.FXLog;
-import org.hildan.fxlog.config.Config;
 
 public enum Theme {
 
