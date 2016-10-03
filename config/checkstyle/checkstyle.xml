@@ -29,6 +29,7 @@
             <property name="allowStaticMemberImports" value="false"/>
             <property name="excludes" value="java.io,java.net,java.lang.Math,javafx.scene.control"/>
         </module>
+        <module name="UnusedImports"/>
         <module name="ClassTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
         </module>
@@ -101,7 +102,7 @@
             <property name="scope" value="public"/>
             <property name="allowedAnnotations" value="Override,FXML"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
-            <property name="allowMissingParamTags" value="true"/>
+            <property name="allowMissingParamTags" value="false"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowMissingThrowsTags" value="false"/>
             <property name="allowMissingJavadoc" value="true"/>
