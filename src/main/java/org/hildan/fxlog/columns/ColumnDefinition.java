@@ -12,6 +12,8 @@ import javafx.beans.property.StringProperty;
  */
 public class ColumnDefinition {
 
+    private static final double DEFAULT_WIDTH = 80d;
+
     private final StringProperty headerLabel;
 
     private final StringProperty capturingGroupName;
@@ -29,10 +31,54 @@ public class ColumnDefinition {
      *         the name of the capturing group of the regexp to put inside this column
      */
     public ColumnDefinition(String headerLabel, String capturingGroupName) {
+        this(headerLabel, capturingGroupName, true, DEFAULT_WIDTH);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupName
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param visible
+     *         whether this column is initially visible before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible) {
+        this(headerLabel, capturingGroupName, visible, DEFAULT_WIDTH);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupName
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param initialWidth
+     *         the initial width to give this column before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupName, double initialWidth) {
+        this(headerLabel, capturingGroupName, true, initialWidth);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupName
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param visible
+     *         whether this column is initially visible before the user customizes it
+     * @param initialWidth
+     *         the initial width to give this column before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible, double initialWidth) {
         this.capturingGroupName = new SimpleStringProperty(capturingGroupName);
         this.headerLabel = new SimpleStringProperty(headerLabel);
-        this.width = new SimpleDoubleProperty(80d);
-        this.visible = new SimpleBooleanProperty(true);
+        this.visible = new SimpleBooleanProperty(visible);
+        this.width = new SimpleDoubleProperty(initialWidth);
     }
 
     /**

@@ -19,6 +19,27 @@ import org.hildan.fxlog.filtering.Filter;
  */
 class DefaultConfig {
 
+    private static final double DEFAULT_DATE_WIDTH = 200;
+
+    private static final double DEFAULT_SEVERITY_WIDTH = 63;
+
+    private static final double DEFAULT_CLASS_WIDTH = 430;
+
+    /**
+     * WHen there are a lot of columns.
+     */
+    private static final double DEFAULT_MSG_WIDTH = 720;
+
+    /**
+     * When there are not many columns.
+     */
+    private static final double DEFAULT_MSG_WIDTH_BIG = 1000;
+
+    private static final double DEFAULT_SID_WIDTH = 300;
+
+    private static final Filter WEBLOGIC_HIGHLIGHT = Filter.findInColumn("msg",
+            "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)");
+
     /**
      * Generates the default config programmatically.
      *
@@ -41,42 +62,54 @@ class DefaultConfig {
 
     private static Columnizer weblogicColumnizer() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
-        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
-        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
-        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine"));
-        columnDefinitions.add(new ColumnDefinition("Server Name", "server"));
-        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread"));
-        columnDefinitions.add(new ColumnDefinition("User ID", "user"));
-        columnDefinitions.add(new ColumnDefinition("Transaction ID", "transaction"));
-        columnDefinitions.add(new ColumnDefinition("Diagnostic Context ID", "context"));
-        columnDefinitions.add(new ColumnDefinition("Timestamp", "timestamp"));
-        columnDefinitions.add(new ColumnDefinition("Message ID", "msgId"));
-        columnDefinitions.add(new ColumnDefinition("Class", "class"));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid"));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Severity", "severity", DEFAULT_SEVERITY_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem", false));
+        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine", false));
+        columnDefinitions.add(new ColumnDefinition("Server Name", "server", false));
+        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread", false));
+        columnDefinitions.add(new ColumnDefinition("User ID", "user", false));
+        columnDefinitions.add(new ColumnDefinition("Transaction ID", "transaction", false));
+        columnDefinitions.add(new ColumnDefinition("Diagnostic Context ID", "context", false));
+        columnDefinitions.add(new ColumnDefinition("Timestamp", "timestamp", false));
+        columnDefinitions.add(new ColumnDefinition("Message ID", "msgId", false));
+        columnDefinitions.add(new ColumnDefinition("Class", "class", DEFAULT_CLASS_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SID_WIDTH));
 
-        ObservableList<String> regexps = FXCollections.observableArrayList(//
-                "####<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?"
-                        + "<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)> ?<(?<user>.*?)> ?<(?<transaction>[^>]*?)> ?"
-                        + "<(?<context>[^>]*?)> ?<(?<timestamp>[^>]*?)> ?<(?<msgId>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?"
-                        + "<(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?", // log beginning
-                "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>", // end of message
-                "(?<msg>.*)"); // middle of log message on new line
+        String logStart = "####" //
+                + "<(?<datetime>[^>]*?)>" //
+                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<subsystem>[^>]*?)>" //
+                + " ?<(?<machine>[^>]*?)>" //
+                + " ?<(?<server>[^>]*?)>" //
+                + " ?<(?<thread>[^>]*?)>" //
+                + " ?<(?<user>.*?)>" //
+                + " ?<(?<transaction>[^>]*?)>" //
+                + " ?<(?<context>[^>]*?)>" //
+                + " ?<(?<timestamp>[^>]*?)>" //
+                + " ?<(?<msgId>[^>]*?)>" //
+                + "( ?<(?<class>[^>]*?)>)?" //
+                + " ?<(?<msg>.*?)" // message start
+                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + ">?"; // optional end of message (if not continued)
+        String logEnd = "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>"; // end of msg and optional session id
+        String logCenter = "(?<msg>.*)";
+        ObservableList<String> regexps = FXCollections.observableArrayList(logStart, logEnd, logCenter);
         return new Columnizer("Weblogic Server Log", columnDefinitions, regexps);
     }
 
     private static Columnizer weblogicEasyTraceColumnizer() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
-        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
-        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem"));
-        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine"));
-        columnDefinitions.add(new ColumnDefinition("Server Name", "server"));
-        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread"));
-        columnDefinitions.add(new ColumnDefinition("Class", "class"));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid"));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Severity", "severity", DEFAULT_SEVERITY_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Subsystem", "subsystem", false));
+        columnDefinitions.add(new ColumnDefinition("Machine Name", "machine", false));
+        columnDefinitions.add(new ColumnDefinition("Server Name", "server", false));
+        columnDefinitions.add(new ColumnDefinition("Thread ID", "thread", false));
+        columnDefinitions.add(new ColumnDefinition("Class", "class", DEFAULT_CLASS_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SID_WIDTH));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(//
                 "<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?"
@@ -89,15 +122,15 @@ class DefaultConfig {
 
     private static Columnizer apacheAccessColumnizer() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Client", "client"));
-        columnDefinitions.add(new ColumnDefinition("User", "user"));
-        columnDefinitions.add(new ColumnDefinition("Username", "username"));
-        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
-        columnDefinitions.add(new ColumnDefinition("Request", "request"));
-        columnDefinitions.add(new ColumnDefinition("Resp. Code", "rstatus"));
-        columnDefinitions.add(new ColumnDefinition("Resp. Size (bytes)", "rsize"));
-        columnDefinitions.add(new ColumnDefinition("Referer", "referer"));
-        columnDefinitions.add(new ColumnDefinition("User-Agent", "useragent"));
+        columnDefinitions.add(new ColumnDefinition("Client", "client", 205));
+        columnDefinitions.add(new ColumnDefinition("User", "user", 80));
+        columnDefinitions.add(new ColumnDefinition("Username", "username", 75));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Request", "request", 700));
+        columnDefinitions.add(new ColumnDefinition("Resp. Code", "rstatus", 80));
+        columnDefinitions.add(new ColumnDefinition("Resp. Size (bytes)", "rsize", 110));
+        columnDefinitions.add(new ColumnDefinition("Referer", "referer", 60));
+        columnDefinitions.add(new ColumnDefinition("User-Agent", "useragent", 80));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(
                 "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>[^\\]]*?)\\] \"(?<request>[^\"]*?)\" "
@@ -107,10 +140,10 @@ class DefaultConfig {
 
     private static Columnizer apacheErrorColumnizer() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime"));
-        columnDefinitions.add(new ColumnDefinition("Severity", "severity"));
-        columnDefinitions.add(new ColumnDefinition("Client", "client"));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg"));
+        columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Severity", "severity", DEFAULT_SEVERITY_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Client", "client", 75));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH_BIG));
 
         String full = "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] \\[(?<client>\\]*?)\\] (?<msg>.*)";
         String noClient = "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] (?<msg>.*)";
@@ -122,22 +155,23 @@ class DefaultConfig {
 
     private static Columnizer amadeusInputLog() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("HH", "hh"));
-        columnDefinitions.add(new ColumnDefinition("MM", "mm"));
-        columnDefinitions.add(new ColumnDefinition("SS", "ss"));
-        columnDefinitions.add(new ColumnDefinition("MS", "ms"));
-        columnDefinitions.add(new ColumnDefinition("Domain", "domain"));
-        columnDefinitions.add(new ColumnDefinition("Action", "action"));
-        columnDefinitions.add(new ColumnDefinition("Parameters", "params"));
+        columnDefinitions.add(new ColumnDefinition("Year", "year", 40));
+        columnDefinitions.add(new ColumnDefinition("M", "month", 23));
+        columnDefinitions.add(new ColumnDefinition("D", "day", 23));
+        columnDefinitions.add(new ColumnDefinition("h", "hours", 23));
+        columnDefinitions.add(new ColumnDefinition("m", "minutes", 23));
+        columnDefinitions.add(new ColumnDefinition("s", "seconds", 23));
+        columnDefinitions.add(new ColumnDefinition("ms", "millis", 30));
+        columnDefinitions.add(new ColumnDefinition("Domain", "domain", 400));
+        columnDefinitions.add(new ColumnDefinition("Action", "action", 60));
+        columnDefinitions.add(new ColumnDefinition("Parameters", "params", 2000));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(
-                "[0-9]{8}(?<hh>[0-9]{2})(?<mm>[0-9]{2})(?<ss>[0-9]{2})(?<ms>[0-9]{3}).*?(?<domain>http.*)/"
-                        + "(?<action>.*?)\\?(?<params>.*)");
+                "(?<year>[0-9]{4})(?<month>[0-9]{2})(?<day>[0-9]{2})(?<hours>[0-9]{2})(?<minutes>[0-9]{2})"
+                        + "(?<seconds>[0-9]{2})"
+                        + "(?<millis>[0-9]{3}).*?(?<domain>http.*)/(?<action>.*?)\\?(?<params>.*)");
         return new Columnizer("Amadeus input.log", columnDefinitions, regexps);
     }
-
-    private static final Filter WEBLOGIC_HIGHLIGHT =
-            Filter.findInColumn("msg", "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)");
 
     private static Colorizer severityBasedColorizerLight() {
         StyleRule highlightRule = new StyleRule("Highlight", WEBLOGIC_HIGHLIGHT, Style.HIGHLIGHT);
