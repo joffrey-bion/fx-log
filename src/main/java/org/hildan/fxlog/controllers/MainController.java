@@ -433,7 +433,8 @@ public class MainController implements Initializable {
     public void openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Log files (*.txt, *.log)", "*.txt", "*.log"));
+        fileChooser.getExtensionFilters()
+                .add(new ExtensionFilter("Log files (*.txt, *.log, *.out)", "*.txt", "*.log", "*.out"));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("All files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (file != null) {
