@@ -90,9 +90,17 @@ public class ScrollBarMarker {
         return mark;
     }
 
+    /**
+     * Unmarks the given position. If the given position was not marked, this method does nothing.
+     *
+     * @param index
+     *         the index to unmark
+     */
     public void unmark(int index) {
         ScrollBarMark mark = activeMarks.remove(index);
-        mark.detach();
+        if (mark != null) {
+            mark.detach();
+        }
     }
 
     public boolean isMarked(int index) {

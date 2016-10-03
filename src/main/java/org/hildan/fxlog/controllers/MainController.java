@@ -29,6 +29,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -127,6 +128,8 @@ public class MainController implements Initializable {
 
     private LogTailListener logTailListener;
 
+    private SearchMarksController searchMarksController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
@@ -145,7 +148,6 @@ public class MainController implements Initializable {
         configureFiltering();
         configureSearch();
         configureLogsTable();
-        configureScrollBarMarks();
         configureRecentFilesMenu();
         configureSecondaryStages();
         configureAutoScroll();
@@ -253,6 +255,7 @@ public class MainController implements Initializable {
     private void configureSearch() {
         searchField.setText("");
         UIUtils.makeClearable(searchField);
+        searchMarksController = new SearchMarksController(config, filteredLogs, logsTable, searchField);
     }
 
     /**
@@ -267,35 +270,6 @@ public class MainController implements Initializable {
             }
         });
         logsTable.setItems(filteredLogs);
-    }
-
-    private void configureScrollBarMarks() {
-        ScrollBarMarker marker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
-        marker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
-        marker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
-        marker.alignmentProperty().bind(config.getPreferences().searchMatchMarkAlignmentProperty());
-        searchField.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                search(searchField.getText(), marker);
-            }
-        });
-        searchField.textProperty().addListener((observable, oldSearch, newSearch) -> {
-            if (newSearch.length() > 2) {
-                search(newSearch, marker);
-            } else {
-                marker.clear();
-            }
-        });
-    }
-
-    private void search(String text, ScrollBarMarker marker) {
-        marker.clear();
-        for (int index = 0; index < filteredLogs.size(); index++) {
-            LogEntry log = filteredLogs.get(index);
-            if (!text.isEmpty() && log.rawLine().contains(text)) {
-                marker.mark(index);
-            }
-        }
     }
 
     private List<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
@@ -435,7 +409,7 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
         fileChooser.getExtensionFilters()
-                .add(new ExtensionFilter("Log files (*.txt, *.log, *.out)", "*.txt", "*.log", "*.out"));
+                   .add(new ExtensionFilter("Log files (*.txt, *.log, *.out)", "*.txt", "*.log", "*.out"));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("All files", "*.*"));
         File file = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
         if (file != null) {
