@@ -1,18 +1,34 @@
 {
-  "version": 3,
-  "selectedColumnizerIndex": 0,
-  "selectedColorizerIndex": 1,
-  "currentTheme": "LIGHT",
-  "openLastFileAtStartup": true,
-  "skipEmptyLogs": true,
-  "wrapLogsText": false,
-  "logsFont": "Arial,Regular,14.0",
-  "recentFiles": [],
+  "version": 4,
+  "preferences": {
+    "openLastFileAtStartup": true,
+    "checkForUpdates": true,
+    "limitNumberOfLogs": true,
+    "maxNumberOfLogs": 100000,
+    "skipEmptyLogs": true,
+    "tailingDelayInMillis": 500,
+    "wrapLogsText": false,
+    "logsFont": "System,Regular,12.0",
+    "searchHighlightStyle": {
+      "name": "Search highlight",
+      "foregroundColor": "#000000ff",
+      "backgroundColor": "#ffa500ff"
+    },
+    "searchMatchMarkColor": "#b2740080",
+    "searchMatchMarkThickness": 3.0,
+    "searchMatchMarkAlignment": "CENTER"
+  },
+  "state": {
+    "recentFiles": [],
+    "selectedColumnizerIndex": 0,
+    "selectedColorizerIndex": 0,
+    "currentTheme": "LIGHT"
+  },
   "columnizers": [
     {
       "name": "Weblogic Server Log",
       "patterns": [
-        "####<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)> ?<(?<user>.*?)> ?<(?<transaction>[^>]*?)> ?<(?<context>[^>]*?)> ?<(?<timestamp>[^>]*?)> ?<(?<msgId>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?<(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?",
+        "####<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)> ?<(?<user>.*?)> ?<(?<transaction>[^>]*?)> ?<(?<context>[^>]*?)> ?<(?<timestamp>[^>]*?)> ?<(?<msgId>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?<(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>?",
         "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>",
         "(?<msg>.*)"
       ],
@@ -20,14 +36,14 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 207.0,
+          "width": 200.0,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 80.0,
-          "visible": false
+          "width": 63.0,
+          "visible": true
         },
         {
           "headerLabel": "Subsystem",
@@ -86,19 +102,19 @@
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 432.0,
+          "width": 430.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 721.0,
+          "width": 720.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 308.0,
+          "width": 300.0,
           "visible": true
         }
       ]
@@ -114,13 +130,13 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 195.0,
+          "width": 200.0,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 80.0,
+          "width": 63.0,
           "visible": true
         },
         {
@@ -150,19 +166,19 @@
         {
           "headerLabel": "Class",
           "capturingGroupName": "class",
-          "width": 427.0,
+          "width": 430.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 742.0,
+          "width": 720.0,
           "visible": true
         },
         {
           "headerLabel": "JSessionID",
           "capturingGroupName": "sessionid",
-          "width": 291.0,
+          "width": 300.0,
           "visible": true
         }
       ]
@@ -176,55 +192,55 @@
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 205.9306640625,
+          "width": 205.0,
           "visible": true
         },
         {
           "headerLabel": "User",
           "capturingGroupName": "user",
-          "width": 79.783203125,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Username",
           "capturingGroupName": "username",
-          "width": 73.291015625,
+          "width": 75.0,
           "visible": true
         },
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 191.341796875,
+          "width": 200.0,
           "visible": true
         },
         {
           "headerLabel": "Request",
           "capturingGroupName": "request",
-          "width": 694.744140625,
+          "width": 700.0,
           "visible": true
         },
         {
           "headerLabel": "Resp. Code",
           "capturingGroupName": "rstatus",
-          "width": 79.291015625,
+          "width": 80.0,
           "visible": true
         },
         {
           "headerLabel": "Resp. Size (bytes)",
           "capturingGroupName": "rsize",
-          "width": 111.294921875,
+          "width": 110.0,
           "visible": true
         },
         {
           "headerLabel": "Referer",
           "capturingGroupName": "referer",
-          "width": 58.103515625,
+          "width": 60.0,
           "visible": true
         },
         {
           "headerLabel": "User-Agent",
           "capturingGroupName": "useragent",
-          "width": 80.521484375,
+          "width": 80.0,
           "visible": true
         }
       ]
@@ -241,25 +257,25 @@
         {
           "headerLabel": "Date/Time",
           "capturingGroupName": "datetime",
-          "width": 187.341796875,
+          "width": 200.0,
           "visible": true
         },
         {
           "headerLabel": "Severity",
           "capturingGroupName": "severity",
-          "width": 73.625,
+          "width": 63.0,
           "visible": true
         },
         {
           "headerLabel": "Client",
           "capturingGroupName": "client",
-          "width": 75.375,
+          "width": 75.0,
           "visible": true
         },
         {
           "headerLabel": "Message",
           "capturingGroupName": "msg",
-          "width": 1084.70703125,
+          "width": 1000.0,
           "visible": true
         }
       ]
@@ -267,49 +283,67 @@
     {
       "name": "Amadeus input.log",
       "patterns": [
-        "[0-9]{8}(?<hh>[0-9]{2})(?<mm>[0-9]{2})(?<ss>[0-9]{2})(?<ms>[0-9]{3}).*?(?<domain>http.*)/(?<action>.*?)\\?(?<params>.*)"
+        "(?<year>[0-9]{4})(?<month>[0-9]{2})(?<day>[0-9]{2})(?<hours>[0-9]{2})(?<minutes>[0-9]{2})(?<seconds>[0-9]{2})(?<millis>[0-9]{3}).*?(?<domain>http.*)/(?<action>.*?)\\?(?<params>.*)"
       ],
       "columnDefinitions": [
         {
-          "headerLabel": "HH",
-          "capturingGroupName": "hh",
-          "width": 80.0,
+          "headerLabel": "Year",
+          "capturingGroupName": "year",
+          "width": 40.0,
           "visible": true
         },
         {
-          "headerLabel": "MM",
-          "capturingGroupName": "mm",
-          "width": 80.0,
+          "headerLabel": "M",
+          "capturingGroupName": "month",
+          "width": 23.0,
           "visible": true
         },
         {
-          "headerLabel": "SS",
-          "capturingGroupName": "ss",
-          "width": 80.0,
+          "headerLabel": "D",
+          "capturingGroupName": "day",
+          "width": 23.0,
           "visible": true
         },
         {
-          "headerLabel": "MS",
-          "capturingGroupName": "ms",
-          "width": 80.0,
+          "headerLabel": "h",
+          "capturingGroupName": "hours",
+          "width": 23.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "m",
+          "capturingGroupName": "minutes",
+          "width": 23.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "s",
+          "capturingGroupName": "seconds",
+          "width": 23.0,
+          "visible": true
+        },
+        {
+          "headerLabel": "ms",
+          "capturingGroupName": "millis",
+          "width": 30.0,
           "visible": true
         },
         {
           "headerLabel": "Domain",
           "capturingGroupName": "domain",
-          "width": 80.0,
+          "width": 400.0,
           "visible": true
         },
         {
           "headerLabel": "Action",
           "capturingGroupName": "action",
-          "width": 80.0,
+          "width": 60.0,
           "visible": true
         },
         {
           "headerLabel": "Parameters",
           "capturingGroupName": "params",
-          "width": 80.0,
+          "width": 2000.0,
           "visible": true
         }
       ]
@@ -339,7 +373,7 @@
           },
           "result": {
             "name": "Red",
-            "foregroundColor": "#ff2020ff",
+            "foregroundColor": "#ff3232ff",
             "backgroundColor": null
           }
         },
@@ -351,7 +385,7 @@
           },
           "result": {
             "name": "Orange",
-            "foregroundColor": "#e99d51ff",
+            "foregroundColor": "#e6994dff",
             "backgroundColor": null
           }
         },
@@ -363,7 +397,7 @@
           },
           "result": {
             "name": "Green",
-            "foregroundColor": "#28ca5eff",
+            "foregroundColor": "#10c14bff",
             "backgroundColor": null
           }
         },
@@ -375,7 +409,7 @@
           },
           "result": {
             "name": "Blue",
-            "foregroundColor": "#425fd3ff",
+            "foregroundColor": "#334db3ff",
             "backgroundColor": null
           }
         },
@@ -399,7 +433,7 @@
           },
           "result": {
             "name": "Red",
-            "foregroundColor": "#ff2020ff",
+            "foregroundColor": "#ff3232ff",
             "backgroundColor": null
           }
         },
@@ -411,7 +445,7 @@
           },
           "result": {
             "name": "Red",
-            "foregroundColor": "#ff2020ff",
+            "foregroundColor": "#ff3232ff",
             "backgroundColor": null
           }
         },
@@ -500,7 +534,7 @@
           },
           "result": {
             "name": "DEFAULT",
-            "foregroundColor": "#333333ff",
+            "foregroundColor": "#d3d3d3ff",
             "backgroundColor": null
           }
         },
@@ -536,7 +570,7 @@
           },
           "result": {
             "name": "Black",
-            "foregroundColor": "#333333ff",
+            "foregroundColor": "#000000ff",
             "backgroundColor": null
           }
         }
