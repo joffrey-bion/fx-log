@@ -1,14 +1,11 @@
 package org.hildan.fxlog.coloring;
 
-import javafx.beans.binding.Binding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
-import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.rulesets.RuleSet;

@@ -1,23 +1,12 @@
 package org.hildan.fxlog.config;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import org.hildan.fxlog.coloring.Colorizer;
-import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.columns.Columnizer;
-import org.hildan.fxlog.themes.Theme;
 import org.jetbrains.annotations.NotNull;
 
 /**
