@@ -149,7 +149,7 @@
                 <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" prefWidth="40.0"
                               styleClass="main-button">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="angle_double_down"/>
+                        <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Stick to bottom"/>
