@@ -21,20 +21,26 @@ import org.hildan.fx.bindings.rulesets.RuleSet;
  */
 public class StyledTableCell extends TableCell<LogEntry, String> {
 
+    private static final String STYLE_BINDING_KEY = "styleBinding";
+
     private final SearchableText text = new SearchableText();
 
     private final Property<Colorizer> colorizer = new SimpleObjectProperty<>();
 
     private final Property<Style> searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
 
-    // this is to prevent the binding from being garbage collected
-    @SuppressWarnings("FieldCanBeLocal")
-    private Binding<Style> colorizerStyle;
-
     public StyledTableCell(TableColumn<LogEntry, String> column) {
-        text.prefWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
-        text.maxWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
+        setPrefHeight(USE_COMPUTED_SIZE);
+        setMaxHeight(USE_COMPUTED_SIZE);
+
+        text.setPrefHeight(80);
+        text.setMaxHeight(USE_COMPUTED_SIZE);
+        text.setPrefWidth(80);
+        text.setMaxWidth(Double.MAX_VALUE);
+//        text.prefWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
+//        text.maxWidthProperty().bind(wrappingWidthBinding(column.widthProperty()));
         text.fontProperty().bind(fontProperty());
+
         setGraphic(text);
         setText(null);
 
@@ -43,20 +49,28 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
             if (row == null) {
                 return;
             }
+            row.setPrefHeight(USE_COMPUTED_SIZE);
+            row.setMaxHeight(USE_COMPUTED_SIZE);
 
             // bind the text for the foreground, and this cell for the background
             //noinspection unchecked
-            bindStyle(row);
+            Binding<Style> colorizerStyle = getOrCreateStyleBinding(row, colorizer);
+            text.normalStyleProperty().bind(colorizerStyle);
+            text.highlightedStyleProperty().bind(searchHighlightStyle);
         });
     }
 
-    private void bindStyle(TableRow<LogEntry> row) {
-        ObservableValue<LogEntry> log = row.itemProperty();
-        colorizerStyle = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
-        text.normalStyleProperty().bind(colorizerStyle);
-        text.highlightedStyleProperty().bind(searchHighlightStyle);
-        // set the whole row background
-        EasyBind.subscribe(colorizerStyle, style -> style.bindNode(row));
+    private static Binding<Style> getOrCreateStyleBinding(TableRow<LogEntry> row, ObservableValue<Colorizer> colorizer) {
+        @SuppressWarnings("unchecked")
+        Binding<Style> colorizerStyleBinding = (Binding<Style>) row.getProperties().get(STYLE_BINDING_KEY);
+        if (colorizerStyleBinding == null) {
+            ObservableValue<LogEntry> observableLogValue = row.itemProperty();
+            colorizerStyleBinding = RuleSet.outputFor(colorizer, observableLogValue, Style.DEFAULT);
+            row.getProperties().put(STYLE_BINDING_KEY, colorizerStyleBinding);
+            // set the whole row background
+            EasyBind.subscribe(colorizerStyleBinding, style -> style.bindNode(row));
+        }
+        return colorizerStyleBinding;
     }
 
     private DoubleBinding wrappingWidthBinding(ObservableDoubleValue columnWidth) {
