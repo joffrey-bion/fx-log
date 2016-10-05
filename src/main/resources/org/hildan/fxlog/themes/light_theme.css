@@ -1,4 +1,5 @@
 
-.main-button {
-    -fx-base: #99e6ff;
+.root {
+    /* Font Awesome icon color tricks */
+    fa-color-magnet: linear-gradient(to bottom, #636363 37%, darkred 38%);
 }

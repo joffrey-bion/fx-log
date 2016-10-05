@@ -1,13 +1,26 @@
-.title {
+/* Huge text for FX Log in 'about' popup */
+.title-huge {
     -fx-font-size: 4em;
     -fx-font-weight: bold;
 }
 
-/* Red border on invalid fields/cells */
+/* Subsection title (in preferences) */
+.title-subsection {
+    -fx-font-weight: bold;
+}
+
+/* Color the magnet on the button when selected */
+.main-button:selected > .label {
+    -fx-text-fill: fa-color-magnet;
+}
+
+/* Red border on invalid text fields */
 .text-input:invalid {
     -fx-text-box-border: red;
     -fx-focus-color: red;
 }
+
+/* Red border on invalid text fields (in editable cells) */
 .list-cell:invalid {
     -fx-text-box-border: red;
     -fx-focus-color: red;
@@ -20,18 +33,23 @@
     -fx-padding: 5px;
 }
 
-/* Remove blue highlight on tables */
-.table-view:focused {
-    -fx-background-color: transparent ,-fx-box-border,-fx-control-inner-background;
-    -fx-background-insets: -1.4, 0, 1;
-    -fx-background-radius: 1.4, 0, 0;
-    -fx-padding: 1; /* 0.083333em; */
+/* Remove blue highlight on focused tables and lists */
+.list-view:focused,
+.tree-view:focused,
+.table-view:focused,
+.tree-table-view:focused,
+.html-editor:contains-focus {
+    /* back to normal background */
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
 }
 
-/* Remove blue highlight on lists */
-.list-view:focused {
-    -fx-background-color: transparent ,-fx-box-border,-fx-control-inner-background;
-    -fx-background-insets: -1.4, 0, 1;
-    -fx-background-radius: 1.4, 0, 0;
-    -fx-padding: 1; /* 0.083333em; */
+/* Remove blue highlight on focused panes */
+.scroll-pane:focused,
+.split-pane:focused {
+    /* back to normal background */
+    -fx-background-color: -fx-box-border, -fx-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
 }

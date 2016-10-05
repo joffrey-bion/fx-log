@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?scenebuilder-stylesheet org/hildan/fxlog/themes/common.css?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -15,13 +17,13 @@
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                 </padding>
-                <Label text="General"/>
+                <Label styleClass="title-subsection" text="General"/>
                 <VBox spacing="8.0">
                     <CheckBox fx:id="reopenLastFile" mnemonicParsing="false" text="Re-open last file at startup"/>
                     <CheckBox fx:id="checkForUpdates" mnemonicParsing="false" text="Check for updates at startup"/>
                 </VBox>
                 <Separator prefWidth="200.0"/>
-                <Label text="Tailing settings"/>
+                <Label styleClass="title-subsection" text="Tailing settings"/>
                 <GridPane vgap="5.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -50,7 +52,7 @@
                     <Spinner fx:id="tailingDelay" editable="true" prefWidth="100.0" GridPane.columnIndex="1"/>
                 </GridPane>
                 <Separator prefWidth="200.0"/>
-                <Label minHeight="-Infinity" minWidth="-Infinity" text="Logs table"/>
+                <Label minHeight="-Infinity" minWidth="-Infinity" styleClass="title-subsection" text="Logs table"/>
                 <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
                     <CheckBox fx:id="wrapLogsText" mnemonicParsing="false" text="Wrap text within columns"/>
                     <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
@@ -66,7 +68,7 @@
                     </HBox>
                 </VBox>
                 <Separator prefWidth="200.0"/>
-                <Label text="Search"/>
+                <Label styleClass="title-subsection" text="Search"/>
                 <GridPane vgap="5.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
