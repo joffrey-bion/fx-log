@@ -33,16 +33,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -51,6 +42,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import org.apache.commons.io.input.Tailer;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -162,12 +154,10 @@ public class MainController implements Initializable {
     }
 
     private void configureTitleBinding() {
-        mainPane.sceneProperty().addListener((obsScene, oldScene, newScene) -> {
-            newScene.windowProperty().addListener((obsWindow, oldWindow, newWindow) -> {
-                Stage stage = (Stage) newWindow;
-                StringBinding titleBinding = createTitleBinding(tailingFile, tailedFileName);
-                stage.titleProperty().bind(titleBinding);
-            });
+        UIUtils.whenWindowReady(mainPane, window -> {
+            Stage stage = (Stage) window;
+            StringBinding titleBinding = createTitleBinding(tailingFile, tailedFileName);
+            stage.titleProperty().bind(titleBinding);
         });
     }
 
@@ -332,6 +322,19 @@ public class MainController implements Initializable {
         columnizersStage = UIUtils.createStage("popups/columnizers.fxml", "Customize Columnizers", theme);
         preferencesStage = UIUtils.createStage("popups/preferences.fxml", "Preferences", theme);
         aboutStage = UIUtils.createStage("popups/about.fxml", "About FX Log", theme);
+        aboutStage.initStyle(StageStyle.UNDECORATED);
+        aboutStage.focusedProperty().addListener((observable, wasFocused, nowFocused) -> {
+            if (!nowFocused) {
+                aboutStage.hide();
+            }
+        });
+
+        UIUtils.whenWindowReady(mainPane, scene -> {
+            colorizersStage.initOwner(scene);
+            columnizersStage.initOwner(scene);
+            preferencesStage.initOwner(scene);
+            aboutStage.initOwner(scene);
+        });
     }
 
     private void configureAutoScroll() {

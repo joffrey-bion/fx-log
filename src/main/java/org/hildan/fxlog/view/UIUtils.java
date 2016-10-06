@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
@@ -120,5 +125,27 @@ public class UIUtils {
             return null;
         }
         return (VirtualFlow)skin.getChildren().get(1);
+    }
+
+    public static void whenWindowReady(Node anyChild, Consumer<? super Window> handler) {
+        ChangeListener<Scene> onNewScene = (obsScene, oldScene, newScene) -> {
+            ChangeListener<? super Window> oneShotWindowListener = asOneShotListener(asListener(handler));
+            newScene.windowProperty().addListener(oneShotWindowListener);
+        };
+
+        anyChild.sceneProperty().addListener(asOneShotListener(onNewScene));
+    }
+
+    private static <T> ChangeListener<T> asListener(Consumer<T> handler) {
+        return (obs, oldValue, newValue) -> handler.accept(newValue);
+    }
+
+    private static <T> ChangeListener<T> asOneShotListener(ChangeListener<T> handler) {
+        return new ChangeListener<T>() {
+            public void changed(ObservableValue<? extends T> obs, T oldValue, T newValue) {
+                handler.changed(obs, oldValue, newValue);
+                obs.removeListener(this);
+            }
+        };
     }
 }
