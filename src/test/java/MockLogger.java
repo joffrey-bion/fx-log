@@ -34,7 +34,7 @@ public class MockLogger {
 
     public static void main(String[] args) {
         // TODO: Use a command line lib? See http://commons.apache.org/proper/commons-cli/index.html
-        streamMockLogsToFile("mock.log", 200);
+        streamMockLogsToFile("src/test/samples/mock.log", 200);
     }
 
     /**
@@ -63,7 +63,7 @@ public class MockLogger {
             while (true) {
                 writer.write(mockLogLine());
                 writer.flush();
-                int delay = rand.nextInt(maxDelayBetweenLines);
+                int delay = maxDelayBetweenLines == 0 ? 0 : rand.nextInt(maxDelayBetweenLines);
                 // Thread.sleep(0) is not neutral. See http://stackoverflow.com/a/17494898
                 if (delay > 0) {
                     Thread.sleep(delay);
