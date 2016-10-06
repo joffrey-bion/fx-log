@@ -52,7 +52,6 @@ public class FXLog extends Application {
             InputStream icon = getClass().getResourceAsStream(APP_ICON_PATH);
             stage.getIcons().add(new Image(icon));
             stage.setScene(scene);
-            stage.setOnCloseRequest(event -> Platform.exit());
             stage.show();
 
             if (Config.getInstance().getPreferences().isCheckForUpdates()) {
