@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
@@ -127,7 +128,7 @@ public class MainController implements Initializable {
     private LogTailListener logTailListener;
 
     // to avoid garbage collection
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private SearchMarksController searchMarksController;
 
     @Override
@@ -270,8 +271,8 @@ public class MainController implements Initializable {
         logsTable.setItems(filteredLogs);
     }
 
-    private List<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
-        List<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
+    private Collection<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
+        Collection<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
             StyledTableCell cell = new StyledTableCell(column);
             cell.fontProperty().bind(config.getPreferences().logsFontProperty());
@@ -466,7 +467,7 @@ public class MainController implements Initializable {
         logTailListener.skipEmptyLogsProperty().bind(config.getPreferences().skipEmptyLogsProperty());
         logTailListener.limitNumberOfLogsProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
         logTailListener.maxNumberOfLogsProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
-        tailer = Tailer.create(file, logTailListener, 500);
+        tailer = Tailer.create(file, logTailListener, config.getPreferences().getTailingDelayInMillis());
         tailingFile.set(true);
         tailedFileName.set(file.getAbsolutePath());
     }
