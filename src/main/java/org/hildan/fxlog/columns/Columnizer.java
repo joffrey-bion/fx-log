@@ -1,6 +1,8 @@
 package org.hildan.fxlog.columns;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class Columnizer {
      *         a name for this columnizer
      */
     public Columnizer(@NotNull String name) {
-        this(name, FXCollections.observableArrayList(), FXCollections.observableArrayList());
+        this(name, FXCollections.observableArrayList(), Collections.emptyList());
     }
 
     /**
@@ -54,7 +56,7 @@ public class Columnizer {
      *         if one of the regexps' syntax is invalid
      */
     public Columnizer(@NotNull String name, @NotNull ObservableList<ColumnDefinition> columnDefinitions,
-                      @NotNull ObservableList<String> regexps) throws PatternSyntaxException {
+                      @NotNull Collection<String> regexps) throws PatternSyntaxException {
         this.name = new SimpleStringProperty(name);
         this.columnDefinitions = columnDefinitions;
         List<Pattern> patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
@@ -65,6 +67,7 @@ public class Columnizer {
         return name.get();
     }
 
+    @SuppressWarnings("unused")
     public StringProperty nameProperty() {
         return name;
     }

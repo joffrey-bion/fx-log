@@ -84,11 +84,13 @@ public class UIUtils {
      * @param index
      *         the index to scroll to
      */
+    @SuppressWarnings("WeakerAccess")
     public static void scrollTo(TableView table, int index) {
         int numberOfVisibleItems = getNumberOfVisibleItems(table);
         table.scrollTo(index - numberOfVisibleItems / 3);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static int getNumberOfVisibleItems(TableView table) {
         return getLastVisibleRowIndex(table) - getFirstVisibleRowIndex(table);
     }
@@ -106,6 +108,7 @@ public class UIUtils {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static int getLastVisibleRowIndex(TableView table) {
         VirtualFlow<?> flow = getVirtualFlow(table);
         if (flow == null || flow.getLastVisibleCellWithinViewPort() == null) {
@@ -119,7 +122,7 @@ public class UIUtils {
         }
     }
 
-    public static VirtualFlow<?> getVirtualFlow(TableView table) {
+    private static VirtualFlow<?> getVirtualFlow(TableView table) {
         TableViewSkin<?> skin = (TableViewSkin)table.getSkin();
         if (skin == null) {
             return null;

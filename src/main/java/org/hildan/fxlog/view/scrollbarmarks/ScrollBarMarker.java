@@ -1,4 +1,4 @@
-package org.hildan.fxlog.view;
+package org.hildan.fxlog.view.scrollbarmarks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import org.hildan.fxlog.view.ScrollBarMark.Alignment;
+import org.hildan.fxlog.view.UIUtils;
 
 public class ScrollBarMarker {
 
@@ -103,15 +103,12 @@ public class ScrollBarMarker {
         }
     }
 
-    public boolean isMarked(int index) {
-        return activeMarks.containsKey(index);
-    }
-
     public void clear() {
         activeMarks.forEach((i, m) -> m.detach());
         activeMarks.clear();
     }
 
+    @SuppressWarnings("unused")
     public Paint getColor() {
         return color.getValue();
     }
@@ -120,10 +117,12 @@ public class ScrollBarMarker {
         return color;
     }
 
+    @SuppressWarnings("unused")
     public void setColor(Paint color) {
         this.color.setValue(color);
     }
 
+    @SuppressWarnings("unused")
     public double getThickness() {
         return thickness.get();
     }
@@ -132,10 +131,12 @@ public class ScrollBarMarker {
         return thickness;
     }
 
+    @SuppressWarnings("unused")
     public void setThickness(double thickness) {
         this.thickness.set(thickness);
     }
 
+    @SuppressWarnings("unused")
     public Alignment getAlignment() {
         return alignment.getValue();
     }
@@ -144,6 +145,7 @@ public class ScrollBarMarker {
         return alignment;
     }
 
+    @SuppressWarnings("unused")
     public void setAlignment(Alignment alignment) {
         this.alignment.setValue(alignment);
     }

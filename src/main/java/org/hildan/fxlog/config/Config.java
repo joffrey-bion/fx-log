@@ -20,7 +20,7 @@ public class Config {
      * Holder class for thread-safe singleton pattern.
      */
     private static class Holder {
-        static final Config INSTANCE = ConfigLoader.getUserConfig();
+        private static final Config INSTANCE = ConfigLoader.getUserConfig();
     }
 
     /**

@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
  * Holds the saved state for application restart. This includes the recent files, the last selected columnizer,
  * colorizer etc.
  */
+@SuppressWarnings("unused")
 public class State {
 
     private static final int MAX_RECENT_FILES = 10;

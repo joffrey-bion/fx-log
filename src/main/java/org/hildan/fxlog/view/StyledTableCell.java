@@ -109,6 +109,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         text.setText(item);
     }
 
+    @SuppressWarnings("unused")
     public Colorizer getColorizer() {
         return colorizer.getValue();
     }
@@ -117,10 +118,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         return colorizer;
     }
 
+    @SuppressWarnings("unused")
     public void setColorizer(Colorizer colorizer) {
         this.colorizer.setValue(colorizer);
     }
 
+    @SuppressWarnings("unused")
     public String getSearchText() {
         return searchText.get();
     }
@@ -129,10 +132,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         return searchText;
     }
 
+    @SuppressWarnings("unused")
     public void setSearchText(String searchText) {
         this.searchText.set(searchText);
     }
 
+    @SuppressWarnings("unused")
     public Style getSearchHighlightStyle() {
         return searchHighlightStyle.getValue();
     }
@@ -141,6 +146,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         return searchHighlightStyle;
     }
 
+    @SuppressWarnings("unused")
     public void setSearchHighlightStyle(Style searchHighlightStyle) {
         this.searchHighlightStyle.setValue(searchHighlightStyle);
     }

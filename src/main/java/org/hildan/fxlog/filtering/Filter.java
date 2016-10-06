@@ -124,7 +124,7 @@ public class Filter implements Matcher<LogEntry> {
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex, int flags) throws
+    private static Filter findInColumn(@NotNull String columnName, @NotNull String regex, int flags) throws
             PatternSyntaxException {
         return new Filter(columnName, regex, flags);
     }
@@ -137,6 +137,7 @@ public class Filter implements Matcher<LogEntry> {
         return columnName;
     }
 
+    @SuppressWarnings("unused")
     public void setColumnName(String columnName) {
         this.columnName.set(columnName);
     }
@@ -149,6 +150,7 @@ public class Filter implements Matcher<LogEntry> {
         return pattern;
     }
 
+    @SuppressWarnings("unused")
     public void setPattern(Pattern pattern) {
         this.pattern.setValue(pattern);
     }

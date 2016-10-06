@@ -1,4 +1,4 @@
-package org.hildan.fxlog.view;
+package org.hildan.fxlog.view.scrollbarmarks;
 
 import java.util.concurrent.Callable;
 
@@ -19,19 +19,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class ScrollBarMark extends Rectangle {
 
-    public enum Alignment {
-        START(0), CENTER(-0.5), END(-1);
-
-        private final double thicknessFactor;
-
-        Alignment(double thicknessFactor) {
-            this.thicknessFactor = thicknessFactor;
-        }
-
-        public double computeOffset(double thickness) {
-            return thickness * thicknessFactor;
-        }
-    }
+    private static final Color DEFAULT_COLOR = Color.web("#cc8800", 0.5);
 
     private final DoubleProperty position = new SimpleDoubleProperty(0.5);
 
@@ -39,19 +27,19 @@ public class ScrollBarMark extends Rectangle {
 
     private final Property<Alignment> alignment = new SimpleObjectProperty<>(Alignment.CENTER);
 
-    public ScrollBarMark() {
+    ScrollBarMark() {
         setManaged(false);
-        setFill(Color.web("#cc8800", 0.5));
+        setFill(DEFAULT_COLOR);
     }
 
-    public void attach(ScrollBar scrollBar) {
+    void attach(ScrollBar scrollBar) {
         StackPane track = (StackPane) scrollBar.lookup(".track");
         bindSizeTo(track, scrollBar);
         track.getChildren().add(this);
         bindPosition(track, scrollBar);
     }
 
-    public void detach() {
+    void detach() {
         StackPane parent = (StackPane) getParent();
         if (parent != null) {
             parent.getChildren().remove(this);
@@ -109,6 +97,7 @@ public class ScrollBarMark extends Rectangle {
         return scaledPosition + offset;
     }
 
+    @SuppressWarnings("unused")
     public double getPosition() {
         return this.position.get();
     }
@@ -118,34 +107,42 @@ public class ScrollBarMark extends Rectangle {
      *
      * @return the position of this mark on the track of the scroll bar; 0 meaning at the start, 1 at the end.
      */
+    @SuppressWarnings("WeakerAccess")
     public DoubleProperty positionProperty() {
         return this.position;
     }
 
+    @SuppressWarnings("unused")
     public void setPosition(double value) {
         this.position.set(value);
     }
 
+    @SuppressWarnings("unused")
     public double getThickness() {
         return thickness.get();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public DoubleProperty thicknessProperty() {
         return thickness;
     }
 
+    @SuppressWarnings("unused")
     public void setThickness(double thickness) {
         this.thickness.set(thickness);
     }
 
+    @SuppressWarnings("unused")
     public Alignment getAlignment() {
         return alignment.getValue();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Property<Alignment> alignmentProperty() {
         return alignment;
     }
 
+    @SuppressWarnings("unused")
     public void setAlignment(Alignment alignment) {
         this.alignment.setValue(alignment);
     }

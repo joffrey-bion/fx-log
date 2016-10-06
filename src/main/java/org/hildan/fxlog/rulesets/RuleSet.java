@@ -14,6 +14,7 @@ public class RuleSet<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> {
     /**
      * Creates a new RuleSet with no rules.
      */
+    @SuppressWarnings("WeakerAccess")
     public RuleSet() {
         this(FXCollections.observableArrayList());
     }
@@ -32,6 +33,7 @@ public class RuleSet<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> {
         return rules;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Binding<U> outputFor(ObservableValue<T> observableValue, U defaultValue) {
         return new FirstMatchBinding<>(this, observableValue, defaultValue);
     }

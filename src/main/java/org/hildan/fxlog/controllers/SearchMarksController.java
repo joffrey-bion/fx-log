@@ -10,17 +10,17 @@ import javafx.scene.input.KeyCode;
 
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.view.ScrollBarMarker;
+import org.hildan.fxlog.view.scrollbarmarks.ScrollBarMarker;
 
-public class SearchMarksController {
+class SearchMarksController {
 
     private final ObservableList<? extends LogEntry> logs;
 
     private final TextField searchField;
 
-    private ScrollBarMarker scrollBarMarker;
+    private final ScrollBarMarker scrollBarMarker;
 
-    public SearchMarksController(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable,
+    SearchMarksController(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable,
                                  TextField searchField) {
         this.logs = logs;
         this.searchField = searchField;

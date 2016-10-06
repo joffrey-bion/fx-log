@@ -22,7 +22,7 @@ public class BintrayApi {
             URL bintrayPackageUrl = new URL(FXLOG_URL);
             HttpURLConnection conn = (HttpURLConnection) bintrayPackageUrl.openConnection();
             int resultCode = conn.getResponseCode();
-            if (resultCode != 200) {
+            if (resultCode != HttpURLConnection.HTTP_OK) {
                 throw new RuntimeException("Call to bintray failed, code " + resultCode + " received");
             }
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));

@@ -82,7 +82,7 @@ public class ColumnizersController implements Initializable {
         columnizersList.setCellFactory(TextFieldListCell.forListView(new StringConverter<Columnizer>() {
             @Override
             public String toString(Columnizer columnizer) {
-                return columnizer.toString();
+                return columnizer.getName();
             }
 
             @Override

@@ -37,10 +37,12 @@ public class Rule<T, U, M extends Matcher<T>> {
         return matcher.getValue();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Property<M> matcherProperty() {
         return matcher;
     }
 
+    @SuppressWarnings("unused")
     public void setMatcher(M matcher) {
         this.matcher.setValue(matcher);
     }
@@ -49,10 +51,12 @@ public class Rule<T, U, M extends Matcher<T>> {
         return result.getValue();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Property<U> resultProperty() {
         return result;
     }
 
+    @SuppressWarnings("unused")
     public void setResult(U result) {
         this.result.setValue(result);
     }

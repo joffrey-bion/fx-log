@@ -109,6 +109,7 @@ public class Style {
         return name.get();
     }
 
+    @SuppressWarnings("unused")
     public StringProperty nameProperty() {
         return name;
     }
@@ -117,6 +118,7 @@ public class Style {
         this.name.set(nameProperty);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Color getForegroundColor() {
         return foregroundColor.getValue();
     }
@@ -125,10 +127,12 @@ public class Style {
         return foregroundColor;
     }
 
+    @SuppressWarnings("unused")
     public void setForegroundColor(Color foregroundColor) {
         this.foregroundColor.setValue(foregroundColor);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Color getBackgroundColor() {
         return backgroundColor.getValue();
     }
@@ -137,15 +141,12 @@ public class Style {
         return backgroundColor;
     }
 
+    @SuppressWarnings("unused")
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor.setValue(backgroundColor);
     }
 
-    public Background getBackground() {
-        return backgroundBinding().getValue();
-    }
-
-    private Binding<Background> backgroundBinding() {
+    private ObservableValue<Background> backgroundBinding() {
         if (backgroundBinding == null) {
             backgroundBinding = createBackgroundBinding(this.backgroundColor);
         }

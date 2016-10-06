@@ -74,7 +74,7 @@ public class ColumnDefinition {
      * @param initialWidth
      *         the initial width to give this column before the user customizes it
      */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible, double initialWidth) {
+    private ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible, double initialWidth) {
         this.capturingGroupName = new SimpleStringProperty(capturingGroupName);
         this.headerLabel = new SimpleStringProperty(headerLabel);
         this.visible = new SimpleBooleanProperty(visible);

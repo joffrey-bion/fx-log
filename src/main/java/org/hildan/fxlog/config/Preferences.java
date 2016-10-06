@@ -1,7 +1,7 @@
 package org.hildan.fxlog.config;
 
 import org.hildan.fxlog.coloring.Style;
-import org.hildan.fxlog.view.ScrollBarMark.Alignment;
+import org.hildan.fxlog.view.scrollbarmarks.Alignment;
 import org.jetbrains.annotations.NotNull;
 
 import javafx.beans.property.BooleanProperty;
@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 /**
  * Represents the user's preferences in terms of colors, fonts, size of things.
  */
+@SuppressWarnings("unused")
 public class Preferences {
 
     private final BooleanProperty openLastFileAtStartup;

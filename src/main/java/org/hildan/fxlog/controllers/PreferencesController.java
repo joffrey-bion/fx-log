@@ -17,12 +17,24 @@ import org.controlsfx.dialog.FontSelectorDialog;
 import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.config.Preferences;
-import org.hildan.fxlog.view.ScrollBarMark.Alignment;
+import org.hildan.fxlog.view.scrollbarmarks.Alignment;
 
 /**
  * Controller associated to the colorizers customization view.
  */
 public class PreferencesController implements Initializable {
+
+    private static final double MIN_THICKNESS = 1;
+
+    private static final double MAX_THICKNESS = 20;
+
+    private static final int MIN_NUMBER_OF_LOGS = 1;
+
+    private static final int MAX_NUMBER_OF_LOGS = Integer.MAX_VALUE;
+
+    private static final int MIN_TAILING_DELAY = 1;
+
+    private static final int MAX_TAILING_DELAY = Integer.MAX_VALUE;
 
     private Preferences prefs;
 
@@ -87,7 +99,7 @@ public class PreferencesController implements Initializable {
     }
 
     private void configureSearchMatchMarkThicknessSpinner() {
-        DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(1, 20);
+        DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(MIN_THICKNESS, MAX_THICKNESS);
         factory.valueProperty().bindBidirectional(prefs.searchMatchMarkThicknessProperty());
         searchMatchMarkThickness.setValueFactory(factory);
     }
@@ -99,13 +111,13 @@ public class PreferencesController implements Initializable {
 
     private void configureLogLimitSpinner() {
         maxNumberOfLogs.disableProperty().bind(limitNumberOfLogs.selectedProperty().not());
-        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
+        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(MIN_NUMBER_OF_LOGS, MAX_NUMBER_OF_LOGS);
         factory.valueProperty().bindBidirectional(prefs.maxNumberOfLogsProperty());
         maxNumberOfLogs.setValueFactory(factory);
     }
 
     private void configureTailingDelaySpinner() {
-        IntegerSpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(50, Integer.MAX_VALUE);
+        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(MIN_TAILING_DELAY, MAX_TAILING_DELAY);
         factory.valueProperty().bindBidirectional(prefs.tailingDelayInMillisProperty());
         tailingDelay.setValueFactory(factory);
     }

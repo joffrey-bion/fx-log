@@ -37,7 +37,8 @@ class ConfigLoader {
     private static final String BUILTIN_RESOURCE = "default_config.json";
 
     private static final class ConfigVersion {
-        int version;
+        @SuppressWarnings("unused")
+        private int version;
     }
 
     /**
@@ -96,7 +97,7 @@ class ConfigLoader {
     }
 
     private static int readConfigVersionFrom(Reader source) throws JsonIOException, JsonSyntaxException {
-        ConfigVersion configVersion =  new GsonBuilder().create().fromJson(source, ConfigVersion.class);
+        ConfigVersion configVersion = new GsonBuilder().create().fromJson(source, ConfigVersion.class);
         return configVersion.version;
     }
 

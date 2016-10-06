@@ -25,17 +25,23 @@ class DefaultConfig {
 
     private static final double DEFAULT_CLASS_WIDTH = 430;
 
-    /**
-     * WHen there are a lot of columns.
-     */
     private static final double DEFAULT_MSG_WIDTH = 720;
 
-    /**
-     * When there are not many columns.
-     */
-    private static final double DEFAULT_MSG_WIDTH_BIG = 1000;
+    private static final double DEFAULT_2_DIGIT_WIDTH = 23;
 
-    private static final double DEFAULT_SID_WIDTH = 300;
+    private static final double DEFAULT_3_DIGIT_WIDTH = 30;
+
+    private static final double DEFAULT_4_DIGIT_WIDTH = 40;
+
+    private static final double DEFAULT_URL_WIDTH = 400;
+
+    private static final double DEFAULT_DOMAIN_WIDTH = 205;
+
+    private static final double DEFAULT_ENDPOINT_WIDTH = 60;
+
+    private static final double DEFAULT_PARAMETERS_LIST_WIDTH = 2000;
+
+    private static final double DEFAULT_SESSION_ID_WIDTH = 300;
 
     private static final Filter WEBLOGIC_HIGHLIGHT = Filter.findInColumn("msg",
             "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)");
@@ -75,7 +81,7 @@ class DefaultConfig {
         columnDefinitions.add(new ColumnDefinition("Message ID", "msgId", false));
         columnDefinitions.add(new ColumnDefinition("Class", "class", DEFAULT_CLASS_WIDTH));
         columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SID_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SESSION_ID_WIDTH));
 
         String logStart = "####" //
                 + "<(?<datetime>[^>]*?)>" //
@@ -109,7 +115,7 @@ class DefaultConfig {
         columnDefinitions.add(new ColumnDefinition("Thread ID", "thread", false));
         columnDefinitions.add(new ColumnDefinition("Class", "class", DEFAULT_CLASS_WIDTH));
         columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
-        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SID_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SESSION_ID_WIDTH));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(//
                 "<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?"
@@ -122,15 +128,15 @@ class DefaultConfig {
 
     private static Columnizer apacheAccessColumnizer() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Client", "client", 205));
-        columnDefinitions.add(new ColumnDefinition("User", "user", 80));
-        columnDefinitions.add(new ColumnDefinition("Username", "username", 75));
+        columnDefinitions.add(new ColumnDefinition("Client", "client", DEFAULT_DOMAIN_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("User", "user"));
+        columnDefinitions.add(new ColumnDefinition("Username", "username"));
         columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
-        columnDefinitions.add(new ColumnDefinition("Request", "request", 700));
-        columnDefinitions.add(new ColumnDefinition("Resp. Code", "rstatus", 80));
-        columnDefinitions.add(new ColumnDefinition("Resp. Size (bytes)", "rsize", 110));
-        columnDefinitions.add(new ColumnDefinition("Referer", "referer", 60));
-        columnDefinitions.add(new ColumnDefinition("User-Agent", "useragent", 80));
+        columnDefinitions.add(new ColumnDefinition("Request", "request", DEFAULT_MSG_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Rsp. Code", "rstatus"));
+        columnDefinitions.add(new ColumnDefinition("Rsp. Size (B)", "rsize"));
+        columnDefinitions.add(new ColumnDefinition("Referer", "referer"));
+        columnDefinitions.add(new ColumnDefinition("User-Agent", "useragent"));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(
                 "(?<client>\\S+) (?<user>\\S+) (?<username>\\S+) \\[(?<datetime>[^\\]]*?)\\] \"(?<request>[^\"]*?)\" "
@@ -142,8 +148,8 @@ class DefaultConfig {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
         columnDefinitions.add(new ColumnDefinition("Date/Time", "datetime", DEFAULT_DATE_WIDTH));
         columnDefinitions.add(new ColumnDefinition("Severity", "severity", DEFAULT_SEVERITY_WIDTH));
-        columnDefinitions.add(new ColumnDefinition("Client", "client", 75));
-        columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH_BIG));
+        columnDefinitions.add(new ColumnDefinition("Client", "client", DEFAULT_DOMAIN_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
 
         String full = "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] \\[(?<client>\\]*?)\\] (?<msg>.*)";
         String noClient = "\\[(?<datetime>[^\\]]*?)\\] \\[(?<severity>[^\\]]*?)\\] (?<msg>.*)";
@@ -155,22 +161,22 @@ class DefaultConfig {
 
     private static Columnizer amadeusInputLog() {
         ObservableList<ColumnDefinition> columnDefinitions = FXCollections.observableArrayList();
-        columnDefinitions.add(new ColumnDefinition("Year", "year", 40));
-        columnDefinitions.add(new ColumnDefinition("M", "month", 23));
-        columnDefinitions.add(new ColumnDefinition("D", "day", 23));
-        columnDefinitions.add(new ColumnDefinition("h", "hours", 23));
-        columnDefinitions.add(new ColumnDefinition("m", "minutes", 23));
-        columnDefinitions.add(new ColumnDefinition("s", "seconds", 23));
-        columnDefinitions.add(new ColumnDefinition("ms", "millis", 30));
-        columnDefinitions.add(new ColumnDefinition("Domain", "domain", 400));
-        columnDefinitions.add(new ColumnDefinition("Action", "action", 60));
-        columnDefinitions.add(new ColumnDefinition("Parameters", "params", 2000));
+        columnDefinitions.add(new ColumnDefinition("Year", "year", DEFAULT_4_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("M", "month", DEFAULT_2_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("D", "day", DEFAULT_2_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("h", "hours", DEFAULT_2_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("m", "minutes", DEFAULT_2_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("s", "seconds", DEFAULT_2_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("ms", "millis", DEFAULT_3_DIGIT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Domain", "domain", DEFAULT_URL_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Action", "action", DEFAULT_ENDPOINT_WIDTH));
+        columnDefinitions.add(new ColumnDefinition("Parameters", "params", DEFAULT_PARAMETERS_LIST_WIDTH));
 
         ObservableList<String> regexps = FXCollections.observableArrayList(
                 "(?<year>[0-9]{4})(?<month>[0-9]{2})(?<day>[0-9]{2})(?<hours>[0-9]{2})(?<minutes>[0-9]{2})"
                         + "(?<seconds>[0-9]{2})"
                         + "(?<millis>[0-9]{3}).*?(?<domain>http.*)/(?<action>.*?)\\?(?<params>.*)");
-        return new Columnizer("Amadeus input.log", columnDefinitions, regexps);
+        return new Columnizer("Amadeus input.out", columnDefinitions, regexps);
     }
 
     private static Colorizer severityBasedColorizerLight() {

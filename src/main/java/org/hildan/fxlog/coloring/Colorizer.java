@@ -45,6 +45,7 @@ public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> {
         return name.get();
     }
 
+    @SuppressWarnings("unused")
     public StringProperty nameProperty() {
         return name;
     }
