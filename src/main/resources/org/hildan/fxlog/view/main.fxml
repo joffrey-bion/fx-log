@@ -7,92 +7,106 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 <?import org.controlsfx.glyphfont.*?>
+<?import org.hildan.fxlog.view.components.MemoryUsageInfo?>
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="48.0" minWidth="128.0"
             prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
-            <MenuBar VBox.vgrow="NEVER">
-                <Menu text="_File">
-                    <MenuItem onAction="#openFile" text="_Open…">
-                        <accelerator>
-                            <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                        </accelerator>
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="folder_open"/>
-                        </graphic>
-                    </MenuItem>
-                    <Menu fx:id="recentFilesMenu" text="Open _Recent"/>
-                    <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="close"/>
-                        </graphic>
-                    </MenuItem>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences...">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="cogs"/>
-                        </graphic>
-                    </MenuItem>
-                    <MenuItem onAction="#quit" text="_Quit">
-                        <accelerator>
-                            <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                        </accelerator>
-                    </MenuItem>
-                </Menu>
-                <Menu text="_Edit">
-                    <MenuItem onAction="#copyRaw" text="Copy _raw log">
-                        <accelerator>
-                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                        </accelerator>
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="copy"/>
-                        </graphic>
-                    </MenuItem>
-                    <MenuItem onAction="#copyPretty" text="Copy with _columns">
-                        <accelerator>
-                            <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN" shortcut="UP"/>
-                        </accelerator>
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="copy"/>
-                        </graphic>
-                    </MenuItem>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem onAction="#selectAll" text="Select _All">
-                        <accelerator>
-                            <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                        </accelerator>
-                    </MenuItem>
-                    <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
-                </Menu>
-                <Menu text="_View">
-                    <CheckMenuItem fx:id="followTailMenu" mnemonicParsing="false" text="Follow Tail"/>
-                    <Menu text="_Theme">
-                        <MenuItem onAction="#selectDarkTheme" text="_Dark Theme"/>
-                        <MenuItem onAction="#selectBrightTheme" text="_Bright Theme"/>
+            <StackPane>
+                <MenuBar>
+                    <Menu text="_File">
+                        <MenuItem onAction="#openFile" text="_Open…">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="folder_open"/>
+                            </graphic>
+                        </MenuItem>
+                        <Menu fx:id="recentFilesMenu" text="Open _Recent"/>
+                        <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="close"/>
+                            </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#editPreferences" text="Preferences...">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="cogs"/>
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem onAction="#quit" text="_Quit">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                     </Menu>
-                </Menu>
-                <Menu text="_Help">
-                    <MenuItem onAction="#openUserManual" text="User _manual">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="question"/>
-                        </graphic>
-                    </MenuItem>
-                    <MenuItem onAction="#checkForUpdates" text="Check for _updates">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="download"/>
-                        </graphic>
-                    </MenuItem>
-                    <MenuItem onAction="#about" text="_About FX Log">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="info"/>
-                        </graphic>
-                    </MenuItem>
-                </Menu>
-            </MenuBar>
+                    <Menu text="_Edit">
+                        <MenuItem onAction="#copyRaw" text="Copy _raw log">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="copy"/>
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem onAction="#copyPretty" text="Copy with _columns">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="copy"/>
+                            </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem onAction="#selectAll" text="Select _All">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
+                    </Menu>
+                    <Menu text="_View">
+                        <CheckMenuItem fx:id="followTailMenu" mnemonicParsing="false" text="Follow Tail"/>
+                        <Menu text="_Theme">
+                            <MenuItem onAction="#selectDarkTheme" text="_Dark Theme"/>
+                            <MenuItem onAction="#selectBrightTheme" text="_Bright Theme"/>
+                        </Menu>
+                    </Menu>
+                    <Menu text="_Help">
+                        <MenuItem onAction="#openUserManual" text="User _manual">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="question"/>
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem onAction="#checkForUpdates" text="Check for _updates">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="download"/>
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem onAction="#about" text="_About FX Log">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="info"/>
+                            </graphic>
+                        </MenuItem>
+                    </Menu>
+                </MenuBar>
+                <MemoryUsageInfo StackPane.alignment="CENTER_RIGHT" showTotal="true" opacity="0.4">
+                    <padding>
+                        <Insets right="4"/>
+                    </padding>
+                </MemoryUsageInfo>
+            </StackPane>
             <ToolBar VBox.vgrow="NEVER">
                 <Label text="Columns"/>
                 <ChoiceBox fx:id="columnizerSelector"/>
