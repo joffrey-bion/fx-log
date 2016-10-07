@@ -19,8 +19,8 @@
         <bottom>
             <HBox spacing="2.0" BorderPane.alignment="CENTER">
                 <TextField fx:id="newColorizerNameField" HBox.hgrow="ALWAYS"/>
-                <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColorizer"
-                        HBox.hgrow="NEVER" styleClass="button-plus">
+                <Button fx:id="addColorizerButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                        onAction="#addNewColorizer" HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
                     </graphic>
@@ -35,6 +35,24 @@
                     </graphic>
                     <tooltip>
                         <Tooltip text="Delete colorizer"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="moveColorizerUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColorizerUp" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move colorizer up"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="moveColorizerDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColorizerDown" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move colorizer down"/>
                     </tooltip>
                 </Button>
             </HBox>
@@ -57,7 +75,7 @@
             <bottom>
                 <HBox spacing="2.0" BorderPane.alignment="CENTER">
                     <TextField fx:id="newRuleNameField" promptText="New rule name" HBox.hgrow="ALWAYS"/>
-                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule"
+                    <Button fx:id="addRuleButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule"
                             HBox.hgrow="NEVER" styleClass="button-plus">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="plus"/>
@@ -73,6 +91,24 @@
                         </graphic>
                         <tooltip>
                             <Tooltip text="Remove rule"/>
+                        </tooltip>
+                    </Button>
+                    <Button fx:id="moveRuleUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                            mnemonicParsing="false" onAction="#moveSelectedRuleUp" styleClass="button-arrow">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Move rule up"/>
+                        </tooltip>
+                    </Button>
+                    <Button fx:id="moveRuleDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                            mnemonicParsing="false" onAction="#moveSelectedRuleDown" styleClass="button-arrow">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Move rule down"/>
                         </tooltip>
                     </Button>
                 </HBox>

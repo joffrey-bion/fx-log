@@ -6,6 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -66,13 +69,41 @@ public class UIUtils {
      */
     public static void makeClearable(CustomTextField customTextField) {
         try {
-            Method method = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class,
-                    ObjectProperty.class);
+            Method method =
+                    TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
             method.setAccessible(true);
             method.invoke(null, customTextField, customTextField.rightProperty());
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    public static BooleanBinding noItemIsSelected(ListView listView) {
+        return listView.getSelectionModel().selectedItemProperty().isNull();
+    }
+
+    public static BooleanBinding firstItemIsSelected(ListView listView) {
+        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(0);
+    }
+
+    public static BooleanBinding lastItemIsSelected(ListView listView) {
+        IntegerExpression lastIndex =
+                Bindings.createIntegerBinding(() -> listView.getItems().size() - 1, listView.itemsProperty());
+        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(lastIndex);
+    }
+
+    public static BooleanBinding noItemIsSelected(TableView listView) {
+        return listView.getSelectionModel().selectedItemProperty().isNull();
+    }
+
+    public static BooleanBinding firstItemIsSelected(TableView listView) {
+        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(0);
+    }
+
+    public static BooleanBinding lastItemIsSelected(TableView listView) {
+        IntegerExpression lastIndex =
+                Bindings.createIntegerBinding(() -> listView.getItems().size() - 1, listView.itemsProperty());
+        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(lastIndex);
     }
 
     /**
@@ -123,11 +154,11 @@ public class UIUtils {
     }
 
     private static VirtualFlow<?> getVirtualFlow(TableView table) {
-        TableViewSkin<?> skin = (TableViewSkin)table.getSkin();
+        TableViewSkin<?> skin = (TableViewSkin) table.getSkin();
         if (skin == null) {
             return null;
         }
-        return (VirtualFlow)skin.getChildren().get(1);
+        return (VirtualFlow) skin.getChildren().get(1);
     }
 
     public static void whenWindowReady(Node anyChild, Consumer<? super Window> handler) {

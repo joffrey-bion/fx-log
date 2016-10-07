@@ -19,7 +19,7 @@
         <bottom>
             <HBox spacing="2.0" BorderPane.alignment="CENTER">
                 <TextField fx:id="newColumnizerNameField" promptText="new columnizer name" HBox.hgrow="ALWAYS"/>
-                <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnizer"
+                <Button fx:id="addColumnizerButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnizer"
                         HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
@@ -35,6 +35,24 @@
                     </graphic>
                     <tooltip>
                         <Tooltip text="Delete columnizer"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="moveColumnizerUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColumnizerUp" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move columnizer up"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="moveColumnizerDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColumnizerDown" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move columnizer down"/>
                     </tooltip>
                 </Button>
             </HBox>
@@ -65,7 +83,7 @@
                 <TextField fx:id="newColumnHeaderField" promptText="column header" HBox.hgrow="ALWAYS"/>
                 <TextField fx:id="newColumnGroupField" promptText="capturing group name"
                            HBox.hgrow="ALWAYS"/>
-                <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                <Button fx:id="addColumnButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
                         onAction="#addNewColumnDefinition" HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
@@ -76,6 +94,24 @@
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
+                </Button>
+                <Button fx:id="moveColumnUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColumnUp" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move column definition up"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="moveColumnDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#moveSelectedColumnDown" styleClass="button-arrow">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Move column definition down"/>
+                    </tooltip>
                 </Button>
             </HBox>
         </VBox>
@@ -93,7 +129,7 @@
             <bottom>
                 <HBox spacing="2.0" BorderPane.alignment="CENTER">
                     <TextField fx:id="newPatternRegexField" promptText="new regex" HBox.hgrow="ALWAYS"/>
-                    <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    <Button fx:id="addPatternButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
                             onAction="#addNewPattern" HBox.hgrow="NEVER" styleClass="button-plus">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="plus"/>
@@ -109,6 +145,24 @@
                         </graphic>
                         <tooltip>
                             <Tooltip text="Remove regex"/>
+                        </tooltip>
+                    </Button>
+                    <Button fx:id="movePatternUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                            mnemonicParsing="false" onAction="#moveSelectedPatternUp" styleClass="button-arrow">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Move regex up"/>
+                        </tooltip>
+                    </Button>
+                    <Button fx:id="movePatternDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                            mnemonicParsing="false" onAction="#moveSelectedPatternDown" styleClass="button-arrow">
+                        <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                        </graphic>
+                        <tooltip>
+                            <Tooltip text="Move regex down"/>
                         </tooltip>
                     </Button>
                 </HBox>

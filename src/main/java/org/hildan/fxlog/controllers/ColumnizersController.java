@@ -1,6 +1,8 @@
 package org.hildan.fxlog.controllers;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -21,6 +23,7 @@ import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.themes.Css;
+import org.hildan.fxlog.view.UIUtils;
 
 /**
  * Controller associated to the columnizer customization view.
@@ -60,13 +63,40 @@ public class ColumnizersController implements Initializable {
     private TextField newPatternRegexField;
 
     @FXML
+    public Button addColumnizerButton;
+
+    @FXML
     private Button removeColumnizerButton;
+
+    @FXML
+    private Button moveColumnizerUpButton;
+
+    @FXML
+    private Button moveColumnizerDownButton;
+
+    @FXML
+    public Button addColumnButton;
 
     @FXML
     private Button removeColumnButton;
 
     @FXML
+    private Button moveColumnUpButton;
+
+    @FXML
+    private Button moveColumnDownButton;
+
+    @FXML
+    public Button addPatternButton;
+
+    @FXML
     private Button removePatternButton;
+
+    @FXML
+    private Button movePatternUpButton;
+
+    @FXML
+    private Button movePatternDownButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -185,14 +215,26 @@ public class ColumnizersController implements Initializable {
         IntegerExpression currentlyUsedColumnizer = config.getState().selectedColumnizerIndexProperty();
         IntegerExpression selectedColumnizer = columnizersList.getSelectionModel().selectedIndexProperty();
         BooleanBinding selectedColorizerIsUsed = selectedColumnizer.isEqualTo(currentlyUsedColumnizer);
-        BooleanBinding noColumnizerSelected = columnizersList.getSelectionModel().selectedItemProperty().isNull();
+        BooleanBinding noColumnizerSelected = UIUtils.noItemIsSelected(columnizersList);
+        BooleanBinding firstColumnizerSelected = UIUtils.firstItemIsSelected(columnizersList);
+        BooleanBinding lastColumnizerSelected = UIUtils.lastItemIsSelected(columnizersList);
         removeColumnizerButton.disableProperty().bind(noColumnizerSelected.or(selectedColorizerIsUsed));
+        moveColumnizerUpButton.disableProperty().bind(noColumnizerSelected.or(firstColumnizerSelected));
+        moveColumnizerDownButton.disableProperty().bind(noColumnizerSelected.or(lastColumnizerSelected));
 
-        BooleanBinding noColumnDefSelected = columnsTable.getSelectionModel().selectedItemProperty().isNull();
+        BooleanBinding noColumnDefSelected = UIUtils.noItemIsSelected(columnsTable);
+        BooleanBinding firstColumnDefSelected = UIUtils.firstItemIsSelected(columnsTable);
+        BooleanBinding lastColumnDefSelected = UIUtils.lastItemIsSelected(columnsTable);
         removeColumnButton.disableProperty().bind(noColumnDefSelected);
+        moveColumnUpButton.disableProperty().bind(noColumnDefSelected.or(firstColumnDefSelected));
+        moveColumnDownButton.disableProperty().bind(noColumnDefSelected.or(lastColumnDefSelected));
 
-        BooleanBinding noPatternSelected = patternList.getSelectionModel().selectedItemProperty().isNull();
+        BooleanBinding noPatternSelected = UIUtils.noItemIsSelected(patternList);
+        BooleanBinding firstPatternSelected = UIUtils.firstItemIsSelected(patternList);
+        BooleanBinding lastPatternSelected = UIUtils.lastItemIsSelected(patternList);
         removePatternButton.disableProperty().bind(noPatternSelected);
+        movePatternUpButton.disableProperty().bind(noPatternSelected.or(firstPatternSelected));
+        movePatternDownButton.disableProperty().bind(noPatternSelected.or(lastPatternSelected));
     }
 
     @FXML
@@ -210,24 +252,20 @@ public class ColumnizersController implements Initializable {
     }
 
     @FXML
-    public void addNewPattern() {
-        try {
-            Pattern newRule = Pattern.compile(newPatternRegexField.getText());
-            Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
-            selectedColumnizer.getPatterns().add(newRule);
-            newPatternRegexField.setText("");
-            patternList.getSelectionModel().select(newRule);
-            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, false);
-        } catch (PatternSyntaxException e) {
-            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, true);
-        }
+    public void moveSelectedColumnizerUp() {
+        moveColumnizer(-1);
     }
 
     @FXML
-    public void removeSelectedPattern() {
-        Pattern selectedPattern = patternList.getSelectionModel().getSelectedItem();
+    public void moveSelectedColumnizerDown() {
+        moveColumnizer(1);
+    }
+
+    private void moveColumnizer(int offset) {
         Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
-        selectedColumnizer.getPatterns().remove(selectedPattern);
+        List<Columnizer> columnizers = config.getColumnizers();
+        int selectedColumnizerIndex = columnizers.indexOf(selectedColumnizer);
+        Collections.swap(columnizers, selectedColumnizerIndex, selectedColumnizerIndex + offset);
     }
 
     @FXML
@@ -247,5 +285,62 @@ public class ColumnizersController implements Initializable {
         ColumnDefinition selectedColumnDef = columnsTable.getSelectionModel().getSelectedItem();
         Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
         selectedColumnizer.getColumnDefinitions().remove(selectedColumnDef);
+    }
+
+    @FXML
+    public void moveSelectedColumnUp() {
+        moveColumn(-1);
+    }
+
+    @FXML
+    public void moveSelectedColumnDown() {
+        moveColumn(1);
+    }
+
+    private void moveColumn(int offset) {
+        ColumnDefinition selectedColumn = columnsTable.getSelectionModel().getSelectedItem();
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        List<ColumnDefinition> columnDefinitions = selectedColumnizer.getColumnDefinitions();
+        int selectedColumnIndex = columnDefinitions.indexOf(selectedColumn);
+        Collections.swap(columnDefinitions, selectedColumnIndex, selectedColumnIndex + offset);
+    }
+
+    @FXML
+    public void addNewPattern() {
+        try {
+            Pattern newPattern = Pattern.compile(newPatternRegexField.getText());
+            Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+            selectedColumnizer.getPatterns().add(newPattern);
+            newPatternRegexField.setText("");
+            patternList.getSelectionModel().select(newPattern);
+            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, false);
+        } catch (PatternSyntaxException e) {
+            newPatternRegexField.pseudoClassStateChanged(Css.INVALID, true);
+        }
+    }
+
+    @FXML
+    public void removeSelectedPattern() {
+        Pattern selectedPattern = patternList.getSelectionModel().getSelectedItem();
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        selectedColumnizer.getPatterns().remove(selectedPattern);
+    }
+
+    @FXML
+    public void moveSelectedPatternUp() {
+        movePattern(-1);
+    }
+
+    @FXML
+    public void moveSelectedPatternDown() {
+        movePattern(1);
+    }
+
+    private void movePattern(int offset) {
+        Pattern selectedPattern = patternList.getSelectionModel().getSelectedItem();
+        Columnizer selectedColumnizer = columnizersList.getSelectionModel().getSelectedItem();
+        List<Pattern> patterns = selectedColumnizer.getPatterns();
+        int selectedPatternIndex = patterns.indexOf(selectedPattern);
+        Collections.swap(patterns, selectedPatternIndex, selectedPatternIndex + offset);
     }
 }

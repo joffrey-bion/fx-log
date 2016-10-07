@@ -1,6 +1,8 @@
 package org.hildan.fxlog.controllers;
 
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
@@ -29,6 +31,7 @@ import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
+import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,10 +88,28 @@ public class ColorizersController implements Initializable {
     private ColorPicker backgroundColorPicker;
 
     @FXML
+    public Button addColorizerButton;
+
+    @FXML
     private Button removeColorizerButton;
 
     @FXML
+    private Button moveColorizerUpButton;
+
+    @FXML
+    private Button moveColorizerDownButton;
+
+    @FXML
+    public Button addRuleButton;
+
+    @FXML
     private Button removeRuleButton;
+
+    @FXML
+    private Button moveRuleUpButton;
+
+    @FXML
+    private Button moveRuleDownButton;
 
     private Property<Pattern> filterRegexFieldPatternBinding;
 
@@ -263,11 +284,19 @@ public class ColorizersController implements Initializable {
         IntegerExpression currentlyUsedColorizer = config.getState().selectedColorizerIndexProperty();
         IntegerExpression selectedColorizer = colorizersList.getSelectionModel().selectedIndexProperty();
         BooleanBinding selectedColorizerIsUsed = selectedColorizer.isEqualTo(currentlyUsedColorizer);
-        BooleanBinding noColorizerSelected = colorizersList.getSelectionModel().selectedItemProperty().isNull();
+        BooleanBinding noColorizerSelected = UIUtils.noItemIsSelected(colorizersList);
+        BooleanBinding firstColorizerSelected = UIUtils.firstItemIsSelected(colorizersList);
+        BooleanBinding lastColorizerSelected = UIUtils.lastItemIsSelected(colorizersList);
         removeColorizerButton.disableProperty().bind(noColorizerSelected.or(selectedColorizerIsUsed));
+        moveColorizerUpButton.disableProperty().bind(noColorizerSelected.or(firstColorizerSelected));
+        moveColorizerDownButton.disableProperty().bind(noColorizerSelected.or(lastColorizerSelected));
 
-        BooleanBinding noRuleSelected = rulesList.getSelectionModel().selectedItemProperty().isNull();
+        BooleanBinding noRuleSelected = UIUtils.noItemIsSelected(rulesList);
+        BooleanBinding firstRuleSelected = UIUtils.firstItemIsSelected(rulesList);
+        BooleanBinding lastRuleSelected = UIUtils.lastItemIsSelected(rulesList);
         removeRuleButton.disableProperty().bind(noRuleSelected);
+        moveRuleUpButton.disableProperty().bind(noRuleSelected.or(firstRuleSelected));
+        moveRuleDownButton.disableProperty().bind(noRuleSelected.or(lastRuleSelected));
     }
 
     @FXML
@@ -285,6 +314,23 @@ public class ColorizersController implements Initializable {
     }
 
     @FXML
+    public void moveSelectedColorizerUp() {
+        moveColorizer(-1);
+    }
+
+    @FXML
+    public void moveSelectedColorizerDown() {
+        moveColorizer(1);
+    }
+
+    private void moveColorizer(int offset) {
+        Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
+        List<Colorizer> colorizers = config.getColorizers();
+        int selectedColorizerIndex = colorizers.indexOf(selectedColorizer);
+        Collections.swap(colorizers, selectedColorizerIndex, selectedColorizerIndex + offset);
+    }
+
+    @FXML
     public void addNewRule() {
         Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
         StyleRule newRule = new StyleRule(newRuleNameField.getText());
@@ -295,8 +341,26 @@ public class ColorizersController implements Initializable {
 
     @FXML
     public void removeSelectedRule() {
-        StyleRule selectedPattern = rulesList.getSelectionModel().getSelectedItem();
+        StyleRule selectedRule = rulesList.getSelectionModel().getSelectedItem();
         Colorizer selectedColumnizer = colorizersList.getSelectionModel().getSelectedItem();
-        selectedColumnizer.getRules().remove(selectedPattern);
+        selectedColumnizer.getRules().remove(selectedRule);
+    }
+
+    @FXML
+    public void moveSelectedRuleUp() {
+        moveRule(-1);
+    }
+
+    @FXML
+    public void moveSelectedRuleDown() {
+        moveRule(1);
+    }
+
+    private void moveRule(int offset) {
+        StyleRule selectedRule = rulesList.getSelectionModel().getSelectedItem();
+        Colorizer selectedColumnizer = colorizersList.getSelectionModel().getSelectedItem();
+        List<StyleRule> rules = selectedColumnizer.getRules();
+        int selectedRuleIndex = rules.indexOf(selectedRule);
+        Collections.swap(rules, selectedRuleIndex, selectedRuleIndex + offset);
     }
 }

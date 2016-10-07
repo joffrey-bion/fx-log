@@ -30,9 +30,14 @@
     -fx-text-fill: fa-color-plus;
 }
 
-/* Trash button color */
+/* Trash buttons color */
 .button-trash:hover > .label {
     -fx-text-fill: fa-color-trash;
+}
+
+/* Arrow buttons color */
+.button-arrow:hover > .label {
+    -fx-text-fill: fa-color-arrow;
 }
 
 /* Red border on invalid text fields */
