@@ -9,9 +9,20 @@
     -fx-font-weight: bold;
 }
 
-/* Color the magnet on the button when selected */
-.main-button:selected > .label {
+/* Pencil button color */
+.pencil-button:hover > .label {
+    -fx-text-fill: fa-color-pencil;
+}
+
+/* Magnet button color */
+.magnet-button:selected > .label,
+.magnet-button:hover > .label {
     -fx-text-fill: fa-color-magnet;
+}
+
+/* Refresh button color */
+.refresh-button:hover > .label {
+    -fx-text-fill: fa-color-refresh;
 }
 
 /* Red border on invalid text fields */

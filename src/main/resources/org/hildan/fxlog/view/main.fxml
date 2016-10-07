@@ -110,9 +110,9 @@
             <ToolBar VBox.vgrow="NEVER">
                 <Label text="Columns"/>
                 <ChoiceBox fx:id="columnizerSelector"/>
-                <Button mnemonicParsing="false" onAction="#editColumnizers">
+                <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="pencil-button">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit columnizers"/>
@@ -121,9 +121,9 @@
                 <Separator orientation="VERTICAL"/>
                 <Label text="Colors"/>
                 <ChoiceBox fx:id="colorizerSelector"/>
-                <Button mnemonicParsing="false" onAction="#editColorizers">
+                <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="pencil-button">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit colorizers"/>
@@ -152,18 +152,26 @@
                     </left>
                 </CustomTextField>
                 <Separator orientation="VERTICAL"/>
+                <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="refresh-button">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="refresh" fontSize="18"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Reload the file"/>
+                    </tooltip>
+                </Button>
                 <Button mnemonicParsing="false" onAction="#clearLogs">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="trash"/>
+                        <Glyph fontFamily="FontAwesome" icon="trash" fontSize="18"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Clear logs (does not affect the file)"/>
                     </tooltip>
                 </Button>
                 <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" prefWidth="40.0"
-                              styleClass="main-button">
+                              styleClass="magnet-button">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0"/>
+                        <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0" fontSize="18"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Stick to bottom"/>

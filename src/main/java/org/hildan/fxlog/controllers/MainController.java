@@ -475,7 +475,8 @@ public class MainController implements Initializable {
     /**
      * Closes and re-opens the file being tailed. Useful to update the columnization for instance.
      */
-    private void restartTailing() {
+    @FXML
+    public void restartTailing() {
         if (!tailingFile.getValue()) {
             System.err.println("Can't RE-start if we're not tailing");
             return;
