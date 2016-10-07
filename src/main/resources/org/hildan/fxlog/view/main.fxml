@@ -110,7 +110,7 @@
             <ToolBar VBox.vgrow="NEVER">
                 <Label text="Columns"/>
                 <ChoiceBox fx:id="columnizerSelector"/>
-                <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="pencil-button">
+                <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="button-pencil">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
                     </graphic>
@@ -121,7 +121,7 @@
                 <Separator orientation="VERTICAL"/>
                 <Label text="Colors"/>
                 <ChoiceBox fx:id="colorizerSelector"/>
-                <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="pencil-button">
+                <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="button-pencil">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
                     </graphic>
@@ -152,7 +152,7 @@
                     </left>
                 </CustomTextField>
                 <Separator orientation="VERTICAL"/>
-                <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="refresh-button">
+                <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="button-refresh">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="refresh" fontSize="18"/>
                     </graphic>
@@ -160,7 +160,7 @@
                         <Tooltip text="Reload the file"/>
                     </tooltip>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#clearLogs">
+                <Button mnemonicParsing="false" onAction="#clearLogs" styleClass="button-trash">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash" fontSize="18"/>
                     </graphic>
@@ -169,7 +169,7 @@
                     </tooltip>
                 </Button>
                 <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" prefWidth="40.0"
-                              styleClass="magnet-button">
+                              styleClass="button-magnet">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0" fontSize="18"/>
                     </graphic>

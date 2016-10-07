@@ -20,7 +20,7 @@
             <HBox spacing="2.0" BorderPane.alignment="CENTER">
                 <TextField fx:id="newColumnizerNameField" promptText="new columnizer name" HBox.hgrow="ALWAYS"/>
                 <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnizer"
-                        HBox.hgrow="NEVER">
+                        HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
                     </graphic>
@@ -29,7 +29,7 @@
                     </tooltip>
                 </Button>
                 <Button fx:id="removeColumnizerButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColumnizer">
+                        mnemonicParsing="false" onAction="#removeSelectedColumnizer" styleClass="button-trash">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
@@ -66,13 +66,13 @@
                 <TextField fx:id="newColumnGroupField" promptText="capturing group name"
                            HBox.hgrow="ALWAYS"/>
                 <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                        onAction="#addNewColumnDefinition" HBox.hgrow="NEVER">
+                        onAction="#addNewColumnDefinition" HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
                     </graphic>
                 </Button>
                 <Button fx:id="removeColumnButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColumnDefinition">
+                        mnemonicParsing="false" onAction="#removeSelectedColumnDefinition" styleClass="button-trash">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
@@ -94,7 +94,7 @@
                 <HBox spacing="2.0" BorderPane.alignment="CENTER">
                     <TextField fx:id="newPatternRegexField" promptText="new regex" HBox.hgrow="ALWAYS"/>
                     <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                            onAction="#addNewPattern" HBox.hgrow="NEVER">
+                            onAction="#addNewPattern" HBox.hgrow="NEVER" styleClass="button-plus">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="plus"/>
                         </graphic>
@@ -103,7 +103,7 @@
                         </tooltip>
                     </Button>
                     <Button fx:id="removePatternButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#removeSelectedPattern">
+                            mnemonicParsing="false" onAction="#removeSelectedPattern" styleClass="button-trash">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="trash"/>
                         </graphic>

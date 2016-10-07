@@ -10,19 +10,29 @@
 }
 
 /* Pencil button color */
-.pencil-button:hover > .label {
+.button-pencil:hover > .label {
     -fx-text-fill: fa-color-pencil;
 }
 
 /* Magnet button color */
-.magnet-button:selected > .label,
-.magnet-button:hover > .label {
+.button-magnet:selected > .label,
+.button-magnet:hover > .label {
     -fx-text-fill: fa-color-magnet;
 }
 
 /* Refresh button color */
-.refresh-button:hover > .label {
+.button-refresh:hover > .label {
     -fx-text-fill: fa-color-refresh;
+}
+
+/* Add button color */
+.button-plus:hover > .label {
+    -fx-text-fill: fa-color-plus;
+}
+
+/* Trash button color */
+.button-trash:hover > .label {
+    -fx-text-fill: fa-color-trash;
 }
 
 /* Red border on invalid text fields */

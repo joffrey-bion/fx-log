@@ -20,7 +20,7 @@
             <HBox spacing="2.0" BorderPane.alignment="CENTER">
                 <TextField fx:id="newColorizerNameField" HBox.hgrow="ALWAYS"/>
                 <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColorizer"
-                        HBox.hgrow="NEVER">
+                        HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
                     </graphic>
@@ -29,7 +29,7 @@
                     </tooltip>
                 </Button>
                 <Button fx:id="removeColorizerButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColorizer">
+                        mnemonicParsing="false" onAction="#removeSelectedColorizer" styleClass="button-trash">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
@@ -58,7 +58,7 @@
                 <HBox spacing="2.0" BorderPane.alignment="CENTER">
                     <TextField fx:id="newRuleNameField" promptText="New rule name" HBox.hgrow="ALWAYS"/>
                     <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule"
-                            HBox.hgrow="NEVER">
+                            HBox.hgrow="NEVER" styleClass="button-plus">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="plus"/>
                         </graphic>
@@ -67,7 +67,7 @@
                         </tooltip>
                     </Button>
                     <Button fx:id="removeRuleButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#removeSelectedRule">
+                            mnemonicParsing="false" onAction="#removeSelectedRule" styleClass="button-trash">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="trash"/>
                         </graphic>
