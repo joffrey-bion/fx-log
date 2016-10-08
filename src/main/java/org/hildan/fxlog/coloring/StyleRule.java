@@ -24,7 +24,7 @@ public class StyleRule extends Rule<LogEntry, Style, Filter> {
      *         a name for this rule
      */
     public StyleRule(@NotNull String name) {
-        this(name, Filter.findInRawLog(""), null);
+        this(name, Filter.findInRawLog(""), new Style(Style.DEFAULT));
     }
 
     /**
