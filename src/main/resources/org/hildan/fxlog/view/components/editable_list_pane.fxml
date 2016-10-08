@@ -1,0 +1,63 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<?import org.hildan.fxlog.view.components.EditableListView?>
+<fx:root type="javafx.scene.layout.BorderPane" prefHeight="300.0" prefWidth="200.0"
+         xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <Label fx:id="titleLabel" BorderPane.alignment="CENTER_LEFT" styleClass="title-subsection"/>
+    </top>
+    <center>
+        <EditableListView fx:id="list">
+            <tooltip>
+                <Tooltip text="Double-click on a row to edit its value. Press enter to commit your edit."/>
+            </tooltip>
+        </EditableListView>
+    </center>
+    <bottom>
+        <HBox spacing="2.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="2"/>
+            </padding>
+            <TextField fx:id="newItemTextField" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#addItem" HBox.hgrow="NEVER" styleClass="button-plus">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="plus"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Create"/>
+                </tooltip>
+            </Button>
+            <Button fx:id="removeButton" minHeight="-Infinity" minWidth="-Infinity"
+                    mnemonicParsing="false" onAction="#removeSelectedItem" styleClass="button-trash">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="trash"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Delete"/>
+                </tooltip>
+            </Button>
+            <Button fx:id="moveUpButton" minHeight="-Infinity" minWidth="-Infinity"
+                    mnemonicParsing="false" onAction="#moveSelectedItemUp" styleClass="button-arrow">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Move up"/>
+                </tooltip>
+            </Button>
+            <Button fx:id="moveDownButton" minHeight="-Infinity" minWidth="-Infinity"
+                    mnemonicParsing="false" onAction="#moveSelectedItemDown" styleClass="button-arrow">
+                <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
+                </graphic>
+                <tooltip>
+                    <Tooltip text="Move down"/>
+                </tooltip>
+            </Button>
+        </HBox>
+    </bottom>
+</fx:root>

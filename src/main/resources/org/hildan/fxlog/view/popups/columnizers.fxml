@@ -2,65 +2,20 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
+<?import org.hildan.fxlog.view.components.EditableListPane?>
 <SplitPane dividerPositions="0.3" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColumnizersController">
     <padding>
         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
     </padding>
-    <BorderPane>
-        <center>
-            <ListView fx:id="columnizersList" editable="true"/>
-        </center>
-        <top>
-            <Label text="Columnizers" BorderPane.alignment="CENTER_LEFT"/>
-        </top>
-        <bottom>
-            <HBox spacing="2.0" BorderPane.alignment="CENTER">
-                <TextField fx:id="newColumnizerNameField" promptText="new columnizer name" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="addColumnizerButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewColumnizer"
-                        HBox.hgrow="NEVER" styleClass="button-plus">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="plus"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Add new columnizer"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="removeColumnizerButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColumnizer" styleClass="button-trash">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="trash"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Delete columnizer"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="moveColumnizerUpButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColumnizerUp" styleClass="button-arrow">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Move columnizer up"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="moveColumnizerDownButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColumnizerDown" styleClass="button-arrow">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Move columnizer down"/>
-                    </tooltip>
-                </Button>
-            </HBox>
-        </bottom>
+    <EditableListPane fx:id="columnizersPane" title="Columnizers">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
-    </BorderPane>
+    </EditableListPane>
     <SplitPane fx:id="selectedColumnizerPane" dividerPositions="0.4340909090909091" orientation="VERTICAL">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
@@ -115,58 +70,6 @@
                 </Button>
             </HBox>
         </VBox>
-        <BorderPane>
-            <center>
-                <ListView fx:id="patternList" editable="true">
-                    <tooltip>
-                        <Tooltip text="Double-click on a row to edit its value. Press enter to commit your edit."/>
-                    </tooltip>
-                </ListView>
-            </center>
-            <top>
-                <Label text="Columnization rules" BorderPane.alignment="CENTER_LEFT"/>
-            </top>
-            <bottom>
-                <HBox spacing="2.0" BorderPane.alignment="CENTER">
-                    <TextField fx:id="newPatternRegexField" promptText="new regex" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="addPatternButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                            onAction="#addNewPattern" HBox.hgrow="NEVER" styleClass="button-plus">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="plus"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Add regex"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="removePatternButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#removeSelectedPattern" styleClass="button-trash">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="trash"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Remove regex"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="movePatternUpButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#moveSelectedPatternUp" styleClass="button-arrow">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Move regex up"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="movePatternDownButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#moveSelectedPatternDown" styleClass="button-arrow">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Move regex down"/>
-                        </tooltip>
-                    </Button>
-                </HBox>
-            </bottom>
-        </BorderPane>
+        <EditableListPane fx:id="patternsPane" title="Log patterns"/>
     </SplitPane>
 </SplitPane>

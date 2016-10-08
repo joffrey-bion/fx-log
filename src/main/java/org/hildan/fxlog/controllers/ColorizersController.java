@@ -1,8 +1,6 @@
 package org.hildan.fxlog.controllers;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
@@ -10,21 +8,16 @@ import java.util.regex.PatternSyntaxException;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.IntegerExpression;
 import javafx.beans.binding.ListBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.paint.Color;
-import javafx.util.StringConverter;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
@@ -32,6 +25,7 @@ import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.view.UIUtils;
+import org.hildan.fxlog.view.components.EditableListPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,19 +37,13 @@ public class ColorizersController implements Initializable {
     private Config config;
 
     @FXML
-    private ListView<Colorizer> colorizersList;
-
-    @FXML
-    private TextField newColorizerNameField;
+    private EditableListPane<Colorizer> colorizersPane;
 
     @FXML
     private SplitPane selectedColorizerPane;
 
     @FXML
-    private ListView<StyleRule> rulesList;
-
-    @FXML
-    private TextField newRuleNameField;
+    private EditableListPane<StyleRule> rulesPane;
 
     @FXML
     private ScrollPane selectedRulePane;
@@ -87,103 +75,39 @@ public class ColorizersController implements Initializable {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    @FXML
-    public Button addColorizerButton;
-
-    @FXML
-    private Button removeColorizerButton;
-
-    @FXML
-    private Button moveColorizerUpButton;
-
-    @FXML
-    private Button moveColorizerDownButton;
-
-    @FXML
-    public Button addRuleButton;
-
-    @FXML
-    private Button removeRuleButton;
-
-    @FXML
-    private Button moveRuleUpButton;
-
-    @FXML
-    private Button moveRuleDownButton;
-
     private Property<Pattern> filterRegexFieldPatternBinding;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
-        initializeColorizersList();
-        initializeSelectedColorizerPane();
-        initializeSelectedRulePane();
-        initializeDeleteButtons();
+        initializeColorizersPane();
+        initializeRulesPane();
+        initializeStyleEditionPane();
     }
 
-    private void initializeColorizersList() {
-        colorizersList.setItems(config.getColorizers());
-        colorizersList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        colorizersList.setCellFactory(TextFieldListCell.forListView(new StringConverter<Colorizer>() {
-            @Override
-            public String toString(Colorizer colorizer) {
-                return colorizer.getName();
-            }
-
-            @Override
-            public Colorizer fromString(String string) {
-                // temporary object
-                return new Colorizer(string);
-            }
-        }));
-        colorizersList.setOnEditCommit(e -> {
-            Colorizer editedColorizer = colorizersList.getItems().get(e.getIndex());
-            editedColorizer.setName(e.getNewValue().getName());
-        });
+    private void initializeColorizersPane() {
+        colorizersPane.setItemCreator(Colorizer::new);
+        colorizersPane.setNewItemValidator(name -> !name.isEmpty());
+        colorizersPane.getList().setConverter(Colorizer::new, Colorizer::getName, name -> !name.isEmpty());
+        colorizersPane.getList().setUpdater(Colorizer::setName);
+        colorizersPane.getList().setItems(config.getColorizers());
+        colorizersPane.itemInUseIndexProperty().bindBidirectional(config.getState().selectedColorizerIndexProperty());
     }
 
-    private void initializeSelectedColorizerPane() {
-        BooleanBinding isEmpty = Bindings.isEmpty(colorizersList.getSelectionModel().getSelectedItems());
-        selectedColorizerPane.disableProperty().bind(isEmpty);
-        ListBinding<StyleRule> rulesOfColorizer = new ListBinding<StyleRule>() {
-            {
-                bind(colorizersList.getSelectionModel().selectedItemProperty());
-            }
+    private void initializeRulesPane() {
+        ObservableObjectValue<Colorizer> selectedColorizer = colorizersPane.selectedItemProperty();
+        selectedColorizerPane.disableProperty().bind(Bindings.isNull(selectedColorizer));
 
-            @Override
-            protected ObservableList<StyleRule> computeValue() {
-                Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
-                if (selectedColorizer != null) {
-                    return selectedColorizer.getRules();
-                } else {
-                    return FXCollections.emptyObservableList();
-                }
-            }
-        };
-        rulesList.itemsProperty().bind(rulesOfColorizer);
-        rulesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        rulesList.setCellFactory(TextFieldListCell.forListView(new StringConverter<StyleRule>() {
-            @Override
-            public String toString(StyleRule styleRule) {
-                return styleRule.getName();
-            }
-
-            @Override
-            public StyleRule fromString(String string) {
-                // temporary object
-                return new StyleRule(string);
-            }
-        }));
-        rulesList.setOnEditCommit(e -> {
-            StyleRule editedRule = rulesList.getItems().get(e.getIndex());
-            editedRule.setName(e.getNewValue().getName());
-        });
+        ListBinding<StyleRule> selectedColorizerRules = UIUtils.selectList(selectedColorizer, Colorizer::getRules);
+        rulesPane.setItemCreator(StyleRule::new);
+        rulesPane.setNewItemValidator(name -> !name.isEmpty());
+        rulesPane.getList().setConverter(StyleRule::new, StyleRule::getName, name -> !name.isEmpty());
+        rulesPane.getList().setUpdater(StyleRule::setName);
+        rulesPane.getList().itemsProperty().bind(selectedColorizerRules);
     }
 
-    private void initializeSelectedRulePane() {
-        BooleanBinding noRuleSelected = Bindings.isEmpty(rulesList.getSelectionModel().getSelectedItems());
-        selectedRulePane.disableProperty().bind(noRuleSelected);
+    private void initializeStyleEditionPane() {
+        selectedRulePane.disableProperty().bind(rulesPane.selectedItemProperty().isNull());
 
         configureActivableColorPicker(foregroundColorPicker, overrideTextForeground);
         configureActivableColorPicker(backgroundColorPicker, overrideTextBackground);
@@ -192,7 +116,7 @@ public class ColorizersController implements Initializable {
         createRegexFieldPatternBinding(filterRegexField, filterRegexFieldPatternBinding);
 
         bindRuleToUI(null); // initialize pane with empty values
-        rulesList.getSelectionModel().selectedItemProperty().addListener((obsRule, oldRule, newRule) -> {
+        rulesPane.selectedItemProperty().addListener((obsRule, oldRule, newRule) -> {
             unbindRuleFromUI(oldRule);
             bindRuleToUI(newRule);
         });
@@ -278,89 +202,5 @@ public class ColorizersController implements Initializable {
         Binding<Color> colorBinding =
                 Bindings.createObjectBinding(getColor, checkbox.selectedProperty(), picker.valueProperty());
         colorProperty.bind(colorBinding);
-    }
-
-    private void initializeDeleteButtons() {
-        IntegerExpression currentlyUsedColorizer = config.getState().selectedColorizerIndexProperty();
-        IntegerExpression selectedColorizer = colorizersList.getSelectionModel().selectedIndexProperty();
-        BooleanBinding selectedColorizerIsUsed = selectedColorizer.isEqualTo(currentlyUsedColorizer);
-        BooleanBinding noColorizerSelected = UIUtils.noItemIsSelected(colorizersList);
-        BooleanBinding firstColorizerSelected = UIUtils.firstItemIsSelected(colorizersList);
-        BooleanBinding lastColorizerSelected = UIUtils.lastItemIsSelected(colorizersList);
-        removeColorizerButton.disableProperty().bind(noColorizerSelected.or(selectedColorizerIsUsed));
-        moveColorizerUpButton.disableProperty().bind(noColorizerSelected.or(firstColorizerSelected));
-        moveColorizerDownButton.disableProperty().bind(noColorizerSelected.or(lastColorizerSelected));
-
-        BooleanBinding noRuleSelected = UIUtils.noItemIsSelected(rulesList);
-        BooleanBinding firstRuleSelected = UIUtils.firstItemIsSelected(rulesList);
-        BooleanBinding lastRuleSelected = UIUtils.lastItemIsSelected(rulesList);
-        removeRuleButton.disableProperty().bind(noRuleSelected);
-        moveRuleUpButton.disableProperty().bind(noRuleSelected.or(firstRuleSelected));
-        moveRuleDownButton.disableProperty().bind(noRuleSelected.or(lastRuleSelected));
-    }
-
-    @FXML
-    public void addNewColorizer() {
-        Colorizer newColorizer = new Colorizer(newColorizerNameField.getText());
-        config.getColorizers().add(newColorizer);
-        newColorizerNameField.setText("");
-        colorizersList.getSelectionModel().select(newColorizer);
-    }
-
-    @FXML
-    public void removeSelectedColorizer() {
-        Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
-        config.getColorizers().remove(selectedColorizer);
-    }
-
-    @FXML
-    public void moveSelectedColorizerUp() {
-        moveColorizer(-1);
-    }
-
-    @FXML
-    public void moveSelectedColorizerDown() {
-        moveColorizer(1);
-    }
-
-    private void moveColorizer(int offset) {
-        Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
-        List<Colorizer> colorizers = config.getColorizers();
-        int selectedColorizerIndex = colorizers.indexOf(selectedColorizer);
-        Collections.swap(colorizers, selectedColorizerIndex, selectedColorizerIndex + offset);
-    }
-
-    @FXML
-    public void addNewRule() {
-        Colorizer selectedColorizer = colorizersList.getSelectionModel().getSelectedItem();
-        StyleRule newRule = new StyleRule(newRuleNameField.getText());
-        selectedColorizer.getRules().add(newRule);
-        newRuleNameField.setText("");
-        rulesList.getSelectionModel().select(newRule);
-    }
-
-    @FXML
-    public void removeSelectedRule() {
-        StyleRule selectedRule = rulesList.getSelectionModel().getSelectedItem();
-        Colorizer selectedColumnizer = colorizersList.getSelectionModel().getSelectedItem();
-        selectedColumnizer.getRules().remove(selectedRule);
-    }
-
-    @FXML
-    public void moveSelectedRuleUp() {
-        moveRule(-1);
-    }
-
-    @FXML
-    public void moveSelectedRuleDown() {
-        moveRule(1);
-    }
-
-    private void moveRule(int offset) {
-        StyleRule selectedRule = rulesList.getSelectionModel().getSelectedItem();
-        Colorizer selectedColumnizer = colorizersList.getSelectionModel().getSelectedItem();
-        List<StyleRule> rules = selectedColumnizer.getRules();
-        int selectedRuleIndex = rules.indexOf(selectedRule);
-        Collections.swap(rules, selectedRuleIndex, selectedRuleIndex + offset);
     }
 }

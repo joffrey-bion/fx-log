@@ -3,117 +3,22 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.controlsfx.glyphfont.Glyph?>
+<?import org.hildan.fxlog.view.components.EditableListPane?>
 <SplitPane dividerPositions="0.3" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColorizersController">
     <padding>
         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
     </padding>
-    <BorderPane>
-        <center>
-            <ListView fx:id="colorizersList" editable="true"/>
-        </center>
-        <top>
-            <Label text="Colorizers" BorderPane.alignment="CENTER_LEFT"/>
-        </top>
-        <bottom>
-            <HBox spacing="2.0" BorderPane.alignment="CENTER">
-                <TextField fx:id="newColorizerNameField" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="addColorizerButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                        onAction="#addNewColorizer" HBox.hgrow="NEVER" styleClass="button-plus">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="plus"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Add new colorizer"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="removeColorizerButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColorizer" styleClass="button-trash">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="trash"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Delete colorizer"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="moveColorizerUpButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColorizerUp" styleClass="button-arrow">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Move colorizer up"/>
-                    </tooltip>
-                </Button>
-                <Button fx:id="moveColorizerDownButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColorizerDown" styleClass="button-arrow">
-                    <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
-                    </graphic>
-                    <tooltip>
-                        <Tooltip text="Move colorizer down"/>
-                    </tooltip>
-                </Button>
-            </HBox>
-        </bottom>
+    <EditableListPane fx:id="colorizersPane" title="Colorizers">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
-    </BorderPane>
+    </EditableListPane>
     <SplitPane fx:id="selectedColorizerPane" dividerPositions="0.65" orientation="VERTICAL">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
-        <BorderPane>
-            <center>
-                <ListView fx:id="rulesList" editable="true" prefHeight="200.0" prefWidth="200.0"/>
-            </center>
-            <top>
-                <Label text="Rules" BorderPane.alignment="CENTER_LEFT"/>
-            </top>
-            <bottom>
-                <HBox spacing="2.0" BorderPane.alignment="CENTER">
-                    <TextField fx:id="newRuleNameField" promptText="New rule name" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="addRuleButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewRule"
-                            HBox.hgrow="NEVER" styleClass="button-plus">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="plus"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Add new rule"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="removeRuleButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#removeSelectedRule" styleClass="button-trash">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="trash"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Remove rule"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="moveRuleUpButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#moveSelectedRuleUp" styleClass="button-arrow">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Move rule up"/>
-                        </tooltip>
-                    </Button>
-                    <Button fx:id="moveRuleDownButton" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" onAction="#moveSelectedRuleDown" styleClass="button-arrow">
-                        <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Move rule down"/>
-                        </tooltip>
-                    </Button>
-                </HBox>
-            </bottom>
-        </BorderPane>
+        <EditableListPane fx:id="rulesPane" title="Style Rules"/>
         <ScrollPane fx:id="selectedRulePane" fitToHeight="true" fitToWidth="true">
             <VBox spacing="10.0">
                 <padding>

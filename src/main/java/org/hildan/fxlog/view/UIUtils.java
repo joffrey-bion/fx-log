@@ -5,13 +5,17 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerExpression;
+import javafx.beans.binding.ListBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -78,32 +82,18 @@ public class UIUtils {
         }
     }
 
-    public static BooleanBinding noItemIsSelected(ListView listView) {
-        return listView.getSelectionModel().selectedItemProperty().isNull();
+    public static BooleanBinding noItemIsSelected(TableView<?> tableView) {
+        return tableView.getSelectionModel().selectedItemProperty().isNull();
     }
 
-    public static BooleanBinding firstItemIsSelected(ListView listView) {
-        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(0);
+    public static BooleanBinding firstItemIsSelected(TableView<?> tableView) {
+        return tableView.getSelectionModel().selectedIndexProperty().isEqualTo(0);
     }
 
-    public static BooleanBinding lastItemIsSelected(ListView listView) {
+    public static BooleanBinding lastItemIsSelected(TableView<?> tableView) {
         IntegerExpression lastIndex =
-                Bindings.createIntegerBinding(() -> listView.getItems().size() - 1, listView.itemsProperty());
-        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(lastIndex);
-    }
-
-    public static BooleanBinding noItemIsSelected(TableView listView) {
-        return listView.getSelectionModel().selectedItemProperty().isNull();
-    }
-
-    public static BooleanBinding firstItemIsSelected(TableView listView) {
-        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(0);
-    }
-
-    public static BooleanBinding lastItemIsSelected(TableView listView) {
-        IntegerExpression lastIndex =
-                Bindings.createIntegerBinding(() -> listView.getItems().size() - 1, listView.itemsProperty());
-        return listView.getSelectionModel().selectedIndexProperty().isEqualTo(lastIndex);
+                Bindings.createIntegerBinding(() -> tableView.getItems().size() - 1, tableView.itemsProperty());
+        return tableView.getSelectionModel().selectedIndexProperty().isEqualTo(lastIndex);
     }
 
     /**
@@ -179,6 +169,24 @@ public class UIUtils {
             public void changed(ObservableValue<? extends T> obs, T oldValue, T newValue) {
                 handler.changed(obs, oldValue, newValue);
                 obs.removeListener(this);
+            }
+        };
+    }
+
+    public static <S, C> ListBinding<C> selectList(ObservableValue<S> source, Function<S, ObservableList<C>> getList) {
+        return new ListBinding<C>() {
+            {
+                bind(source);
+            }
+
+            @Override
+            protected ObservableList<C> computeValue() {
+                S sourceValue = source.getValue();
+                if (sourceValue != null) {
+                    return getList.apply(sourceValue);
+                } else {
+                    return FXCollections.emptyObservableList();
+                }
             }
         };
     }
