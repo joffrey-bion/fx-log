@@ -21,7 +21,7 @@
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
         <VBox>
-            <Label text="Columns" VBox.vgrow="NEVER"/>
+            <Label text="Columns" VBox.vgrow="NEVER" styleClass="title-subsection"/>
             <TableView fx:id="columnsTable" editable="true" maxHeight="1.7976931348623157E308"
                        maxWidth="1.7976931348623157E308">
                 <columns>
