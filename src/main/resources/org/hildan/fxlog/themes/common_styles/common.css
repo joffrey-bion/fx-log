@@ -1,0 +1,32 @@
+@import "remove-highlight.css";
+@import "icon-buttons.css";
+
+/* Huge text for FX Log in 'about' popup */
+.title-huge {
+    -fx-font-size: 4em;
+    -fx-font-weight: bold;
+}
+
+/* Subsection title (in preferences) */
+.title-subsection {
+    -fx-font-weight: bold;
+}
+
+/* Red border on invalid text fields */
+.text-input:invalid {
+    -fx-text-box-border: red;
+    -fx-focus-color: red;
+}
+
+/* Red border on invalid text fields (in editable cells) */
+.list-cell:invalid {
+    -fx-text-box-border: red;
+    -fx-focus-color: red;
+}
+
+/* Make the scrollbar bigger */
+#logs-table .scroll-bar .thumb,
+#logs-table .scroll-bar .increment-button,
+#logs-table .scroll-bar .decrement-button {
+    -fx-padding: 5px;
+}

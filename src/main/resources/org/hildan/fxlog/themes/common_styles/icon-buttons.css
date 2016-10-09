@@ -1,0 +1,26 @@
+/* Gives colors to the icons on the buttons */
+
+.button-pencil:hover > .label {
+    -fx-text-fill: fa-color-pencil;
+}
+
+.button-magnet:selected > .label,
+.button-magnet:hover > .label {
+    -fx-text-fill: fa-color-magnet;
+}
+
+.button-refresh:hover > .label {
+    -fx-text-fill: fa-color-refresh;
+}
+
+.button-plus:hover > .label {
+    -fx-text-fill: fa-color-plus;
+}
+
+.button-trash:hover > .label {
+    -fx-text-fill: fa-color-trash;
+}
+
+.button-arrow:hover > .label {
+    -fx-text-fill: fa-color-arrow;
+}

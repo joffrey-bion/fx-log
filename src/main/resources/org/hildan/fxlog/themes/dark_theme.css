@@ -1,3 +1,5 @@
+@import "common_styles/common.css";
+@import "modena_dark.css";
 
 .root {
     /* Font Awesome icon color tricks */
@@ -7,4 +9,27 @@
     fa-color-trash: #cb413f;
     fa-color-plus: #3cb56e;
     fa-color-arrow: #50b1de;
+}
+
+/*
+ * Pseudo classes on table-row-cell:
+ * - focused = last clicked (or tabbed to)
+ * - selected = within the selection
+ */
+
+/* Non selected rows */
+.table-view {
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Selected row when table is focused */
+.table-view:focused .table-row-cell:filled:focused:selected,
+.table-view:focused .table-row-cell:selected {
+    -fx-table-cell-border-color: -fx-selection-bar;
+}
+
+/* Selected row when table not focused */
+.table-row-cell:focused:selected,
+.table-row-cell:selected {
+    -fx-table-cell-border-color: -fx-selection-bar-non-focused;
 }

@@ -1,0 +1,20 @@
+/* Remove blue highlight on focused tables and lists */
+.list-view:focused,
+.tree-view:focused,
+.table-view:focused,
+.tree-table-view:focused,
+.html-editor:contains-focus {
+    /* back to normal background */
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
+}
+
+/* Remove blue highlight on focused panes */
+.scroll-pane:focused,
+.split-pane:focused {
+    /* back to normal background */
+    -fx-background-color: -fx-box-border, -fx-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
+}

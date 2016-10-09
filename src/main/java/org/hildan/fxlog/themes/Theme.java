@@ -10,8 +10,8 @@ import org.hildan.fxlog.FXLog;
 
 public enum Theme {
 
-    DARK( "common.css", "modena_dark.css", "dark_theme.css"),
-    LIGHT("common.css", "light_theme.css");
+    DARK("dark_theme.css"),
+    LIGHT("light_theme.css");
 
     private static final String CSS_PATH = FXLog.BASE_PACKAGE + "/themes";
 
