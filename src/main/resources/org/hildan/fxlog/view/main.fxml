@@ -7,13 +7,14 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 <?import org.controlsfx.glyphfont.*?>
 <?import org.hildan.fxlog.view.components.MemoryUsageInfo?>
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="48.0" minWidth="128.0"
-            prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.65"
+            prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.60"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -77,6 +78,12 @@
                         <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
                     </Menu>
                     <Menu text="_View">
+                        <MenuItem onAction="#search" text="_Search">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <CheckMenuItem fx:id="followTailMenu" mnemonicParsing="false" text="Follow Tail"/>
                         <Menu text="_Theme">
                             <MenuItem onAction="#selectDarkTheme" text="_Dark Theme"/>
@@ -101,7 +108,7 @@
                         </MenuItem>
                     </Menu>
                 </MenuBar>
-                <MemoryUsageInfo StackPane.alignment="CENTER_RIGHT" showTotal="true" opacity="0.4">
+                <MemoryUsageInfo opacity="0.4" showTotal="true" StackPane.alignment="CENTER_RIGHT">
                     <padding>
                         <Insets right="4"/>
                     </padding>
@@ -112,7 +119,7 @@
                 <ChoiceBox fx:id="columnizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
+                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit columnizers"/>
@@ -123,7 +130,7 @@
                 <ChoiceBox fx:id="colorizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="pencil" fontSize="18"/>
+                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit colorizers"/>
@@ -131,7 +138,7 @@
                 </Button>
                 <Separator orientation="VERTICAL"/>
                 <CustomTextField fx:id="filterField" minWidth="100.0" prefColumnCount="20"
-                                 promptText="regexp filter on raw logs" HBox.hgrow="SOMETIMES">
+                                 promptText="regex filter on raw logs" HBox.hgrow="SOMETIMES">
                     <left>
                         <Glyph fontFamily="FontAwesome" icon="FILTER">
                             <padding>
@@ -140,7 +147,7 @@
                         </Glyph>
                     </left>
                 </CustomTextField>
-                <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Case Sensitive"/>
+                <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Match case"/>
                 <Separator orientation="VERTICAL"/>
                 <CustomTextField fx:id="searchField" minWidth="80.0" prefColumnCount="15" promptText="search">
                     <left>
@@ -154,7 +161,7 @@
                 <Separator orientation="VERTICAL"/>
                 <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="button-refresh">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="refresh" fontSize="18"/>
+                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="refresh"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Reload the file"/>
@@ -162,7 +169,7 @@
                 </Button>
                 <Button mnemonicParsing="false" onAction="#clearLogs" styleClass="button-trash">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="trash" fontSize="18"/>
+                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="trash"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Clear logs (does not affect the file)"/>
@@ -171,7 +178,7 @@
                 <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" prefWidth="40.0"
                               styleClass="button-magnet">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0" fontSize="18"/>
+                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="magnet" rotate="180.0"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Stick to bottom"/>
@@ -181,39 +188,47 @@
         </VBox>
     </top>
     <center>
-        <TableView id="logs-table" fx:id="logsTable" tableMenuButtonVisible="true">
-            <contextMenu>
-                <ContextMenu>
-                    <items>
-                        <MenuItem onAction="#copyRaw" text="Copy _raw log">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
-                                                    shortcut="UP"/>
-                            </accelerator>
-                            <graphic>
-                                <Glyph fontFamily="FontAwesome" icon="copy"/>
-                            </graphic>
-                        </MenuItem>
-                        <MenuItem onAction="#copyPretty" text="Copy with _columns">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN"
-                                                    shortcut="UP"/>
-                            </accelerator>
-                            <graphic>
-                                <Glyph fontFamily="FontAwesome" icon="copy"/>
-                            </graphic>
-                        </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem onAction="#selectAll" text="Select _All">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
-                                                    shortcut="UP"/>
-                            </accelerator>
-                        </MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
-                    </items>
-                </ContextMenu>
-            </contextMenu>
-        </TableView>
+        <StackPane>
+            <TableView id="logs-table" fx:id="logsTable" tableMenuButtonVisible="true">
+                <contextMenu>
+                    <ContextMenu>
+                        <items>
+                            <MenuItem onAction="#copyRaw" text="Copy _raw log">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
+                                                        shortcut="UP"/>
+                                </accelerator>
+                                <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="copy"/>
+                                </graphic>
+                            </MenuItem>
+                            <MenuItem onAction="#copyPretty" text="Copy with _columns">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="DOWN"
+                                                        shortcut="UP"/>
+                                </accelerator>
+                                <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="copy"/>
+                                </graphic>
+                            </MenuItem>
+                            <SeparatorMenuItem mnemonicParsing="false"/>
+                            <MenuItem onAction="#selectAll" text="Select _All">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
+                                                        shortcut="UP"/>
+                                </accelerator>
+                            </MenuItem>
+                            <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
+                        </items>
+                    </ContextMenu>
+                </contextMenu>
+            </TableView>
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="TOP_LEFT">
+                <fx:include fx:id="searchPanel" source="components/search.fxml"/>
+                <StackPane.margin>
+                    <Insets left="15.0" top="35.0"/>
+                </StackPane.margin>
+            </Pane>
+        </StackPane>
     </center>
 </BorderPane>

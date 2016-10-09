@@ -1,15 +1,16 @@
 package org.hildan.fxlog.view.scrollbarmarks;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -19,9 +20,9 @@ import javafx.scene.paint.Paint;
 
 import org.hildan.fxlog.view.UIUtils;
 
-public class ScrollBarMarker {
+public class ScrollBarMarker implements ListChangeListener<Integer> {
 
-    private final Map<Integer, ScrollBarMark> activeMarks = new HashMap<>();
+    private final ObservableMap<Integer, ScrollBarMark> activeMarks = FXCollections.observableHashMap();
 
     private final Property<Paint> color = new SimpleObjectProperty<>(Color.ORANGE);
 
@@ -106,6 +107,18 @@ public class ScrollBarMarker {
     public void clear() {
         activeMarks.forEach((i, m) -> m.detach());
         activeMarks.clear();
+    }
+
+    @Override
+    public void onChanged(Change<? extends Integer> change) {
+        while (change.next()) {
+            if (change.wasAdded()) {
+                change.getAddedSubList().forEach(this::mark);
+            }
+            if (change.wasRemoved()) {
+                change.getRemoved().forEach(this::unmark);
+            }
+        }
     }
 
     @SuppressWarnings("unused")

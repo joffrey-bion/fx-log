@@ -30,3 +30,18 @@
 #logs-table .scroll-bar .decrement-button {
     -fx-padding: 5px;
 }
+
+.search-background {
+    -fx-background-radius: 2px;
+    -fx-background-color: -fx-background;
+}
+
+.flat-button {
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+}
+
+.flat-button:hover {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}

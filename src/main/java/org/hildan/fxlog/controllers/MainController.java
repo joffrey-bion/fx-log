@@ -40,6 +40,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -77,6 +78,9 @@ public class MainController implements Initializable {
     private Stage aboutStage;
 
     @FXML
+    private SearchController searchPanelController;
+
+    @FXML
     private BorderPane mainPane;
 
     @FXML
@@ -96,6 +100,9 @@ public class MainController implements Initializable {
 
     @FXML
     private CheckBox caseSensitiveFilterCheckbox;
+
+    @FXML
+    private Pane searchPanel;
 
     @FXML
     private Menu recentFilesMenu;
@@ -127,10 +134,6 @@ public class MainController implements Initializable {
 
     private LogTailListener logTailListener;
 
-    // to avoid garbage collection
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private SearchMarksController searchMarksController;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
@@ -147,11 +150,12 @@ public class MainController implements Initializable {
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
-        configureSearch();
         configureLogsTable();
         configureRecentFilesMenu();
         configureSecondaryStages();
         configureAutoScroll();
+
+        searchPanelController.configure(config, filteredLogs, logsTable);
     }
 
     private void configureTitleBinding() {
@@ -251,10 +255,10 @@ public class MainController implements Initializable {
         });
     }
 
-    private void configureSearch() {
-        searchField.setText("");
-        UIUtils.makeClearable(searchField);
-        searchMarksController = new SearchMarksController(config, filteredLogs, logsTable, searchField);
+    @FXML
+    public void search() {
+        searchPanel.setVisible(true);
+        searchPanelController.startSearch();
     }
 
     /**
@@ -278,7 +282,7 @@ public class MainController implements Initializable {
             cell.fontProperty().bind(config.getPreferences().logsFontProperty());
             cell.wrapTextProperty().bind(config.getPreferences().wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
-            cell.searchTextProperty().bind(searchField.textProperty());
+            cell.searchTextProperty().bind(searchPanelController.getSearchField().textProperty());
             cell.searchHighlightStyleProperty().bind(config.getPreferences().searchHighlightStyleProperty());
             return cell;
         }));

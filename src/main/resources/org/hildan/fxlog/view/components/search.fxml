@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?scenebuilder-stylesheet org/hildan/fxlog/themes/common.css?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<VBox fx:id="searchPanel" spacing="5.0" styleClass="search-background" visible="false"
+      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.hildan.fxlog.controllers.SearchController">
+    <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+    </padding>
+    <HBox alignment="CENTER_LEFT">
+        <CustomTextField fx:id="searchTextField" prefColumnCount="18" HBox.hgrow="ALWAYS">
+            <left>
+                <Glyph fontFamily="FontAwesome" icon="SEARCH">
+                    <padding>
+                        <Insets left="3"/>
+                    </padding>
+                </Glyph>
+            </left>
+        </CustomTextField>
+        <Button fx:id="previousButton" mnemonicParsing="false" onAction="#goToPreviousMatch">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="chevron_up"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Previous match"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="nextButton" mnemonicParsing="false" onAction="#goToNextMatch">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="chevron_down"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Next match"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSearch" styleClass="flat-button">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="close"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Close search"/>
+            </tooltip>
+        </Button>
+    </HBox>
+    <Separator/>
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <CheckBox fx:id="matchCaseCheckBox" mnemonicParsing="false" text="Match case"/>
+        <CheckBox fx:id="regexCheckBox" mnemonicParsing="false" text="Regex"/>
+    </HBox>
+</VBox>
