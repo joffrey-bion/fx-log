@@ -1,10 +1,6 @@
 package org.hildan.fxlog.view;
 
-import org.fxmisc.easybind.EasyBind;
-import org.hildan.fxlog.coloring.Colorizer;
-import org.hildan.fxlog.coloring.Style;
-import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.rulesets.RuleSet;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -12,14 +8,18 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.text.Text;
+
+import org.fxmisc.easybind.EasyBind;
+import org.hildan.fxlog.coloring.Colorizer;
+import org.hildan.fxlog.coloring.Style;
+import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.rulesets.RuleSet;
 
 /**
  * A table cell that can be styled using a {@link Colorizer}.
@@ -32,7 +32,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     private final Property<Style> searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
 
-    private final StringProperty searchText = new SimpleStringProperty("");
+    private final Property<Predicate<String>> searchMatcher = new SimpleObjectProperty<>();
 
     private final BooleanBinding matchesSearch;
 
@@ -48,7 +48,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         setGraphic(text);
         setText(null);
 
-        matchesSearch = Bindings.createBooleanBinding(this::computeSearchMatch, itemProperty(), searchText);
+        matchesSearch = Bindings.createBooleanBinding(this::computeSearchMatch, itemProperty(), searchMatcher);
 
         // this is usually called only once (when this cell is attached to a row)
         EasyBind.subscribe(tableRowProperty(), row -> {
@@ -63,9 +63,8 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
     }
 
     private boolean computeSearchMatch() {
-        String search = searchText.getValue();
         String cellText = getItem();
-        return cellText != null && !search.isEmpty() && cellText.contains(search);
+        return cellText != null && searchMatcher.getValue().test(cellText);
     }
 
     /**
@@ -123,18 +122,16 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         this.colorizer.setValue(colorizer);
     }
 
-    @SuppressWarnings("unused")
-    public String getSearchText() {
-        return searchText.get();
+    public Predicate<String> getSearchMatcher() {
+        return searchMatcher.getValue();
     }
 
-    public StringProperty searchTextProperty() {
-        return searchText;
+    public Property<Predicate<String>> searchMatcherProperty() {
+        return searchMatcher;
     }
 
-    @SuppressWarnings("unused")
-    public void setSearchText(String searchText) {
-        this.searchText.set(searchText);
+    public void setSearchMatcher(Predicate<String> searchMatcher) {
+        this.searchMatcher.setValue(searchMatcher);
     }
 
     @SuppressWarnings("unused")

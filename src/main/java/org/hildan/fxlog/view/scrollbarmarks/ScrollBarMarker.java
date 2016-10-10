@@ -1,5 +1,7 @@
 package org.hildan.fxlog.view.scrollbarmarks;
 
+import java.util.Collection;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -8,12 +10,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -101,6 +103,10 @@ public class ScrollBarMarker implements ListChangeListener<Integer> {
         if (mark != null) {
             mark.detach();
         }
+    }
+
+    public void markAll(Collection<Integer> indices) {
+        indices.forEach(this::mark);
     }
 
     public void clear() {

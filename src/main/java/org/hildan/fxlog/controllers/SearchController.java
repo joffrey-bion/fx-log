@@ -9,25 +9,30 @@ import java.util.function.Predicate;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener.Change;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 import org.controlsfx.control.textfield.CustomTextField;
+import org.hildan.fxlog.columns.ColumnDefinition;
+import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.core.LogEntry;
 import org.hildan.fxlog.view.UIUtils;
 import org.hildan.fxlog.view.scrollbarmarks.ScrollBarMarker;
 
-public class SearchController implements Initializable {
+public class SearchController implements Initializable, ListChangeListener<LogEntry> {
 
     private static final int MIN_QUERY_LENGTH_TO_TRIGGER = 3;
 
@@ -53,58 +58,57 @@ public class SearchController implements Initializable {
 
     private TableView<LogEntry> logsTable;
 
-    private final ObservableList<Integer> matches = FXCollections.observableArrayList();
+    private Binding<ObservableList<ColumnDefinition>> columnDefinitions;
 
-    private Binding<Predicate<LogEntry>> matchTestBinding;
+    private final ObservableList<Integer> matchRows = FXCollections.observableArrayList();
+
+    private Binding<Predicate<String>> textMatcherBinding;
+
+    private Binding<Predicate<LogEntry>> logMatcherBinding;
 
     private ScrollBarMarker scrollBarMarker;
 
-    private final IntegerProperty currentMatchIndex = new SimpleIntegerProperty(-1);
+    private final Property<Integer> currentMatchIndex = new SimpleObjectProperty<>(null);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         UIUtils.makeClearable(searchTextField);
+
+        BooleanBinding disableMatchBrowsing = Bindings.createBooleanBinding(matchRows::isEmpty, matchRows);
+        nextButton.disableProperty().bind(disableMatchBrowsing);
+        previousButton.disableProperty().bind(disableMatchBrowsing);
+
+        // TODO regex mode feature
+        regexCheckBox.setDisable(true);
     }
 
-    void configure(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable) {
+    void configure(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable,
+            ObservableValue<Columnizer> columnizer) {
         this.logs = logs;
         this.logsTable = logsTable;
-
-        matchTestBinding = createMatcherBinding();
+        this.columnDefinitions = Bindings.createObjectBinding(() -> columnizer.getValue().getColumnDefinitions(),
+                columnizer);
+        this.textMatcherBinding = createTextMatcherBinding();
+        this.logMatcherBinding = createLogMatcherBinding(textMatcherBinding);
 
         scrollBarMarker = new ScrollBarMarker(logsTable, Orientation.VERTICAL);
         scrollBarMarker.colorProperty().bind(config.getPreferences().searchMatchMarkColorProperty());
         scrollBarMarker.thicknessProperty().bind(config.getPreferences().searchMatchMarkThicknessProperty());
         scrollBarMarker.alignmentProperty().bind(config.getPreferences().searchMatchMarkAlignmentProperty());
 
-        BooleanBinding disableMatchBrowsing = Bindings.createBooleanBinding(matches::isEmpty, matches);
-        nextButton.disableProperty().bind(disableMatchBrowsing);
-        previousButton.disableProperty().bind(disableMatchBrowsing);
-
-        // feature not ready yet
-        regexCheckBox.setDisable(true);
-
         configureSearchFieldUpdates();
-        configureLogsListUpdates();
     }
 
-    private Binding<Predicate<LogEntry>> createMatcherBinding() {
-        Binding<Predicate<String>> textMatcherBinding =
-                Bindings.createObjectBinding(this::createTextMatcher, matchCaseCheckBox.selectedProperty(),
-                        searchTextField.textProperty());
-
-        Callable<Predicate<LogEntry>> createLogMatcher = () -> createLogEntryMatcher(textMatcherBinding.getValue());
-
-        return Bindings.createObjectBinding(createLogMatcher, textMatcherBinding);
+    private Binding<Predicate<String>> createTextMatcherBinding() {
+        return Bindings.createObjectBinding(() -> {
+            return createTextMatcher(matchCaseCheckBox.isSelected(), searchTextField.getText());
+        }, matchCaseCheckBox.selectedProperty(), searchTextField.textProperty());
     }
 
-    private static Predicate<LogEntry> createLogEntryMatcher(Predicate<String> textMatcher) {
-        return log -> textMatcher.test(log.rawLine());
-    }
-
-    private Predicate<String> createTextMatcher() {
-        boolean matchCase = matchCaseCheckBox.isSelected();
-        String searchText = searchTextField.getText();
+    private static Predicate<String> createTextMatcher(boolean matchCase, String searchText) {
+        if (searchText.isEmpty()) {
+            return s -> false;
+        }
         if (matchCase) {
             return s -> s.contains(searchText);
         } else {
@@ -113,63 +117,82 @@ public class SearchController implements Initializable {
         }
     }
 
+    private Binding<Predicate<LogEntry>> createLogMatcherBinding(Binding<Predicate<String>> textMatcherBinding) {
+        Callable<Predicate<LogEntry>> createLogMatcher = () -> createLogEntryMatcher(textMatcherBinding.getValue(),
+                columnDefinitions.getValue());
+
+        return Bindings.createObjectBinding(createLogMatcher, textMatcherBinding, columnDefinitions);
+    }
+
+    private static Predicate<LogEntry> createLogEntryMatcher(Predicate<String> textMatcher,
+            List<ColumnDefinition> columnDefinitions) {
+        return log -> log.getVisibleColumnValues(columnDefinitions).stream().anyMatch(textMatcher);
+    }
+
     private void configureSearchFieldUpdates() {
         searchTextField.textProperty().addListener((observable, oldSearch, newSearch) -> {
             if (newSearch.length() >= MIN_QUERY_LENGTH_TO_TRIGGER) {
-                recomputeMatches();
+                recomputeMatchesAndGoToFirst();
             } else {
-                matches.clear();
+                matchRows.clear();
             }
         });
 
         // to search anyway even below 3 characters
         searchTextField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (matches.size() > 0) {
+                if (matchRows.size() > 0) {
                     goToNextMatch();
                 } else {
-                    recomputeMatches();
+                    recomputeMatchesAndGoToFirst();
                 }
             }
         });
     }
 
-    private void configureLogsListUpdates() {
-        logs.addListener((Change<? extends LogEntry> c) -> {
-            while (c.next() && !searchTextField.getText().isEmpty()) {
-                if (c.wasAdded()) {
-                    addPotentialMatches(c.getAddedSubList(), c.getFrom());
-                } else if (c.wasRemoved()) {
-                    removeMatches(c.getFrom(), c.getFrom() + c.getRemovedSize());
-                }
+    @Override
+    public void onChanged(Change<? extends LogEntry> c) {
+        while (c.next() && !searchTextField.getText().isEmpty()) {
+            if (c.wasAdded()) {
+                addPotentialMatches(c.getAddedSubList(), c.getFrom());
+            } else if (c.wasRemoved()) {
+                removeMatches(c.getFrom(), c.getFrom() + c.getRemovedSize());
             }
-        });
+        }
     }
 
-    TextField getSearchField() {
-        return searchTextField;
+    ObservableValue<Predicate<String>> textMatcher() {
+        return textMatcherBinding;
     }
 
     void startSearch() {
+        // first, pre-mark the former search, then re-add the listener (to avoid concurrent modification)
+        scrollBarMarker.markAll(matchRows);
+        logs.addListener(this);
+        matchRows.addListener(scrollBarMarker);
+
+        // for the ease of use
         searchTextField.requestFocus();
         searchTextField.selectAll();
-        matches.addListener(scrollBarMarker);
     }
 
     private void hideSearch() {
-        matches.removeListener(scrollBarMarker);
+        // first, remove the listener, then clear (to avoid concurrent modification)
+        matchRows.removeListener(scrollBarMarker);
+        logs.removeListener(this);
         scrollBarMarker.clear();
+
         searchPanel.setVisible(false);
     }
 
-    private void recomputeMatches() {
-        matches.clear();
+    private void recomputeMatchesAndGoToFirst() {
+        matchRows.clear();
         addPotentialMatches(logs, 0);
-        if (matches.size() > 0) {
-            currentMatchIndex.set(0);
-            goToMatch(0);
+        if (matchRows.size() > 0) {
+            currentMatchIndex.setValue(0);
+            scrollToMatch(0);
         } else {
-            currentMatchIndex.set(-1);
+            currentMatchIndex.setValue(null);
         }
     }
 
@@ -178,35 +201,43 @@ public class SearchController implements Initializable {
         if (textSearch.isEmpty()) {
             return;
         }
-        Predicate<LogEntry> matchTest = matchTestBinding.getValue();
+        Predicate<LogEntry> matchTest = logMatcherBinding.getValue();
         for (int i = 0; i < newLogs.size(); i++) {
             LogEntry log = newLogs.get(i);
             if (matchTest.test(log)) {
-                matches.add(indexOffset + i);
+                matchRows.add(indexOffset + i);
             }
         }
     }
 
     private void removeMatches(int fromIndex, int toIndex) {
-        for (int i = fromIndex; i < toIndex; i++) {
-            matches.remove((Integer) i);
+        for (int rowIndex = fromIndex; rowIndex < toIndex; rowIndex++) {
+            matchRows.remove((Integer)rowIndex);
         }
     }
 
     @FXML
     void goToNextMatch() {
-        currentMatchIndex.set((currentMatchIndex.get() + 1) % matches.size());
-        goToMatch(currentMatchIndex.get());
+        moveCurrentMatch(+1);
+        scrollToMatch(currentMatchIndex.getValue());
     }
 
     @FXML
     void goToPreviousMatch() {
-        currentMatchIndex.set((currentMatchIndex.get() - 1) % matches.size());
-        goToMatch(currentMatchIndex.get());
+        moveCurrentMatch(-1);
+        scrollToMatch(currentMatchIndex.getValue());
     }
 
-    private void goToMatch(int matchIndex) {
-        UIUtils.scrollTo(logsTable, matches.get(matchIndex));
+    private void moveCurrentMatch(int offset) {
+        int newIndex = Math.floorMod(currentMatchIndex.getValue() + offset, matchRows.size());
+        currentMatchIndex.setValue(newIndex);
+    }
+
+    private void scrollToMatch(int matchIndex) {
+        int rowIndexOfMatch = matchRows.get(matchIndex);
+        UIUtils.scrollTo(logsTable, rowIndexOfMatch);
+        logsTable.getSelectionModel().clearAndSelect(rowIndexOfMatch);
+        logsTable.getFocusModel().focus(rowIndexOfMatch);
     }
 
     @FXML

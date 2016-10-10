@@ -152,7 +152,7 @@ public class MainController implements Initializable {
         configureSecondaryStages();
         configureAutoScroll();
 
-        searchPanelController.configure(config, filteredLogs, logsTable);
+        searchPanelController.configure(config, filteredLogs, logsTable, columnizer);
     }
 
     private void configureTitleBinding() {
@@ -279,7 +279,7 @@ public class MainController implements Initializable {
             cell.fontProperty().bind(config.getPreferences().logsFontProperty());
             cell.wrapTextProperty().bind(config.getPreferences().wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
-            cell.searchTextProperty().bind(searchPanelController.getSearchField().textProperty());
+            cell.searchMatcherProperty().bind(searchPanelController.textMatcher());
             cell.searchHighlightStyleProperty().bind(config.getPreferences().searchHighlightStyleProperty());
             return cell;
         }));
@@ -539,7 +539,7 @@ public class MainController implements Initializable {
                                           .filter(ColumnDefinition::isVisible)
                                           .map(ColumnDefinition::getHeaderLabel)
                                           .collect(Collectors.joining("\t"));
-        copySelectedLogsToClipboard(log -> log.toColumnizedString(columnDefinitions), headers + '\n');
+        copySelectedLogsToClipboard(log -> log.toColumnizedString(columnDefinitions, "\t"), headers + '\n');
     }
 
     /**

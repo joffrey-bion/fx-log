@@ -40,6 +40,22 @@ public class LogEntry {
     }
 
     /**
+     * Gets collection of this log's column values for the currently visible columns.
+     *
+     * @param columnDefinitions
+     *         the column definitions of this logs, to be able to give the values in proper order
+     *
+     * @return a collection of this log's column values for the currently visible columns
+     */
+    public List<String> getVisibleColumnValues(List<ColumnDefinition> columnDefinitions) {
+        return columnDefinitions.stream()
+                .filter(ColumnDefinition::isVisible)
+                .map(ColumnDefinition::getCapturingGroupName)
+                .map(col -> getColumnValues().get(col))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Gets the initial raw log line before being parsed into columns.
      *
      * @return the raw log line
@@ -49,19 +65,17 @@ public class LogEntry {
     }
 
     /**
-     * Gets a tab-separated representation of this log used its columns values.
+     * Gets a string representation of this log's column values.
      *
      * @param columnDefinitions
      *         the column definitions of this logs, to be able to give the values in proper order
+     * @param delimiter
+     *         the delimiter to place between the columns in the resulting string
      *
-     * @return a tab-separated string of this log's column values
+     * @return a string this log's column values separated by the given delimiter
      */
-    public String toColumnizedString(List<ColumnDefinition> columnDefinitions) {
-        return columnDefinitions.stream()
-                                .filter(ColumnDefinition::isVisible)
-                                .map(ColumnDefinition::getCapturingGroupName)
-                                .map(col -> getColumnValues().get(col))
-                                .collect(Collectors.joining("\t"));
+    public String toColumnizedString(List<ColumnDefinition> columnDefinitions, CharSequence delimiter) {
+        return getVisibleColumnValues(columnDefinitions).stream().collect(Collectors.joining(delimiter));
     }
 
     @Override
