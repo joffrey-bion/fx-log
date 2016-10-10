@@ -1,11 +1,11 @@
 language: java
 
-# the default JDK is 7 if unspecified
+# The default JDK is 7 if unspecified, and we need 8
 jdk:
   - oraclejdk8
 
-# this is required because by default, the Container-based mode runs jdk1.8_31 (which is too old for this build)
-# manually installing the jdk ensures the latest version (but makes it run in standard mode)
-before_install:
-  - sudo apt-get update && sudo apt-get install oracle-java8-installer
-  - java -version
+# By default, the Travis container-based mode runs jdk1.8.0_31 (which is too old for this build)
+addons:
+  apt:
+    packages:
+    - oracle-java8-installer
