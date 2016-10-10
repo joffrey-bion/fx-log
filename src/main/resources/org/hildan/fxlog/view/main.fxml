@@ -149,16 +149,6 @@
                 </CustomTextField>
                 <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Match case"/>
                 <Separator orientation="VERTICAL"/>
-                <CustomTextField fx:id="searchField" minWidth="80.0" prefColumnCount="15" promptText="search">
-                    <left>
-                        <Glyph fontFamily="FontAwesome" icon="SEARCH">
-                            <padding>
-                                <Insets left="3"/>
-                            </padding>
-                        </Glyph>
-                    </left>
-                </CustomTextField>
-                <Separator orientation="VERTICAL"/>
                 <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="button-refresh">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" fontSize="18" icon="refresh"/>

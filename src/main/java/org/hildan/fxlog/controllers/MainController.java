@@ -78,10 +78,13 @@ public class MainController implements Initializable {
     private Stage aboutStage;
 
     @FXML
-    private SearchController searchPanelController;
+    private BorderPane mainPane;
 
     @FXML
-    private BorderPane mainPane;
+    private Pane searchPanel;
+
+    @FXML
+    private SearchController searchPanelController;
 
     @FXML
     private TableView<LogEntry> logsTable;
@@ -96,13 +99,7 @@ public class MainController implements Initializable {
     private CustomTextField filterField;
 
     @FXML
-    private CustomTextField searchField;
-
-    @FXML
     private CheckBox caseSensitiveFilterCheckbox;
-
-    @FXML
-    private Pane searchPanel;
 
     @FXML
     private Menu recentFilesMenu;
