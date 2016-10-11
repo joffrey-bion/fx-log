@@ -64,7 +64,11 @@
                         </Label>
                         <TextField fx:id="logsFontField" maxHeight="1.7976931348623157E308"
                                    maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
-                        <Button mnemonicParsing="false" onAction="#chooseLogsTextFont" text="..."/>
+                        <Button mnemonicParsing="false" onAction="#chooseLogsTextFont" text="...">
+                            <HBox.margin>
+                                <Insets left="3.0"/>
+                            </HBox.margin>
+                        </Button>
                     </HBox>
                 </VBox>
                 <Separator prefWidth="200.0"/>
