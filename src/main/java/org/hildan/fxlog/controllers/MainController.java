@@ -30,6 +30,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -342,11 +343,21 @@ public class MainController implements Initializable {
     private void configureAutoScroll() {
         followTailMenu.selectedProperty().bindBidirectional(followingTail);
         toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
-        logsTable.addEventFilter(ScrollEvent.ANY, event -> followingTail.set(false));
+        logsTable.addEventFilter(ScrollEvent.ANY, event -> {
+            if (event.getDeltaY() > 0) {
+                // scrolling up, stop following tail
+                followingTail.set(false);
+            } else if (event.getDeltaY() < 0 && UIUtils.getLastVisibleRowIndex(logsTable) == filteredLogs.size() - 1) {
+                // scrolling down and reached the bottom
+                // we can't prevent the stick effect, so we might as well consider the state changed
+                followingTail.set(true);
+            }
+        });
         followingTail.addListener((obs, oldValue, newValue) -> {
             if (newValue) {
                 scrollToBottom();
             } else {
+                // move back up 1 row to unstick the scroll
                 int indexFirst = UIUtils.getFirstVisibleRowIndex(logsTable);
                 if (indexFirst > 1 && !logsTable.getItems().isEmpty()) {
                     logsTable.scrollTo(indexFirst - 1);
@@ -358,11 +369,22 @@ public class MainController implements Initializable {
                 followingTail.set(!followingTail.get());
             }
         });
+
+        // keep scroll to bottom as logs are added
+        // note: this is only necessary when the scrollbar appears, because being at the scrollbar maximum already
+        // realizes the scroll-to-bottom feature naturally
+        filteredLogs.addListener((Change<? extends LogEntry> c) -> {
+            while (c.next()) {
+                if ((c.wasAdded() || c.wasRemoved()) && followingTail.get()) {
+                    scrollToBottom();
+                }
+            }
+        });
     }
 
     private void scrollToBottom() {
-        if (!columnizedLogs.isEmpty()) {
-            logsTable.scrollTo(columnizedLogs.size() - 1);
+        if (!filteredLogs.isEmpty()) {
+            logsTable.scrollTo(filteredLogs.size() - 1);
         }
     }
 
