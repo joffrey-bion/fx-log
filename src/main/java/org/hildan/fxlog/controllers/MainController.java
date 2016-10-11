@@ -255,6 +255,8 @@ public class MainController implements Initializable {
 
     @FXML
     public void search() {
+        // stop tailing to be able to go from match to match
+        followingTail.set(false);
         searchPanel.setVisible(true);
         searchPanelController.startSearch();
     }
