@@ -11,8 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import org.fxmisc.easybind.EasyBind;
@@ -26,6 +25,8 @@ import org.hildan.fxlog.rulesets.RuleSet;
  */
 public class StyledTableCell extends TableCell<LogEntry, String> {
 
+    private static final String STYLE_BINDING_PROPERTY = "styleBinding";
+
     private final Text text = new Text();
 
     private final Property<Colorizer> colorizer = new SimpleObjectProperty<>();
@@ -36,7 +37,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     private final BooleanBinding matchesSearch;
 
-    private Binding<Style> colorizerStyle;
+    private Binding<Style> rowStyleBinding;
 
     // this is to prevent the binding from being garbage collected
     @SuppressWarnings("FieldCanBeLocal")
@@ -55,10 +56,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
             if (row == null) {
                 return;
             }
+            //noinspection unchecked
+            rowStyleBinding = getOrCreateRowStyleBinding((TableRow<LogEntry>) row, colorizer);
 
             // bind the text for the foreground, and this cell for the background
             //noinspection unchecked
-            bindStyle(row.itemProperty(), text, this);
+            bindStyle(text, this);
         });
     }
 
@@ -67,19 +70,27 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         return cellText != null && searchMatcher.getValue().test(cellText);
     }
 
+    private static Binding<Style> getOrCreateRowStyleBinding(TableRow<LogEntry> row,
+                                                             ObservableValue<Colorizer> colorizer) {
+        //noinspection unchecked
+        Binding<Style> rowStyleBinding = (Binding<Style>) row.getProperties().get(STYLE_BINDING_PROPERTY);
+        if (rowStyleBinding == null) {
+            rowStyleBinding = RuleSet.outputFor(colorizer, row.itemProperty(), Style.DEFAULT);
+            row.getProperties().put(STYLE_BINDING_PROPERTY, rowStyleBinding);
+        }
+        return rowStyleBinding;
+    }
+
     /**
-     * Binds the style of the given Node to the given log observable. If it changes, the rule matching is re-computed to
-     * update the style of the node accordingly.
+     * Binds the style of the given Nodes to match either the search highlight or the default row style for the current
+     * colorizer.
      *
-     * @param log
-     *         the observable log on which to test the rules
      * @param nodes
      *         the nodes to style
      */
-    private void bindStyle(ObservableValue<LogEntry> log, Node... nodes) {
-        colorizerStyle = RuleSet.outputFor(colorizer, log, Style.DEFAULT);
+    private void bindStyle(Node... nodes) {
         // cannot be a local variable or it will be garbage collected
-        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, matchesSearch, colorizerStyle,
+        cellStyleBinding = Bindings.createObjectBinding(this::computeCellStyle, matchesSearch, rowStyleBinding,
                 searchHighlightStyle);
         EasyBind.subscribe(cellStyleBinding, style -> style.bindNodes(nodes));
     }
@@ -88,7 +99,7 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
         if (matchesSearch.get()) {
             return searchHighlightStyle.getValue();
         } else {
-            return colorizerStyle.getValue();
+            return rowStyleBinding.getValue();
         }
     }
 
