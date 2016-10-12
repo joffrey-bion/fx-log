@@ -139,7 +139,7 @@ public class MainController implements Initializable {
         filteredLogs = new FilteredList<>(columnizedLogs);
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
-        followingTail = new SimpleBooleanProperty(false);
+        followingTail = new SimpleBooleanProperty(true);
         tailingFile = new SimpleBooleanProperty(false);
         tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
