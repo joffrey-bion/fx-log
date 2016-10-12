@@ -278,11 +278,10 @@ public class MainController implements Initializable {
     private Collection<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
         Collection<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
-            StyledTableCell cell = new StyledTableCell(column);
+            StyledTableCell cell = new StyledTableCell(column, searchPanelController.getSearch());
             cell.fontProperty().bind(config.getPreferences().logsFontProperty());
             cell.wrapTextProperty().bind(config.getPreferences().wrapLogsTextProperty());
             cell.colorizerProperty().bind(colorizer);
-            cell.searchMatcherProperty().bind(searchPanelController.textMatcher());
             cell.searchHighlightStyleProperty().bind(config.getPreferences().searchHighlightStyleProperty());
             return cell;
         }));
