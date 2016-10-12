@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -14,13 +15,18 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableObjectValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
+import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
+import org.hildan.fxlog.bindings.MappedList;
+import org.hildan.fxlog.bindings.MergedList;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
+import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
@@ -122,6 +128,14 @@ public class ColorizersController implements Initializable {
         });
 
         filterColumnNameField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
+
+        ObservableList<ObservableList<String>> columnGroupNames = new MappedList<>(config.getColumnizers(), c -> {
+            return new MappedList<>(c.getColumnDefinitions(), ColumnDefinition::getCapturingGroupName);
+        });
+        ObservableList<String> autoCompleteList = MergedList.create(columnGroupNames);
+        new AutoCompletionTextFieldBinding<>(filterColumnNameField, param -> {
+            return autoCompleteList.stream().filter(s -> s.contains(param.getUserText())).collect(Collectors.toSet());
+        });
     }
 
     private static void configureActivableColorPicker(@NotNull ColorPicker picker, @NotNull CheckBox checkbox) {
