@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import org.hildan.fxlog.bindings.MappedList;
-import org.hildan.fxlog.bindings.MergedList;
+import org.hildan.fxlog.bindings.UnorderedMergedList;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.columns.ColumnDefinition;
@@ -129,10 +129,11 @@ public class ColorizersController implements Initializable {
 
         filterColumnNameField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
 
+
         ObservableList<ObservableList<String>> columnGroupNames = new MappedList<>(config.getColumnizers(), c -> {
             return new MappedList<>(c.getColumnDefinitions(), ColumnDefinition::getCapturingGroupName);
         });
-        ObservableList<String> autoCompleteList = MergedList.create(columnGroupNames);
+        ObservableList<String> autoCompleteList = new UnorderedMergedList<>(columnGroupNames);
         new AutoCompletionTextFieldBinding<>(filterColumnNameField, param -> {
             return autoCompleteList.stream().filter(s -> s.contains(param.getUserText())).collect(Collectors.toSet());
         });

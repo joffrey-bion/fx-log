@@ -8,10 +8,26 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 
+/**
+ * Returns a wrapper list whose items are mapped from the source list's items.
+ *
+ * @param <E>
+ *         the type of the elements in this list
+ * @param <F>
+ *         the type of the elements in the source list
+ */
 public class MappedList<E, F> extends TransformationList<E, F> {
 
     private final Function<F, E> mapper;
 
+    /**
+     * Creates a new mapped list containing the items of the given source transformed with the given mapper.
+     *
+     * @param source
+     *         the source list to wrap
+     * @param mapper
+     *         the mapper to use to transform the items of the source into items of this list
+     */
     public MappedList(ObservableList<F> source, Function<F, E> mapper) {
         super(source);
         this.mapper = mapper;
