@@ -127,7 +127,7 @@ public class Columnizer {
     @NotNull
     public LogEntry parse(@NotNull String inputLogLine) {
         for (Pattern pattern : patterns) {
-            Matcher matcher = pattern.matcher(inputLogLine.trim());
+            Matcher matcher = pattern.matcher(inputLogLine);
             if (matcher.matches()) {
                 Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
                 for (ColumnDefinition columnDefinition : columnDefinitions) {
