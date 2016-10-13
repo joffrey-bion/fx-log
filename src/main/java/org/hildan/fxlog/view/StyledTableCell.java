@@ -12,6 +12,7 @@ import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fx.bindings.rulesets.RuleSet;
 import org.hildan.fxlog.search.Search;
+import org.hildan.fxlog.view.components.SearchableLabel;
 
 /**
  * A table cell that can be styled using a {@link Colorizer}.

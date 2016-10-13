@@ -1,4 +1,4 @@
-package org.hildan.fxlog.view;
+package org.hildan.fxlog.view.components;
 
 import java.util.regex.Pattern;
 
@@ -8,15 +8,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.search.Search;
 
-public class SearchableLabel extends HBox {
+// FIXME the size of this component goes crazy and makes it unusable
+public class SearchableText extends TextFlow {
 
     private static final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))";
 
@@ -32,46 +34,47 @@ public class SearchableLabel extends HBox {
 
     private final Search search;
 
-    private final Label initialText;
+    private final Text initialText;
 
-    public SearchableLabel(Search search) {
+    public SearchableText(Search search) {
         this.search = search;
 
-        // reuse the same initial text when not searching
-        initialText = new Label();
+        initialText = createNonMatchingText("");
         initialText.textProperty().bind(text);
-        initialText.fontProperty().bind(font);
-        initialText.setMinWidth(USE_COMPUTED_SIZE);
 
         EasyBind.subscribe(normalStyle, style -> style.bindNodes(initialText));
 
-        text.addListener((obs, old, val) -> refreshSearch());
-        search.textProperty().addListener((obs, old, val) -> refreshSearch());
-        search.activeProperty().addListener((obs, old, val) -> refreshSearch());
-        search.matchCaseProperty().addListener((obs, old, val) -> refreshSearch());
-        search.regexModeProperty().addListener((obs, old, val) -> refreshSearch());
+        getChildren().add(initialText);
 
-        // initialize the content
-        refreshSearch();
+        EasyBind.subscribe(text, s -> refreshSearch());
+        EasyBind.subscribe(search.textProperty(), s -> refreshSearch());
     }
 
-    private Label createLabel(String str, boolean matchesSearch) {
-        Label label = new Label(str);
-        label.fontProperty().bind(font);
+    private Text createNonMatchingText(String str) {
+        Text text = new Text(str);
+        text.fontProperty().bind(font);
 
-        // prevents the different parts from collapsing in favor of others
-        label.setMinWidth(USE_PREF_SIZE);
+        EasyBind.subscribe(normalStyle, style -> style.bindNodes(text));
 
-        EasyBind.subscribe(matchesSearch ? searchMatchStyle : normalStyle, style -> style.bindNodes(label));
+        return text;
+    }
 
-        return label;
+    private StackPane createMatchingTextPane(String str) {
+        Text text = new Text(str);
+        text.fontProperty().bind(font);
+
+        StackPane pane = new StackPane();
+        pane.getChildren().add(text);
+
+        EasyBind.subscribe(searchMatchStyle, style -> style.bindNodes(text, pane));
+
+        return pane;
     }
 
     private void refreshSearch() {
         String currentText = text.get();
         String searchText = search.getText();
-        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()
-                || !search.isActive()) {
+        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()) {
             getChildren().setAll(initialText);
             return;
         }
@@ -80,8 +83,11 @@ public class SearchableLabel extends HBox {
         String[] parts = splitButKeepDelimiter(currentText, Pattern.quote(searchText));
         for (String part : parts) {
             boolean matchesSearch = part.equals(searchText);
-            Node partNode = createLabel(part, matchesSearch);
-            getChildren().add(partNode);
+            // each part
+            for (String word : splitButKeepDelimiter(part, "\\s")) {
+                Node wordNode = matchesSearch ? createNonMatchingText(word) : createMatchingTextPane(word);
+                getChildren().add(wordNode);
+            }
         }
     }
 
