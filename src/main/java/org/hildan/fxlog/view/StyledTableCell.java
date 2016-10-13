@@ -20,12 +20,12 @@ public class StyledTableCell extends TableCell<LogEntry, String> {
 
     private static final String STYLE_BINDING_KEY = "styleBinding";
 
-    private final SearchableText text;
+    private final SearchableLabel text;
 
     private final Property<Colorizer> colorizer = new SimpleObjectProperty<>();
 
     public StyledTableCell(TableColumn<LogEntry, String> column, Search search) {
-        text = new SearchableText(search);
+        text = new SearchableLabel(search);
         text.fontProperty().bind(fontProperty());
 
         setGraphic(text);
