@@ -22,8 +22,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
-import org.hildan.fxlog.bindings.MappedList;
-import org.hildan.fxlog.bindings.UnorderedMergedList;
+import org.hildan.fx.bindings.lists.MappedList;
+import org.hildan.fx.bindings.lists.UnorderedMergedList;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.columns.ColumnDefinition;
@@ -31,7 +31,7 @@ import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.view.UIUtils;
-import org.hildan.fxlog.view.components.EditableListPane;
+import org.hildan.fx.components.EditableListPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -128,7 +128,6 @@ public class ColorizersController implements Initializable {
         });
 
         filterColumnNameField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
-
 
         ObservableList<ObservableList<String>> columnGroupNames = new MappedList<>(config.getColumnizers(), c -> {
             return new MappedList<>(c.getColumnDefinitions(), ColumnDefinition::getCapturingGroupName);

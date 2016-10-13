@@ -1,4 +1,4 @@
-package org.hildan.fxlog.rulesets;
+package org.hildan.fx.bindings.rulesets;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;

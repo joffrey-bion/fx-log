@@ -6,9 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
-import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.filtering.Filter;
-import org.hildan.fxlog.rulesets.RuleSet;
+import org.hildan.fx.bindings.rulesets.RuleSet;
 import org.jetbrains.annotations.NotNull;
 
 /**

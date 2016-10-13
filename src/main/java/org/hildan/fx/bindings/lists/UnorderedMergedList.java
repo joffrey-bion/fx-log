@@ -1,4 +1,4 @@
-package org.hildan.fxlog.bindings;
+package org.hildan.fx.bindings.lists;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +44,7 @@ public class UnorderedMergedList<E> extends ObservableListWrapper<E> {
         }
     };
 
+    @SafeVarargs
     public UnorderedMergedList(ObservableList<? extends E>... lists) {
         super(new ArrayList<>(Arrays.stream(lists).mapToInt(List::size).sum()));
 
@@ -65,12 +66,12 @@ public class UnorderedMergedList<E> extends ObservableListWrapper<E> {
         lists.addListener(subscriber);
     }
 
-    private <T extends E> void subscribeTo(ObservableList<T> dependency) {
+    private void subscribeTo(ObservableList<? extends E> dependency) {
         addAll(dependency);
         dependency.addListener(updater);
     }
 
-    private <T extends E> void unsubscribeFrom(ObservableList<T> dependency) {
+    private void unsubscribeFrom(ObservableList<? extends E> dependency) {
         removeAll(dependency);
         dependency.removeListener(updater);
     }

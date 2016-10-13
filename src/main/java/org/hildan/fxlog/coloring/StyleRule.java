@@ -4,9 +4,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 
-import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.filtering.Filter;
-import org.hildan.fxlog.rulesets.Rule;
+import org.hildan.fx.bindings.rulesets.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

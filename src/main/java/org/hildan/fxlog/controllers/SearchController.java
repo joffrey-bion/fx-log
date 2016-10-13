@@ -28,7 +28,7 @@ import org.controlsfx.control.textfield.CustomTextField;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
-import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.view.UIUtils;
 import org.hildan.fxlog.view.scrollbarmarks.ScrollBarMarker;
 

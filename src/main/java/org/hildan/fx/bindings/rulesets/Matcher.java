@@ -1,4 +1,4 @@
-package org.hildan.fxlog.rulesets;
+package org.hildan.fx.bindings.rulesets;
 
 import java.util.function.Predicate;
 

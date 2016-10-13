@@ -1,4 +1,4 @@
-package org.hildan.fxlog.core;
+package org.hildan.fxlog.tailing;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.data.LogEntry;
 
 /**
  * An implementation of {@link TailerListener} that columnizes logs and adds them to a list as they arrive.

@@ -20,7 +20,7 @@ import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.view.UIUtils;
-import org.hildan.fxlog.view.components.EditableListPane;
+import org.hildan.fx.components.EditableListPane;
 
 /**
  * Controller associated to the columnizer customization view.

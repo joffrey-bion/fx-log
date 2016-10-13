@@ -1,4 +1,4 @@
-package org.hildan.fxlog.bindings;
+package org.hildan.fx.bindings.lists;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

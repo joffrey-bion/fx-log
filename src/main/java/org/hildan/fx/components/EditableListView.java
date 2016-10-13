@@ -1,4 +1,4 @@
-package org.hildan.fxlog.view.components;
+package org.hildan.fx.components;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

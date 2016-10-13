@@ -1,4 +1,4 @@
-package org.hildan.fxlog.core;
+package org.hildan.fxlog.data;
 
 import java.util.List;
 import java.util.Map;

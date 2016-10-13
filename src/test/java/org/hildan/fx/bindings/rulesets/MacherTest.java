@@ -1,4 +1,4 @@
-package org.hildan.fxlog.rulesets;
+package org.hildan.fx.bindings.rulesets;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;

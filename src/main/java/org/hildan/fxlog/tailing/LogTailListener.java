@@ -1,4 +1,4 @@
-package org.hildan.fxlog.core;
+package org.hildan.fxlog.tailing;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 import org.hildan.fxlog.columns.Columnizer;
+import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.errors.ErrorDialog;
 
 /**

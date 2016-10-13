@@ -11,8 +11,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
-import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.rulesets.Matcher;
+import org.hildan.fxlog.data.LogEntry;
+import org.hildan.fx.bindings.rulesets.Matcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

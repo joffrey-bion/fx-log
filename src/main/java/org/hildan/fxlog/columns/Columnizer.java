@@ -18,7 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 
-import org.hildan.fxlog.core.LogEntry;
+import org.hildan.fxlog.data.LogEntry;
 import org.jetbrains.annotations.NotNull;
 
 /**

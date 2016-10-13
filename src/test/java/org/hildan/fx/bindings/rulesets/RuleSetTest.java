@@ -1,10 +1,10 @@
-package org.hildan.fxlog.rulesets;
+package org.hildan.fx.bindings.rulesets;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
-import org.hildan.fxlog.rulesets.MacherTest.GreaterThanMatcher;
+import org.hildan.fx.bindings.rulesets.MacherTest.GreaterThanMatcher;
 import org.junit.Assert;
 import org.junit.Test;
 

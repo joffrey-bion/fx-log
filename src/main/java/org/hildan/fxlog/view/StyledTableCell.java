@@ -17,8 +17,8 @@ import javafx.scene.text.Text;
 import org.fxmisc.easybind.EasyBind;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.Style;
-import org.hildan.fxlog.core.LogEntry;
-import org.hildan.fxlog.rulesets.RuleSet;
+import org.hildan.fxlog.data.LogEntry;
+import org.hildan.fx.bindings.rulesets.RuleSet;
 
 /**
  * A table cell that can be styled using a {@link Colorizer}.

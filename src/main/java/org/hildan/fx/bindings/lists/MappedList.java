@@ -1,4 +1,4 @@
-package org.hildan.fxlog.bindings;
+package org.hildan.fx.bindings.lists;
 
 import java.util.List;
 import java.util.function.Function;
