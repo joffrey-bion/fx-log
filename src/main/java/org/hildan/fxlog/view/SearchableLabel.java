@@ -37,16 +37,22 @@ public class SearchableLabel extends HBox {
     public SearchableLabel(Search search) {
         this.search = search;
 
-        initialText = createLabel("", false);
+        // reuse the same initial text when not searching
+        initialText = new Label();
         initialText.textProperty().bind(text);
+        initialText.fontProperty().bind(font);
         initialText.setMinWidth(USE_COMPUTED_SIZE);
 
         EasyBind.subscribe(normalStyle, style -> style.bindNodes(initialText));
 
-        getChildren().add(initialText);
+        text.addListener((obs, old, val) -> refreshSearch());
+        search.textProperty().addListener((obs, old, val) -> refreshSearch());
+        search.activeProperty().addListener((obs, old, val) -> refreshSearch());
+        search.matchCaseProperty().addListener((obs, old, val) -> refreshSearch());
+        search.regexModeProperty().addListener((obs, old, val) -> refreshSearch());
 
-        EasyBind.subscribe(text, s -> refreshSearch());
-        EasyBind.subscribe(search.textProperty(), s -> refreshSearch());
+        // initialize the content
+        refreshSearch();
     }
 
     private Label createLabel(String str, boolean matchesSearch) {
@@ -64,7 +70,8 @@ public class SearchableLabel extends HBox {
     private void refreshSearch() {
         String currentText = text.get();
         String searchText = search.getText();
-        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()) {
+        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()
+                || !search.isActive()) {
             getChildren().setAll(initialText);
             return;
         }
