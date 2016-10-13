@@ -35,7 +35,16 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -56,9 +65,9 @@ import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.data.LogEntry;
-import org.hildan.fxlog.tailing.LogTailListener;
 import org.hildan.fxlog.errors.ErrorDialog;
 import org.hildan.fxlog.filtering.Filter;
+import org.hildan.fxlog.tailing.BufferedLogTailListener;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
@@ -130,7 +139,7 @@ public class MainController implements Initializable {
 
     private Tailer tailer;
 
-    private LogTailListener logTailListener;
+    private BufferedLogTailListener logTailListener;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -487,7 +496,7 @@ public class MainController implements Initializable {
         }
         closeCurrentFile();
         config.getState().addToRecentFiles(file.getAbsolutePath());
-        logTailListener = new LogTailListener(columnizer.getValue(), columnizedLogs);
+        logTailListener = new BufferedLogTailListener(columnizer.getValue(), columnizedLogs);
         logTailListener.skipEmptyLogsProperty().bind(config.getPreferences().skipEmptyLogsProperty());
         logTailListener.limitNumberOfLogsProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
         logTailListener.maxNumberOfLogsProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
