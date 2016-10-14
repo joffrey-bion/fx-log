@@ -1,5 +1,7 @@
 package org.hildan.fxlog.view.components;
 
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import javafx.beans.property.ObjectProperty;
@@ -7,12 +9,14 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
 import org.fxmisc.easybind.EasyBind;
+import org.fxmisc.easybind.Subscription;
 import org.hildan.fxlog.coloring.Style;
 import org.hildan.fxlog.search.Search;
 
@@ -55,34 +59,93 @@ public class SearchableLabel extends HBox {
         refreshSearch();
     }
 
-    private Label createLabel(String str, boolean matchesSearch) {
+    private void refreshSearch() {
+        ObservableList<Node> children = getChildren();
+        String currentText = text.get();
+        String searchText = search.getText();
+        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()
+                || !search.isActive()) {
+            children.setAll(initialText);
+            return;
+        }
+        // we don't want to update the initial text label
+        if (children.get(0) == initialText) {
+            children.clear();
+        }
+        // separate the parts of the text that match the search and the others
+        String[] parts = splitButKeepDelimiter(currentText, Pattern.quote(searchText));
+        if (parts.length > children.size()) {
+            updateAndCreateMore(parts);
+        } else {
+            updateAndRemoveExtra(parts);
+        }
+    }
+
+    private boolean matchesSearch(String part) {
+        return part.equals(search.getText());
+    }
+
+    private void updateAndCreateMore(String[] parts) {
+        List<Node> children = getChildren();
+
+        // update existing labels
+        updateChildren(parts, children.size());
+
+        // create extra labels
+        for (int i = children.size(); i < parts.length; i++) {
+            Node partNode = createLabel(parts[i]);
+            children.add(partNode);
+        }
+    }
+
+    private void updateAndRemoveExtra(String[] parts) {
+        List<Node> children = getChildren();
+
+        // update existing labels
+        updateChildren(parts, parts.length);
+
+        // remove extra labels
+        for (int i = parts.length; i < children.size(); i++) {
+            children.remove(i);
+        }
+    }
+
+    private void updateChildren(String[] parts, int upperBoundExclusive) {
+        for (int i = 0; i < upperBoundExclusive; i++) {
+            Label label = (Label) getChildren().get(i);
+            label.setText(parts[i]);
+            bindStyle(label, matchesSearch(parts[i]));
+        }
+    }
+
+    private Label createLabel(String str) {
         Label label = new Label(str);
         label.fontProperty().bind(font);
 
         // prevents the different parts from collapsing in favor of others
         label.setMinWidth(USE_PREF_SIZE);
 
-        EasyBind.subscribe(matchesSearch ? searchMatchStyle : normalStyle, style -> style.bindNodes(label));
+        Consumer<Style> styleChangeListener = style -> style.bindNodes(label);
+        label.getProperties().put("styleListener", styleChangeListener);
+
+        bindStyle(label, matchesSearch(str));
 
         return label;
     }
 
-    private void refreshSearch() {
-        String currentText = text.get();
-        String searchText = search.getText();
-        if (currentText == null || currentText.isEmpty() || searchText == null || searchText.isEmpty()
-                || !search.isActive()) {
-            getChildren().setAll(initialText);
-            return;
+    private void bindStyle(Label label, boolean matchesSearch) {
+        @SuppressWarnings("unchecked")
+        Consumer<Style> styleListener = (Consumer<Style>)label.getProperties().get("styleListener");
+
+        // remove previous style subscription
+        Subscription subscription = (Subscription)label.getProperties().get("subscription");
+        if (subscription != null) {
+            subscription.unsubscribe();
         }
-        getChildren().clear();
-        // separate the parts of the text that match the search and the others
-        String[] parts = splitButKeepDelimiter(currentText, Pattern.quote(searchText));
-        for (String part : parts) {
-            boolean matchesSearch = part.equals(searchText);
-            Node partNode = createLabel(part, matchesSearch);
-            getChildren().add(partNode);
-        }
+
+        // subscribe to new style
+        subscription = EasyBind.subscribe(matchesSearch ? searchMatchStyle : normalStyle, styleListener);
+        label.getProperties().put("subscription", subscription);
     }
 
     private static String[] splitButKeepDelimiter(String text, String delimiterRegex) {
