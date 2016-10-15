@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
-<?import org.controlsfx.glyphfont.*?>
+<?import org.controlsfx.glyphfont.Glyph?>
 <?import org.hildan.fxlog.view.components.MemoryUsageInfo?>
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="48.0" minWidth="128.0"
             prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.60"
@@ -108,11 +108,14 @@
                         </MenuItem>
                     </Menu>
                 </MenuBar>
-                <MemoryUsageInfo opacity="0.4" showTotal="true" StackPane.alignment="CENTER_RIGHT">
-                    <padding>
-                        <Insets right="4"/>
-                    </padding>
-                </MemoryUsageInfo>
+                <HBox alignment="CENTER_RIGHT" spacing="20.0" StackPane.alignment="CENTER_RIGHT">
+                    <Label fx:id="nbLogs" opacity="0.4" text="# logs"/>
+                    <MemoryUsageInfo opacity="0.4" showTotal="true">
+                        <padding>
+                            <Insets right="4"/>
+                        </padding>
+                    </MemoryUsageInfo>
+                </HBox>
             </StackPane>
             <ToolBar VBox.vgrow="NEVER">
                 <Label text="Columns"/>

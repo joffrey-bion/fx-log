@@ -38,6 +38,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -121,6 +122,9 @@ public class MainController implements Initializable {
     private CheckMenuItem followTailMenu;
 
     @FXML
+    private Label nbLogs;
+
+    @FXML
     private ToggleButton toggleFollowTailButton;
 
     private Property<Columnizer> columnizer;
@@ -152,6 +156,10 @@ public class MainController implements Initializable {
         tailingFile = new SimpleBooleanProperty(false);
         tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
+
+        columnizedLogs.addListener((Change<? extends LogEntry> c) -> {
+            nbLogs.setText(String.format("%s logs", columnizedLogs.size()));
+        });
 
         configureTitleBinding();
         configureColumnizerSelector();
