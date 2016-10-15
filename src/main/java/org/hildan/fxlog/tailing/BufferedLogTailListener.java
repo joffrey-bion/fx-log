@@ -20,7 +20,7 @@ import org.hildan.fxlog.data.LogEntry;
  */
 public class BufferedLogTailListener extends TailerListenerAdapter {
 
-    private static final int DEFAULT_BUF_SIZE = 10;
+    private static final int DEFAULT_BUF_SIZE = 1000;
 
     private final Columnizer columnizer;
 
@@ -93,9 +93,7 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     public void handle(String line) {
         if (running && !(skipEmptyLogs.get() && line.isEmpty())) {
             LogEntry log = columnizer.parse(line);
-            synchronized (buffer) {
-                buffer.add(log);
-            }
+            buffer.add(log);
             // limit batches size
             if (buffer.size() >= bufferMaxSize) {
                 endOfFileReached();
@@ -106,10 +104,8 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     @Override
     public void endOfFileReached() {
         List<LogEntry> toSendToUI;
-        synchronized (buffer) {
-            toSendToUI = new ArrayList<>(buffer);
-            buffer.clear();
-        }
+        toSendToUI = new ArrayList<>(buffer);
+        buffer.clear();
         // needs to run on the main thread to avoid concurrent modifications
         Platform.runLater(() -> {
             // we need to check again here because the listener may have been stopped in the meantime
