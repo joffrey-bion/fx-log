@@ -59,19 +59,20 @@ jar {
 // defines JavaFX deployment info
 javafx {
     appID 'FX-Log'
-    appName 'FX Log'
-    vendor = "Hildan Software"
+    appName 'FX-Log'
     mainClass mainClassName
 
     profiles {
         windows {
-            category = 'Utils'
+            category = 'Tools'
         }
     }
 
+    category = 'Tools'
     copyright = 'Copyright (c) 2016 Joffrey Bion'
     description = project.description
     licenseType = 'MIT'
+    vendor = "Joffrey Bion"
     installSystemWide = true
     menu = true
     shortcut = true
