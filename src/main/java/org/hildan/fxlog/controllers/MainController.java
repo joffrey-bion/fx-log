@@ -119,13 +119,13 @@ public class MainController implements Initializable {
     private MenuItem closeMenu;
 
     @FXML
-    private CheckMenuItem followTailMenu;
+    private CheckMenuItem autoScrollMenu;
 
     @FXML
     private Label nbLogs;
 
     @FXML
-    private ToggleButton toggleFollowTailButton;
+    private ToggleButton autoScrollButton;
 
     private Property<Columnizer> columnizer;
 
@@ -137,7 +137,7 @@ public class MainController implements Initializable {
 
     private StringProperty tailedFileName;
 
-    private BooleanProperty followingTail;
+    private BooleanProperty autoScrollActive;
 
     private BooleanProperty tailingFile;
 
@@ -152,7 +152,7 @@ public class MainController implements Initializable {
         filteredLogs = new FilteredList<>(columnizedLogs);
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
-        followingTail = new SimpleBooleanProperty(true);
+        autoScrollActive = new SimpleBooleanProperty(true);
         tailingFile = new SimpleBooleanProperty(false);
         tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
@@ -263,17 +263,12 @@ public class MainController implements Initializable {
         filterField.setText("");
         UIUtils.makeClearable(filterField);
         filteredLogs.predicateProperty().bind(filterBinding);
-        filteredLogs.predicateProperty().addListener((obs, before, now) -> {
-            if (followingTail.get()) {
-                scrollToBottom();
-            }
-        });
     }
 
     @FXML
     public void search() {
         // stop tailing to be able to go from match to match
-        followingTail.set(false);
+        autoScrollActive.set(false);
         searchPanel.setVisible(true);
         searchPanelController.startSearch();
     }
@@ -359,19 +354,19 @@ public class MainController implements Initializable {
     }
 
     private void configureAutoScroll() {
-        followTailMenu.selectedProperty().bindBidirectional(followingTail);
-        toggleFollowTailButton.selectedProperty().bindBidirectional(followingTail);
+        autoScrollMenu.selectedProperty().bindBidirectional(autoScrollActive);
+        autoScrollButton.selectedProperty().bindBidirectional(autoScrollActive);
         logsTable.addEventFilter(ScrollEvent.ANY, event -> {
             if (event.getDeltaY() > 0) {
                 // scrolling up, stop following tail
-                followingTail.set(false);
+                autoScrollActive.set(false);
             } else if (event.getDeltaY() < 0 && UIUtils.getLastVisibleRowIndex(logsTable) == filteredLogs.size() - 1) {
                 // scrolling down and reached the bottom
-                // we can't prevent the stick effect, so we might as well consider the state changed
-                followingTail.set(true);
+                // we can't prevent the stick effect, so we have to consider the state changed
+                autoScrollActive.set(true);
             }
         });
-        followingTail.addListener((obs, oldValue, newValue) -> {
+        autoScrollActive.addListener((obs, oldValue, newValue) -> {
             if (newValue) {
                 scrollToBottom();
             } else {
@@ -382,9 +377,11 @@ public class MainController implements Initializable {
                 }
             }
         });
+
+        // toggle auto-scroll when SPACE is pressed
         logsTable.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
-                followingTail.set(!followingTail.get());
+                autoScrollActive.set(!autoScrollActive.get());
             }
         });
 
@@ -393,9 +390,16 @@ public class MainController implements Initializable {
         // realizes the scroll-to-bottom feature naturally
         filteredLogs.addListener((Change<? extends LogEntry> c) -> {
             while (c.next()) {
-                if ((c.wasAdded() || c.wasRemoved()) && followingTail.get()) {
+                if ((c.wasAdded() || c.wasRemoved()) && autoScrollActive.get()) {
                     scrollToBottom();
                 }
+            }
+        });
+
+        // keep scroll to bottom when the filter changes
+        filteredLogs.predicateProperty().addListener((obs, before, now) -> {
+            if (autoScrollActive.get()) {
+                scrollToBottom();
             }
         });
     }
