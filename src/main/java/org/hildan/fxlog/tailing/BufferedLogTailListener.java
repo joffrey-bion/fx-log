@@ -110,6 +110,12 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
         Platform.runLater(() -> {
             // we need to check again here because the listener may have been stopped in the meantime
             if (running) {
+                if (limitNumberOfLogs.get()) {
+                    int nbExtraLogs = logs.size() + toSendToUI.size() - maxNumberOfLogs.getValue();
+                    if (nbExtraLogs > 0) {
+                        logs.removeAll(logs.subList(0, nbExtraLogs));
+                    }
+                }
                 logs.addAll(toSendToUI);
             }
         });
