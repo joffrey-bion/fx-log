@@ -389,8 +389,8 @@ public class MainController implements Initializable {
         // note: this is only necessary when the scrollbar appears, because being at the scrollbar maximum already
         // realizes the scroll-to-bottom feature naturally
         filteredLogs.addListener((Change<? extends LogEntry> c) -> {
-            while (c.next()) {
-                if ((c.wasAdded() || c.wasRemoved()) && autoScrollActive.get()) {
+            while (c.next() && (c.wasAdded() || c.wasRemoved()) && autoScrollActive.get()) {
+                if (UIUtils.getLastVisibleRowIndex(logsTable) < filteredLogs.size()) {
                     scrollToBottom();
                 }
             }
