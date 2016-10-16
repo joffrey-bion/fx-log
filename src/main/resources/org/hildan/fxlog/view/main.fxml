@@ -84,7 +84,7 @@
                                                     shortcut="UP"/>
                             </accelerator>
                         </MenuItem>
-                        <CheckMenuItem fx:id="followTailMenu" mnemonicParsing="false" text="Follow Tail"/>
+                        <CheckMenuItem fx:id="autoScrollMenu" mnemonicParsing="false" text="Follow Tail"/>
                         <Menu text="_Theme">
                             <MenuItem onAction="#selectDarkTheme" text="_Dark Theme"/>
                             <MenuItem onAction="#selectBrightTheme" text="_Bright Theme"/>
@@ -108,7 +108,8 @@
                         </MenuItem>
                     </Menu>
                 </MenuBar>
-                <HBox alignment="CENTER_RIGHT" spacing="20.0" StackPane.alignment="CENTER_RIGHT">
+                <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0"
+                      StackPane.alignment="CENTER_RIGHT">
                     <Label fx:id="nbLogs" opacity="0.4" text="# logs"/>
                     <MemoryUsageInfo opacity="0.4" showTotal="true">
                         <padding>
@@ -168,7 +169,7 @@
                         <Tooltip text="Clear logs (does not affect the file)"/>
                     </tooltip>
                 </Button>
-                <ToggleButton fx:id="toggleFollowTailButton" mnemonicParsing="false" prefWidth="40.0"
+                <ToggleButton fx:id="autoScrollButton" mnemonicParsing="false" prefWidth="40.0"
                               styleClass="button-magnet">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" fontSize="18" icon="magnet" rotate="180.0"/>
