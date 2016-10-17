@@ -118,13 +118,19 @@ class DefaultConfig {
         columnDefinitions.add(new ColumnDefinition("Class", "class", DEFAULT_CLASS_WIDTH));
         columnDefinitions.add(new ColumnDefinition("Message", "msg", DEFAULT_MSG_WIDTH));
         columnDefinitions.add(new ColumnDefinition("JSessionID", "sessionid", DEFAULT_SESSION_ID_WIDTH));
+        String logStart = "<(?<datetime>[^>]*?)>" //
+                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<subsystem>[^>]*?)>" //
+                + " ?<(?<machine>[^>]*?)>" //
+                + " ?<(?<server>[^>]*?)>" //
+                + " ?<(?<thread>[^>]*?)>" //
+                + "( ?<(?<class>[^>]*?)>)?" //
+                + " ?<(?<msg>.*?)" // message start
+                + "(;jsessionid=(?<sessionid>[^>]*)>|>)?\\s*"; // optional session id or end of message
+        String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>\\s*"; // end of msg and optional session id
+        String logCenter = "(?<msg>.*)";
 
-        ObservableList<String> regexps = FXCollections.observableArrayList(//
-                "<(?<datetime>[^>]*?)> ?<(?<severity>[^>]*?)> ?<(?<subsystem>[^>]*?)> ?<(?<machine>[^>]*?)> ?"
-                        + "<(?<server>[^>]*?)> ?<(?<thread>[^>]*?)>( ?<(?<class>[^>]*?)>)? ?"
-                        + "<(?<msg>.*?)(;jsessionid=(?<sessionid>.*))?>?", // log beginning
-                "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>", // end of message
-                "(?<msg>.*)"); // middle of log message on new line
+        ObservableList<String> regexps = FXCollections.observableArrayList(logStart, logEnd, logCenter);
         return new Columnizer("Weblogic (processed by EasyTrace)", columnDefinitions, regexps);
     }
 
