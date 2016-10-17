@@ -14,18 +14,10 @@
 
 **Fixed bugs:**
 
-- Following tail stops after clearing logs [\#60](https://github.com/joffrey-bion/fx-log/issues/60)
-- Scrolling down on mouse causes Scroll button to uncheck [\#38](https://github.com/joffrey-bion/fx-log/issues/38)
-
-**Closed issues:**
-
 - Indentation in Stacktraces is not preserved [\#87](https://github.com/joffrey-bion/fx-log/issues/87)
 - "Stick to bottom" icon looks like it will expand some menu [\#78](https://github.com/joffrey-bion/fx-log/issues/78)
-- Re-use colorizer binding for all cells in a row [\#74](https://github.com/joffrey-bion/fx-log/issues/74)
-
-**Merged pull requests:**
-
-- Remove unused import [\#84](https://github.com/joffrey-bion/fx-log/pull/84) ([mebubo](https://github.com/mebubo))
+- Following tail stops after clearing logs [\#60](https://github.com/joffrey-bion/fx-log/issues/60)
+- Scrolling down on mouse causes Scroll button to uncheck [\#38](https://github.com/joffrey-bion/fx-log/issues/38)
 
 ## [v2.1.0](https://bintray.com/joffrey-bion/applications/fx-log/2.1.0) (2016-09-29)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v2.0.0...v2.1.0)
@@ -47,14 +39,14 @@
 
 **Fixed bugs:**
 
+- View not updated when changing selected colorizer [\#66](https://github.com/joffrey-bion/fx-log/issues/66)
 - Exiting the program does not close secondary windows [\#65](https://github.com/joffrey-bion/fx-log/issues/65)
 - Regex editing is not instantly taken into account anymore [\#64](https://github.com/joffrey-bion/fx-log/issues/64)
+- View not updated when changing color rule regex [\#62](https://github.com/joffrey-bion/fx-log/issues/62)
 
 **Closed issues:**
 
 - Improve rule matching binding between colorizer and log [\#67](https://github.com/joffrey-bion/fx-log/issues/67)
-- View not updated when changing selected colorizer [\#66](https://github.com/joffrey-bion/fx-log/issues/66)
-- View not updated when changing color rule regex [\#62](https://github.com/joffrey-bion/fx-log/issues/62)
 
 ## [v1.7](https://bintray.com/joffrey-bion/applications/fx-log/1.7) (2016-04-26)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.6...v1.7)
@@ -102,7 +94,7 @@
 
 - Refine CSS for dark theme [\#7](https://github.com/joffrey-bion/fx-log/issues/7)
 
-**Closed issues:**
+**Fixed bugs:**
 
 - Resizing down hides the scrollbars [\#47](https://github.com/joffrey-bion/fx-log/issues/47)
 
@@ -138,10 +130,6 @@
 - Toggle "open last file" via a preference [\#12](https://github.com/joffrey-bion/fx-log/issues/12)
 - Toggle "skip empty lines" via a preference [\#11](https://github.com/joffrey-bion/fx-log/issues/11)
 - Remove blue border on the data table when its focused [\#2](https://github.com/joffrey-bion/fx-log/issues/2)
-
-**Closed issues:**
-
-- Slow logs display \(and jumps\) [\#27](https://github.com/joffrey-bion/fx-log/issues/27)
 
 **Merged pull requests:**
 

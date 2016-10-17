@@ -1,7 +1,7 @@
 user=joffrey-bion
 project=fx-log
 since-tag=v0.9
-bug-labels=bug (minor),bug (major)
+bug-labels=bug (minor),bug (major),visual issue
 enhancement-labels=enhancement,feature,visual improvement
-exclude-labels=wontfix,on hold,duplicate
+exclude-labels=wontfix,duplicate,internal
 release-url=https://bintray.com/joffrey-bion/applications/fx-log/%s
