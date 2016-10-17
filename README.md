@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/joffrey-bion/fx-log/master/src/deploy/package/shortcut.png" alt="FX Log" height=27/> FX Log
+# <img src="https://raw.githubusercontent.com/joffrey-bion/fx-log/master/src/deploy/package/icon.png" alt="FX Log" height=27/> FX Log
 
 [![Bintray](https://img.shields.io/bintray/v/joffrey-bion/applications/fx-log.svg)](https://bintray.com/joffrey-bion/applications/fx-log/_latestVersion)
 [![Travis Build](https://img.shields.io/travis/joffrey-bion/fx-log/master.svg)](https://travis-ci.org/joffrey-bion/fx-log)

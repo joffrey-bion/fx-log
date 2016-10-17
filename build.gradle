@@ -58,15 +58,9 @@ jar {
 
 // defines JavaFX deployment info
 javafx {
-    appID 'FX-Log'
-    appName 'FX-Log'
+    appID project.name
+    appName project.name
     mainClass mainClassName
-
-    profiles {
-        windows {
-            category = 'Tools'
-        }
-    }
 
     category = 'Tools'
     copyright = 'Copyright (c) 2016 Joffrey Bion'
