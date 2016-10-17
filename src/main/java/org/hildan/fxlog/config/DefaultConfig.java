@@ -9,6 +9,7 @@ import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.filtering.Filter;
+import org.hildan.fxlog.themes.Theme;
 
 /**
  * A generator for the default configuration. It is used as fallback when the built-in config is not available as a
@@ -54,6 +55,8 @@ class DefaultConfig {
     static Config generate() {
         Config config = new Config();
 
+        config.getState().setCurrentTheme(Theme.DARK);
+        config.getState().setSelectedColorizerIndex(0);
         config.getColorizers().add(severityBasedColorizerDark());
         config.getColorizers().add(severityBasedColorizerLight());
 
