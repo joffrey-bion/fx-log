@@ -47,7 +47,7 @@ public class Preferences {
         this.limitNumberOfLogs = new SimpleBooleanProperty(true);
         this.maxNumberOfLogs = new SimpleObjectProperty<>(100000);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
-        this.tailingDelayInMillis = new SimpleObjectProperty<>(500);
+        this.tailingDelayInMillis = new SimpleObjectProperty<>(100);
         this.wrapLogsText = new SimpleBooleanProperty(false);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
