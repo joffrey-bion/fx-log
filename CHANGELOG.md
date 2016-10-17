@@ -1,5 +1,32 @@
 # Change Log
 
+## [v3.0.0](https://bintray.com/joffrey-bion/applications/fx-log/3.0.0) (2016-10-17)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v2.1.0...v3.0.0)
+
+**Implemented enhancements:**
+
+- Add auto-complete data for column ID fields [\#85](https://github.com/joffrey-bion/fx-log/issues/85)
+- Add memory usage info [\#82](https://github.com/joffrey-bion/fx-log/issues/82)
+- Make secondary stages stay on top while tuning [\#81](https://github.com/joffrey-bion/fx-log/issues/81)
+- Add a "reload file" button [\#75](https://github.com/joffrey-bion/fx-log/issues/75)
+- Search/highlight without filtering [\#35](https://github.com/joffrey-bion/fx-log/issues/35)
+- Add re-ordering for customization lists [\#23](https://github.com/joffrey-bion/fx-log/issues/23)
+
+**Fixed bugs:**
+
+- Following tail stops after clearing logs [\#60](https://github.com/joffrey-bion/fx-log/issues/60)
+- Scrolling down on mouse causes Scroll button to uncheck [\#38](https://github.com/joffrey-bion/fx-log/issues/38)
+
+**Closed issues:**
+
+- Indentation in Stacktraces is not preserved [\#87](https://github.com/joffrey-bion/fx-log/issues/87)
+- "Stick to bottom" icon looks like it will expand some menu [\#78](https://github.com/joffrey-bion/fx-log/issues/78)
+- Re-use colorizer binding for all cells in a row [\#74](https://github.com/joffrey-bion/fx-log/issues/74)
+
+**Merged pull requests:**
+
+- Remove unused import [\#84](https://github.com/joffrey-bion/fx-log/pull/84) ([mebubo](https://github.com/mebubo))
+
 ## [v2.1.0](https://bintray.com/joffrey-bion/applications/fx-log/2.1.0) (2016-09-29)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v2.0.0...v2.1.0)
 
