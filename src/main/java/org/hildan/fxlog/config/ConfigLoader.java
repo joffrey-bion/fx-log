@@ -3,8 +3,6 @@ package org.hildan.fxlog.config;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -14,11 +12,12 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
 
+import org.hildan.fxlog.errors.ErrorDialog;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import org.hildan.fxlog.errors.ErrorDialog;
 
 /**
  * The ConfigLoader is responsible for reading and writing configuration files.
@@ -30,11 +29,6 @@ class ConfigLoader {
      */
     private static final String USER_CONFIG_PATH =
             Paths.get(System.getProperty("user.home") + "/.fxlog/config.json").toAbsolutePath().toString();
-
-    /**
-     * The resource path of the default config.
-     */
-    private static final String BUILTIN_RESOURCE = "default_config.json";
 
     private static final class ConfigVersion {
         @SuppressWarnings("unused")
@@ -64,31 +58,6 @@ class ConfigLoader {
             // the user will decide whether to stop here or continue with default (and overwrite)
             ErrorDialog.configReadException(USER_CONFIG_PATH, e);
         }
-        return getBuiltinConfig();
-    }
-
-    private static Config getBuiltinConfig() {
-        InputStream jsonConfigStream = ConfigLoader.class.getResourceAsStream(BUILTIN_RESOURCE);
-        if (jsonConfigStream == null) {
-            System.err.println("Something's wrong: built-in config not found!");
-            return DefaultConfig.generate();
-        }
-        try {
-            int version = readConfigVersionFrom(new InputStreamReader(jsonConfigStream));
-            if (version == Config.FORMAT_VERSION) {
-                jsonConfigStream = ConfigLoader.class.getResourceAsStream(BUILTIN_RESOURCE);
-                return readConfigFrom(new InputStreamReader(jsonConfigStream));
-            } else if (version < Config.FORMAT_VERSION) {
-                ErrorDialog.configOutdated(BUILTIN_RESOURCE, version, Config.FORMAT_VERSION);
-            } else {
-                ErrorDialog.configTooRecent(BUILTIN_RESOURCE, version, Config.FORMAT_VERSION);
-            }
-        } catch (JsonSyntaxException e) {
-            System.err.println("Syntax error in built-in config. SHAME.");
-        } catch (JsonIOException e) {
-            System.err.println("IO error while reading built-in config");
-        }
-        System.err.println("Falling back to default config");
         return DefaultConfig.generate();
     }
 
