@@ -18,6 +18,11 @@ bintray {
     user = getPropOrEnv('bintrayUser', 'BINTRAY_USER', githubUser)
     key = getPropOrEnv('bintrayApiKey', 'BINTRAY_KEY')
     configurations = ['archives']
+    filesSpec {
+        from 'build/distributions'
+        into 'installers'
+    }
+
     publish = true // the version should be auto published after an upload
 
     pkg {
