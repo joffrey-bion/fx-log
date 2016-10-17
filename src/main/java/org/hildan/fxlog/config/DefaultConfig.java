@@ -100,9 +100,8 @@ class DefaultConfig {
                 + " ?<(?<msgId>[^>]*?)>" //
                 + "( ?<(?<class>[^>]*?)>)?" //
                 + " ?<(?<msg>.*?)" // message start
-                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
-                + ">?"; // optional end of message (if not continued)
-        String logEnd = "(?<msg>[^>]*)(;jsessionid=(?<sid>.*?))?>"; // end of msg and optional session id
+                + "(;jsessionid=(?<sessionid>[^>]*)>|>)?\\s*"; // optional session id or end of message
+        String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>\\s*"; // end of msg and optional session id
         String logCenter = "(?<msg>.*)";
         ObservableList<String> regexps = FXCollections.observableArrayList(logStart, logEnd, logCenter);
         return new Columnizer("Weblogic Server Log", columnDefinitions, regexps);
