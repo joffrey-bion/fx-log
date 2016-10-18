@@ -7,7 +7,7 @@
 <?import org.controlsfx.glyphfont.Glyph?>
 <?import org.hildan.fx.components.list.EditableListPane?>
 <?import org.hildan.fx.components.list.BaseEditableListPane?>
-<SplitPane dividerPositions="0.3" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65"
+<SplitPane dividerPositions="0.25" prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.65"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColumnizersController">
     <padding>
         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
@@ -17,7 +17,7 @@
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
     </BaseEditableListPane>
-    <SplitPane fx:id="selectedColumnizerPane" dividerPositions="0.4340909090909091" orientation="VERTICAL">
+    <SplitPane fx:id="selectedColumnizerPane" dividerPositions="0.65" orientation="VERTICAL">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
@@ -31,9 +31,9 @@
                     <TableColumn fx:id="headerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
                                  prefWidth="100.0" sortable="false" text="Header Label"/>
                     <TableColumn fx:id="capturingGroupColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="100.0" sortable="false" text="Capt. group"/>
+                                 prefWidth="105.0" sortable="false" text="Capturing group"/>
                     <TableColumn fx:id="descriptionColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="300.0" sortable="false" text="Description"/>
+                                 prefWidth="560.0" sortable="false" text="Description"/>
                 </columns>
                 <tooltip>
                     <Tooltip text="Double-click on a cell to edit its value. Press enter to commit your edit."/>
