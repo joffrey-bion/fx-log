@@ -52,7 +52,7 @@ public class Config {
     /**
      * Creates an empty configuration.
      */
-    Config() {
+    public Config() {
         this.version = FORMAT_VERSION;
         this.preferences = new Preferences();
         this.state = new State();

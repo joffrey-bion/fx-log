@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
 
+import org.hildan.fxlog.config.builtin.DefaultConfig;
 import org.hildan.fxlog.errors.ErrorDialog;
 
 import com.google.gson.Gson;

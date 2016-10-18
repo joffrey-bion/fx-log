@@ -22,6 +22,8 @@ public class ColumnDefinition {
 
     private final BooleanProperty visible;
 
+    private final StringProperty description;
+
     /**
      * Creates a new ColumnDefinition for the given field.
      *
@@ -31,7 +33,7 @@ public class ColumnDefinition {
      *         the name of the capturing group of the regexp to put inside this column
      */
     public ColumnDefinition(String headerLabel, String capturingGroupName) {
-        this(headerLabel, capturingGroupName, true, DEFAULT_WIDTH);
+        this(headerLabel, capturingGroupName, null, true, DEFAULT_WIDTH);
     }
 
     /**
@@ -41,11 +43,27 @@ public class ColumnDefinition {
      *         the label of this column
      * @param capturingGroupName
      *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupName, String description) {
+        this(headerLabel, capturingGroupName, description, true, DEFAULT_WIDTH);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupName
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
      * @param visible
      *         whether this column is initially visible before the user customizes it
      */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible) {
-        this(headerLabel, capturingGroupName, visible, DEFAULT_WIDTH);
+    public ColumnDefinition(String headerLabel, String capturingGroupName, String description, boolean visible) {
+        this(headerLabel, capturingGroupName, description, visible, DEFAULT_WIDTH);
     }
 
     /**
@@ -59,7 +77,7 @@ public class ColumnDefinition {
      *         the initial width to give this column before the user customizes it
      */
     public ColumnDefinition(String headerLabel, String capturingGroupName, double initialWidth) {
-        this(headerLabel, capturingGroupName, true, initialWidth);
+        this(headerLabel, capturingGroupName, null, true, initialWidth);
     }
 
     /**
@@ -69,16 +87,36 @@ public class ColumnDefinition {
      *         the label of this column
      * @param capturingGroupName
      *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
+     * @param initialWidth
+     *         the initial width to give this column before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupName, String description, double initialWidth) {
+        this(headerLabel, capturingGroupName, description, true, initialWidth);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupName
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
      * @param visible
      *         whether this column is initially visible before the user customizes it
      * @param initialWidth
      *         the initial width to give this column before the user customizes it
      */
-    private ColumnDefinition(String headerLabel, String capturingGroupName, boolean visible, double initialWidth) {
+    private ColumnDefinition(String headerLabel, String capturingGroupName, String description, boolean visible, double
+            initialWidth) {
         this.capturingGroupName = new SimpleStringProperty(capturingGroupName);
         this.headerLabel = new SimpleStringProperty(headerLabel);
         this.visible = new SimpleBooleanProperty(visible);
         this.width = new SimpleDoubleProperty(initialWidth);
+        this.description = new SimpleStringProperty(description);
     }
 
     /**
@@ -129,5 +167,17 @@ public class ColumnDefinition {
      */
     BooleanProperty visibleProperty() {
         return visible;
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
     }
 }
