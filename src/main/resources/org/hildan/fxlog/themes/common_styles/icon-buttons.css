@@ -21,6 +21,10 @@
     -fx-text-fill: fa-color-trash;
 }
 
+.button-copy:hover > .label {
+    -fx-text-fill: fa-color-copy;
+}
+
 .button-arrow:hover > .label {
     -fx-text-fill: fa-color-arrow;
 }
