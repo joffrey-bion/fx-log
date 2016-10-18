@@ -30,8 +30,12 @@
                                 <Glyph fontFamily="FontAwesome" icon="folder_open"/>
                             </graphic>
                         </MenuItem>
-                        <Menu fx:id="recentFilesMenu" text="Open _Recent"/>
-                        <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close">
+                        <Menu fx:id="recentFilesMenu" text="Open _Recent">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="clock_alt"/>
+                            </graphic>
+                        </Menu>
+                        <MenuItem fx:id="closeMenu" onAction="#closeCurrentFile" text="_Close file">
                             <graphic>
                                 <Glyph fontFamily="FontAwesome" icon="close"/>
                             </graphic>
@@ -50,6 +54,16 @@
                         </MenuItem>
                     </Menu>
                     <Menu text="_Edit">
+                        <MenuItem onAction="#search" text="_Search">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="search"/>
+                            </graphic>
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem onAction="#copyRaw" text="Copy _raw log">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP"
@@ -68,7 +82,6 @@
                                 <Glyph fontFamily="FontAwesome" icon="copy"/>
                             </graphic>
                         </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem onAction="#selectAll" text="Select _All">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
@@ -76,14 +89,19 @@
                             </accelerator>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#unselectAll" text="Unselect All"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem onAction="#editColorizers" text="Edit colorizers...">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="paint_brush"/>
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem onAction="#editColumnizers" text="Edit columnizers...">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="table"/>
+                            </graphic>
+                        </MenuItem>
                     </Menu>
                     <Menu text="_View">
-                        <MenuItem onAction="#search" text="_Search">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP"
-                                                    shortcut="UP"/>
-                            </accelerator>
-                        </MenuItem>
                         <CheckMenuItem fx:id="autoScrollMenu" mnemonicParsing="false" text="Follow Tail"/>
                         <Menu text="_Theme">
                             <MenuItem onAction="#selectDarkTheme" text="_Dark Theme"/>
