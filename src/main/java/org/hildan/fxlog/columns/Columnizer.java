@@ -113,10 +113,11 @@ public class Columnizer implements Named {
         List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             TableColumn<LogEntry, String> col = new TableColumn<>();
+            col.textProperty().bind(columnDefinition.headerLabelProperty());
             col.setGraphic(columnDefinition.createBoundHeaderLabel());
             col.setVisible(columnDefinition.isVisible());
             col.setPrefWidth(columnDefinition.getWidth());
-            columnDefinition.visibleProperty().bind(col.visibleProperty());
+            columnDefinition.visibleProperty().bindBidirectional(col.visibleProperty());
             columnDefinition.widthProperty().bind(col.widthProperty());
             col.setCellValueFactory(data -> {
                 LogEntry log = data.getValue();

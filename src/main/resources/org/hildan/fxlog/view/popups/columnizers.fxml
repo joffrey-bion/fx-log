@@ -26,6 +26,8 @@
             <TableView fx:id="columnsTable" editable="true" maxHeight="1.7976931348623157E308"
                        maxWidth="1.7976931348623157E308">
                 <columns>
+                    <TableColumn fx:id="visibleColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
+                                 prefWidth="40" sortable="false" text="Show"/>
                     <TableColumn fx:id="headerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
                                  prefWidth="100.0" sortable="false" text="Header Label"/>
                     <TableColumn fx:id="capturingGroupColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"

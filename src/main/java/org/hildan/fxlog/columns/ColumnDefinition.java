@@ -196,7 +196,7 @@ public class ColumnDefinition {
     /**
      * @return whether this column is visible (property)
      */
-    BooleanProperty visibleProperty() {
+    public BooleanProperty visibleProperty() {
         return visible;
     }
 

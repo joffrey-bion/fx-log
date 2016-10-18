@@ -14,6 +14,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 import org.hildan.fx.components.list.BaseEditableListPane;
@@ -38,6 +39,9 @@ public class ColumnizersController implements Initializable {
 
     @FXML
     private TableView<ColumnDefinition> columnsTable;
+
+    @FXML
+    private TableColumn<ColumnDefinition, String> visibleColumn;
 
     @FXML
     private TableColumn<ColumnDefinition, String> headerColumn;
@@ -111,6 +115,13 @@ public class ColumnizersController implements Initializable {
         newColumnHeaderField.setMaxWidth(headerColumn.getPrefWidth());
         newColumnGroupField.setMaxWidth(capturingGroupColumn.getPrefWidth());
 
+        ListBinding<ColumnDefinition> columnDefinitions =
+                UIUtils.selectList(columnizersPane.selectedItemProperty(), Columnizer::getColumnDefinitions);
+
+        visibleColumn.setCellFactory(
+                CheckBoxTableCell.forTableColumn(index -> columnDefinitions.get(index).visibleProperty()));
+        visibleColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
+
         headerColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         headerColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
 
@@ -119,9 +130,6 @@ public class ColumnizersController implements Initializable {
 
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setCellValueFactory(data -> data.getValue().descriptionProperty());
-
-        ListBinding<ColumnDefinition> columnDefinitions =
-                UIUtils.selectList(columnizersPane.selectedItemProperty(), Columnizer::getColumnDefinitions);
 
         columnsTable.itemsProperty().bind(columnDefinitions);
 
