@@ -130,6 +130,8 @@ public class ColumnDefinition {
         Label header = new Label();
         header.textProperty().bind(headerLabel);
         header.tooltipProperty().bind(createTooltipBinding());
+        // allows to show this label while hiding the default header text
+        header.getStyleClass().add("column-header-label");
         // makes it take up the full width of the table column header so that the tooltip is shown more easily
         header.setMaxWidth(Double.MAX_VALUE);
         return header;

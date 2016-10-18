@@ -24,6 +24,16 @@
     -fx-focus-color: red;
 }
 
+/* Hide the default column header text (we keep its value to avoid breaking the table visibility menu) */
+#logs-table .column-header .label{
+    -fx-content-display: graphic-only;
+}
+
+/* Show the text of the Label set as graphic on the column header (overrides previous hack) */
+#logs-table .column-header .label .column-header-label{
+    -fx-content-display: text-only;
+}
+
 /* Make the scrollbar bigger */
 #logs-table .scroll-bar .thumb,
 #logs-table .scroll-bar .increment-button,

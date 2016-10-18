@@ -113,6 +113,7 @@ public class Columnizer implements Named {
         List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             TableColumn<LogEntry, String> col = new TableColumn<>();
+            // we need to keep the original text to avoid breaking the table visibility menu
             col.textProperty().bind(columnDefinition.headerLabelProperty());
             col.setGraphic(columnDefinition.createBoundHeaderLabel());
             col.setVisible(columnDefinition.isVisible());
