@@ -123,7 +123,7 @@
                 <ChoiceBox fx:id="columnizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome"  icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit columnizers"/>
@@ -134,7 +134,7 @@
                 <ChoiceBox fx:id="colorizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome"  icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit colorizers"/>
@@ -153,9 +153,17 @@
                 </CustomTextField>
                 <CheckBox fx:id="caseSensitiveFilterCheckbox" mnemonicParsing="false" text="Match case"/>
                 <Separator orientation="VERTICAL"/>
+                <Button mnemonicParsing="false" onAction="#search" styleClass="button-search">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="search"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Search"/>
+                    </tooltip>
+                </Button>
                 <Button mnemonicParsing="false" onAction="#restartTailing" styleClass="button-refresh">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="refresh"/>
+                        <Glyph fontFamily="FontAwesome" icon="refresh"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Reload the file"/>
@@ -163,7 +171,7 @@
                 </Button>
                 <Button mnemonicParsing="false" onAction="#clearLogs" styleClass="button-trash">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="trash"/>
+                        <Glyph fontFamily="FontAwesome"  icon="trash"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Clear logs (does not affect the file)"/>
@@ -172,7 +180,7 @@
                 <ToggleButton fx:id="autoScrollButton" mnemonicParsing="false" prefWidth="40.0"
                               styleClass="button-magnet">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome" fontSize="18" icon="magnet" rotate="180.0"/>
+                        <Glyph fontFamily="FontAwesome"  icon="magnet" rotate="180.0"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Stick to bottom"/>

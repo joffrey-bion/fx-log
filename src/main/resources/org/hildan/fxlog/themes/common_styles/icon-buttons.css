@@ -9,6 +9,10 @@
     -fx-text-fill: fa-color-magnet;
 }
 
+.button-search:hover > .label {
+    -fx-text-fill: fa-color-search;
+}
+
 .button-refresh:hover > .label {
     -fx-text-fill: fa-color-refresh;
 }
