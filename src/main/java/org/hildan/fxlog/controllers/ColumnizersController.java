@@ -45,6 +45,9 @@ public class ColumnizersController implements Initializable {
     private TableColumn<ColumnDefinition, String> capturingGroupColumn;
 
     @FXML
+    private TableColumn<ColumnDefinition, String> descriptionColumn;
+
+    @FXML
     private TextField newColumnHeaderField;
 
     @FXML
@@ -113,6 +116,9 @@ public class ColumnizersController implements Initializable {
 
         capturingGroupColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         capturingGroupColumn.setCellValueFactory(data -> data.getValue().capturingGroupNameProperty());
+
+        descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descriptionColumn.setCellValueFactory(data -> data.getValue().descriptionProperty());
 
         ListBinding<ColumnDefinition> columnDefinitions =
                 UIUtils.selectList(columnizersPane.selectedItemProperty(), Columnizer::getColumnDefinitions);

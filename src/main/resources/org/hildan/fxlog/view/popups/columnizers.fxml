@@ -26,9 +26,11 @@
                        maxWidth="1.7976931348623157E308">
                 <columns>
                     <TableColumn fx:id="headerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="200.0" sortable="false" text="Header Label"/>
+                                 prefWidth="100.0" sortable="false" text="Header Label"/>
                     <TableColumn fx:id="capturingGroupColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="200.0" sortable="false" text="Associated capturing group"/>
+                                 prefWidth="100.0" sortable="false" text="Capt. group"/>
+                    <TableColumn fx:id="descriptionColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
+                                 prefWidth="300.0" sortable="false" text="Description"/>
                 </columns>
                 <tooltip>
                     <Tooltip text="Double-click on a cell to edit its value. Press enter to commit your edit."/>
