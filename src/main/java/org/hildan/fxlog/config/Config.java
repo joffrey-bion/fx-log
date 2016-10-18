@@ -37,7 +37,7 @@ public class Config {
      * The version of the format of the config. This needs to be increased each time the serialization format of this
      * class is changed.
      */
-    static final int FORMAT_VERSION = 4;
+    static final int FORMAT_VERSION = 5;
 
     private final Integer version;
 
