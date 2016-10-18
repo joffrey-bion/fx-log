@@ -1,11 +1,18 @@
 package org.hildan.fxlog.columns;
 
+import java.util.concurrent.Callable;
+
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 
 /**
  * Defines a column to hold part of a log line.
@@ -117,6 +124,30 @@ public class ColumnDefinition {
         this.visible = new SimpleBooleanProperty(visible);
         this.width = new SimpleDoubleProperty(initialWidth);
         this.description = new SimpleStringProperty(description);
+    }
+
+    Label createBoundHeaderLabel() {
+        Label header = new Label();
+        header.textProperty().bind(headerLabel);
+        header.tooltipProperty().bind(createTooltipBinding());
+        // makes it take up the full width of the table column header so that the tooltip is shown more easily
+        header.setMaxWidth(Double.MAX_VALUE);
+        return header;
+    }
+
+    private Binding<Tooltip> createTooltipBinding() {
+        Tooltip tooltip = new Tooltip();
+        tooltip.textProperty().bind(description);
+
+        BooleanBinding descriptionIsNull = description.isNull();
+        Callable<Tooltip> tooltipCallable = () -> {
+            if (descriptionIsNull.get()) {
+                // no tooltip when no description
+                return null;
+            }
+            return tooltip;
+        };
+        return Bindings.createObjectBinding(tooltipCallable, descriptionIsNull);
     }
 
     /**

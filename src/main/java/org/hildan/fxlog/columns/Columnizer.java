@@ -97,7 +97,8 @@ public class Columnizer {
     public List<TableColumn<LogEntry, String>> getColumns() {
         List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
         for (ColumnDefinition columnDefinition : columnDefinitions) {
-            TableColumn<LogEntry, String> col = new TableColumn<>(columnDefinition.getHeaderLabel());
+            TableColumn<LogEntry, String> col = new TableColumn<>();
+            col.setGraphic(columnDefinition.createBoundHeaderLabel());
             col.setVisible(columnDefinition.isVisible());
             col.setPrefWidth(columnDefinition.getWidth());
             columnDefinition.visibleProperty().bind(col.visibleProperty());
