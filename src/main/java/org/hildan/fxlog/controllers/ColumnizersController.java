@@ -16,11 +16,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 
+import org.hildan.fx.components.list.BaseEditableListPane;
+import org.hildan.fx.components.list.EditableListPane;
 import org.hildan.fxlog.columns.ColumnDefinition;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.view.UIUtils;
-import org.hildan.fx.components.EditableListPane;
 
 /**
  * Controller associated to the columnizer customization view.
@@ -30,7 +31,7 @@ public class ColumnizersController implements Initializable {
     private Config config;
 
     @FXML
-    private EditableListPane<Columnizer> columnizersPane;
+    private BaseEditableListPane<Columnizer> columnizersPane;
 
     @FXML
     private SplitPane selectedColumnizerPane;
@@ -76,10 +77,8 @@ public class ColumnizersController implements Initializable {
     }
 
     private void initializeColumnizersPane() {
-        columnizersPane.setItemCreator(Columnizer::new);
-        columnizersPane.setNewItemValidator(name -> !name.isEmpty());
-        columnizersPane.getList().setConverter(Columnizer::new, Columnizer::getName, name -> !name.isEmpty());
-        columnizersPane.getList().setUpdater(Columnizer::setName);
+        columnizersPane.setItemFactory(Columnizer::new);
+        columnizersPane.setItemDuplicator(Columnizer::new);
         columnizersPane.getList().setItems(config.getColumnizers());
         columnizersPane.itemInUseIndexProperty().bindBidirectional(config.getState().selectedColumnizerIndexProperty());
     }
@@ -90,7 +89,8 @@ public class ColumnizersController implements Initializable {
 
         ListBinding<Pattern> patterns = UIUtils.selectList(selectedColumnizer, Columnizer::getPatterns);
         Predicate<String> isValidRegex = regex -> createPattern(regex) != null;
-        patternsPane.setItemCreator(ColumnizersController::createPattern);
+        patternsPane.setItemFactory(ColumnizersController::createPattern);
+        patternsPane.setItemDuplicator(p -> p); // not updated anyway
         patternsPane.setNewItemValidator(isValidRegex);
         patternsPane.getList().setConverter(ColumnizersController::createPattern, Pattern::pattern, isValidRegex);
         patternsPane.getList().itemsProperty().bind(patterns);

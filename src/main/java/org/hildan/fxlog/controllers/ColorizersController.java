@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import org.hildan.fx.bindings.lists.MappedList;
 import org.hildan.fx.bindings.lists.UnorderedMergedList;
+import org.hildan.fx.components.list.BaseEditableListPane;
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.StyleRule;
 import org.hildan.fxlog.columns.ColumnDefinition;
@@ -31,7 +32,6 @@ import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.filtering.Filter;
 import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.view.UIUtils;
-import org.hildan.fx.components.EditableListPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,13 +43,13 @@ public class ColorizersController implements Initializable {
     private Config config;
 
     @FXML
-    private EditableListPane<Colorizer> colorizersPane;
+    private BaseEditableListPane<Colorizer> colorizersPane;
 
     @FXML
     private SplitPane selectedColorizerPane;
 
     @FXML
-    private EditableListPane<StyleRule> rulesPane;
+    private BaseEditableListPane<StyleRule> rulesPane;
 
     @FXML
     private ScrollPane selectedRulePane;
@@ -92,10 +92,8 @@ public class ColorizersController implements Initializable {
     }
 
     private void initializeColorizersPane() {
-        colorizersPane.setItemCreator(Colorizer::new);
-        colorizersPane.setNewItemValidator(name -> !name.isEmpty());
-        colorizersPane.getList().setConverter(Colorizer::new, Colorizer::getName, name -> !name.isEmpty());
-        colorizersPane.getList().setUpdater(Colorizer::setName);
+        colorizersPane.setItemFactory(Colorizer::new);
+        colorizersPane.setItemDuplicator(Colorizer::new);
         colorizersPane.getList().setItems(config.getColorizers());
         colorizersPane.itemInUseIndexProperty().bindBidirectional(config.getState().selectedColorizerIndexProperty());
     }
@@ -105,10 +103,8 @@ public class ColorizersController implements Initializable {
         selectedColorizerPane.disableProperty().bind(Bindings.isNull(selectedColorizer));
 
         ListBinding<StyleRule> selectedColorizerRules = UIUtils.selectList(selectedColorizer, Colorizer::getRules);
-        rulesPane.setItemCreator(StyleRule::new);
-        rulesPane.setNewItemValidator(name -> !name.isEmpty());
-        rulesPane.getList().setConverter(StyleRule::new, StyleRule::getName, name -> !name.isEmpty());
-        rulesPane.getList().setUpdater(StyleRule::setName);
+        rulesPane.setItemFactory(StyleRule::new);
+        rulesPane.setItemDuplicator(StyleRule::new);
         rulesPane.getList().itemsProperty().bind(selectedColorizerRules);
     }
 

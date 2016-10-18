@@ -1,4 +1,4 @@
-package org.hildan.fx.components;
+package org.hildan.fx.components.list;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -7,6 +7,8 @@ import java.util.function.Predicate;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
+
+import org.hildan.fx.components.ValidatingTextFieldListCell;
 
 public class EditableListView<T> extends ListView<T> {
 
