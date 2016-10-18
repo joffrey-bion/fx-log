@@ -6,15 +6,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
+import org.hildan.fx.bindings.rulesets.RuleSet;
+import org.hildan.fx.components.list.Named;
 import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.filtering.Filter;
-import org.hildan.fx.bindings.rulesets.RuleSet;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A Colorizer can apply a style to any {@link Node} based on a list of {@link StyleRule}s.
  */
-public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> {
+public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> implements Named {
 
     private final StringProperty name;
 
@@ -41,6 +42,18 @@ public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> {
         this.name = new SimpleStringProperty(name);
     }
 
+    /**
+     * Creates a copy of the given Colorizer.
+     *
+     * @param source
+     *         the colorizer to create a copy of
+     */
+    public Colorizer(@NotNull Colorizer source) {
+        this(source.getName());
+        this.getRules().setAll(source.getRules());
+    }
+
+    @Override
     public String getName() {
         return name.get();
     }
@@ -50,6 +63,7 @@ public class Colorizer extends RuleSet<LogEntry, Style, Filter, StyleRule> {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name.set(name);
     }

@@ -19,13 +19,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import org.hildan.fx.components.list.Named;
 import org.hildan.fxlog.data.LogEntry;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Uses regexps to split log lines into columns.
  */
-public class Columnizer {
+public class Columnizer implements Named {
 
     private final StringProperty name;
 
@@ -64,6 +65,19 @@ public class Columnizer {
         this.patterns = FXCollections.observableArrayList(patterns);
     }
 
+    /**
+     * Creates a copy of the given Columnizer.
+     *
+     * @param source
+     *         the rule to copy
+     */
+    public Columnizer(@NotNull Columnizer source) {
+        this.name = new SimpleStringProperty(source.getName());
+        this.columnDefinitions = FXCollections.observableArrayList(source.columnDefinitions);
+        this.patterns = FXCollections.observableArrayList(source.patterns);
+    }
+
+    @Override
     public String getName() {
         return name.get();
     }
@@ -73,6 +87,7 @@ public class Columnizer {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name.set(name);
     }

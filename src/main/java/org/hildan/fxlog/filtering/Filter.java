@@ -63,6 +63,19 @@ public class Filter implements Matcher<LogEntry> {
     }
 
     /**
+     * Creates a copy of the given Filter.
+     *
+     * @param source
+     *         the filter to copy
+     * @throws PatternSyntaxException
+     *         if the given regex is not well formed
+     */
+    public Filter(Filter source) throws PatternSyntaxException {
+        this.pattern = new SimpleObjectProperty<>(source.pattern.getValue());
+        this.columnName = new SimpleStringProperty(source.getColumnName());
+    }
+
+    /**
      * Creates a new filter which applies on the raw log line.
      *
      * @param regex
