@@ -80,6 +80,10 @@ public class PreferencesController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         prefs = Config.getInstance().getPreferences();
+        // FIXME this override is necessary while SearchableText has not been fixed and plugged in
+        prefs.setWrapLogsText(false);
+        wrapLogsText.setDisable(true);
+
         reopenLastFile.selectedProperty().bindBidirectional(prefs.openLastFileAtStartupProperty());
         checkForUpdates.selectedProperty().bindBidirectional(prefs.checkForUpdatesProperty());
         skipEmptyLogs.selectedProperty().bindBidirectional(prefs.skipEmptyLogsProperty());
