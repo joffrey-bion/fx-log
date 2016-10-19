@@ -3,10 +3,10 @@ plugins {
 }
 
 apply plugin: 'java'
-apply from: 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'checkstyle'
+apply from: 'gradle/plugins/javafx.plugin'
 
 group = 'org.hildan'
 version = '3.0.0'
