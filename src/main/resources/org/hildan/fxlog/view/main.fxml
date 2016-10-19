@@ -13,6 +13,7 @@
 <?import org.controlsfx.control.textfield.CustomTextField?>
 <?import org.controlsfx.glyphfont.Glyph?>
 <?import org.hildan.fxlog.view.components.MemoryUsageInfo?>
+<?import org.hildan.fxlog.view.components.ProportionLabel?>
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="48.0" minWidth="128.0"
             prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.60"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.MainController">
@@ -128,7 +129,7 @@
                 </MenuBar>
                 <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0"
                       StackPane.alignment="CENTER_RIGHT">
-                    <Label fx:id="nbLogs" opacity="0.4" text="# logs"/>
+                    <ProportionLabel fx:id="nbLogs" opacity="0.4" showTotal="true" templateWithTotal="\%,d / %,d logs"/>
                     <MemoryUsageInfo opacity="0.4" showTotal="true">
                         <padding>
                             <Insets right="4"/>
@@ -141,7 +142,7 @@
                 <ChoiceBox fx:id="columnizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColumnizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome"  icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome" icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit columnizers"/>
@@ -152,7 +153,7 @@
                 <ChoiceBox fx:id="colorizerSelector"/>
                 <Button mnemonicParsing="false" onAction="#editColorizers" styleClass="button-pencil">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome"  icon="pencil"/>
+                        <Glyph fontFamily="FontAwesome" icon="pencil"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Edit colorizers"/>
@@ -189,7 +190,7 @@
                 </Button>
                 <Button mnemonicParsing="false" onAction="#clearLogs" styleClass="button-trash">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome"  icon="trash"/>
+                        <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Clear logs (does not affect the file)"/>
@@ -198,7 +199,7 @@
                 <ToggleButton fx:id="autoScrollButton" mnemonicParsing="false" prefWidth="40.0"
                               styleClass="button-magnet">
                     <graphic>
-                        <Glyph fontFamily="FontAwesome"  icon="magnet" rotate="180.0"/>
+                        <Glyph fontFamily="FontAwesome" icon="magnet" rotate="180.0"/>
                     </graphic>
                     <tooltip>
                         <Tooltip text="Stick to bottom"/>

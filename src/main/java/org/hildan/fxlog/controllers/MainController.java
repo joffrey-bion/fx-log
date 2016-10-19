@@ -35,17 +35,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -74,6 +64,7 @@ import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
 import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
+import org.hildan.fxlog.view.components.ProportionLabel;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController implements Initializable {
@@ -122,7 +113,7 @@ public class MainController implements Initializable {
     private CheckMenuItem autoScrollMenu;
 
     @FXML
-    private Label nbLogs;
+    private ProportionLabel<Integer> nbLogs;
 
     @FXML
     private ToggleButton autoScrollButton;
@@ -157,11 +148,8 @@ public class MainController implements Initializable {
         tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
 
-        columnizedLogs.addListener((Change<? extends LogEntry> c) -> {
-            nbLogs.setText(String.format("%s logs", columnizedLogs.size()));
-        });
-
         configureTitleBinding();
+        configureNumberOfLogs();
         configureColumnizerSelector();
         configureColorizerSelector();
         configureFiltering();
@@ -189,6 +177,13 @@ public class MainController implements Initializable {
             }
             return newTitle;
         }, filename, appendFileName);
+    }
+
+    private void configureNumberOfLogs() {
+        nbLogs.totalCountProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
+        columnizedLogs.addListener((Change<? extends LogEntry> c) -> {
+            nbLogs.setCurrentCount(columnizedLogs.size());
+        });
     }
 
     /**
