@@ -184,9 +184,7 @@ public class MainController implements Initializable {
 
     private void configureNumberOfLogs() {
         nbLogs.totalCountProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
-        columnizedLogs.addListener((Change<? extends LogEntry> c) -> {
-            nbLogs.setCurrentCount(columnizedLogs.size());
-        });
+        nbLogs.currentCountProperty().bind(Bindings.createObjectBinding(columnizedLogs::size, columnizedLogs));
     }
 
     /**
