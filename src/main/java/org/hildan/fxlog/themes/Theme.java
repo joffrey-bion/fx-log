@@ -13,7 +13,7 @@ public enum Theme {
     DARK("dark_theme.css"),
     LIGHT("light_theme.css");
 
-    private static final String CSS_PATH = FXLog.BASE_PACKAGE + "/themes";
+    private static final String CSS_BASE_PATH = '/' + Theme.class.getPackage().getName().replace('.', '/');
 
     private final List<String> cssFiles;
 
@@ -42,7 +42,7 @@ public enum Theme {
      * @return the CSS as a style string
      */
     private static String getCss(String cssFilename) {
-        String path = CSS_PATH + '/' + cssFilename;
+        String path = CSS_BASE_PATH + '/' + cssFilename;
         URL url = FXLog.class.getResource(path);
         if (url == null) {
             throw new RuntimeException(String.format("Cannot find CSS stylesheet '%s'", path));

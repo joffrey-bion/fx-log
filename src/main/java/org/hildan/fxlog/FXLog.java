@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,7 +22,9 @@ import javafx.stage.Stage;
 import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.controllers.MainController;
 import org.hildan.fxlog.errors.ErrorDialog;
+import org.hildan.fxlog.themes.Theme;
 import org.hildan.fxlog.version.VersionChecker;
+import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class FXLog extends Application {
@@ -31,11 +35,13 @@ public class FXLog extends Application {
 
     public static final String GITHUB_URL = "https://github.com/joffrey-bion/fx-log";
 
-    public static final String BASE_PACKAGE = '/' + FXLog.class.getPackage().getName().replace('.', '/');
+    private static final String BASE_PACKAGE = FXLog.class.getPackage().getName();
 
-    public static final String APP_ICON_PATH = BASE_PACKAGE + "/fx-log.png";
+    private static final String BASE_PACKAGE_PATH = '/' + BASE_PACKAGE.replace('.', '/');
 
-    private static final String VIEWS_PATH = BASE_PACKAGE + "/view";
+    private static final String APP_ICON_PATH = BASE_PACKAGE_PATH + "/fx-log.png";
+
+    private static final String VIEWS_PATH = BASE_PACKAGE_PATH + "/view";
 
     @Override
     public void start(Stage stage) {
@@ -43,8 +49,10 @@ public class FXLog extends Application {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> ErrorDialog.uncaughtException(e)));
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> ErrorDialog.uncaughtException(e));
         try {
-            URL url = getClass().getResource(BASE_PACKAGE + "/view/main.fxml");
-            FXMLLoader loader = new FXMLLoader(url);
+            URL url = getClass().getResource(VIEWS_PATH + "/main.fxml");
+            Locale locale = new Locale("en", "US");
+            ResourceBundle resources = ResourceBundle.getBundle(BASE_PACKAGE + ".strings", locale);
+            FXMLLoader loader = new FXMLLoader(url, resources);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Config.getInstance().getState().getCurrentTheme().apply(scene);
@@ -67,18 +75,37 @@ public class FXLog extends Application {
     }
 
     /**
-     * Loads the given view.
+     * Creates a new Stage with the given parameters.
+     * <p>
+     * This method does not throw an exception if the view is not found, but shows an error dialog instead.
      *
-     * @param viewFilename
-     *         the name of the view. It can be a path relative to the views package.
+     * @param fxmlFile
+     *         the FXML filename (with extension) of the view to load
+     * @param title
+     *         the title of the new stage
+     * @param theme
+     *         the CSS theme to use for the new stage
      *
-     * @return the Parent returned by the FXMLLoader
-     * @throws IOException
-     *         if the resource couldn't be loaded for some reason
+     * @return a new Stage with the given title. If an error occurred while loading the view, the returned stage has no
+     * attached Scene. Otherwise, a new Scene is created for the view and attached to returned Stage.
      */
-    public static Parent loadView(@NotNull String viewFilename) throws IOException {
-        URL url = FXLog.class.getResource(VIEWS_PATH + '/' + viewFilename);
-        return FXMLLoader.load(url);
+    public static Stage createStage(String fxmlFile, String title, Theme theme) {
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        try {
+            URL url = FXLog.class.getResource(VIEWS_PATH + '/' + fxmlFile);
+            Locale locale = new Locale("en", "US");
+            ResourceBundle resources = ResourceBundle.getBundle(BASE_PACKAGE + ".strings", locale);
+            Parent root = FXMLLoader.load(url, resources);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            InputStream icon = UIUtils.class.getResourceAsStream(APP_ICON_PATH);
+            stage.getIcons().add(new Image(icon));
+            theme.apply(scene);
+        } catch (IOException e) {
+            ErrorDialog.uncaughtException(e);
+        }
+        return stage;
     }
 
     private void autoOpenFile(@NotNull MainController controller) {

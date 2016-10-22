@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.hildan.fx.components.list.EditableListPane?>
-<?import org.hildan.fx.components.list.BaseEditableListPane?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import org.hildan.fx.components.list.BaseEditableListPane?>
 <SplitPane dividerPositions="0.3" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColorizersController">
     <padding>
         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
     </padding>
-    <BaseEditableListPane fx:id="colorizersPane" title="Colorizers">
+    <BaseEditableListPane fx:id="colorizersPane" title="%colorizers.colorizersPane.title">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
@@ -19,7 +15,7 @@
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
-        <BaseEditableListPane fx:id="rulesPane" title="Style Rules"/>
+        <BaseEditableListPane fx:id="rulesPane" title="%colorizers.rulesPane.title"/>
         <ScrollPane fx:id="selectedRulePane" fitToHeight="true" fitToWidth="true">
             <VBox spacing="10.0">
                 <padding>
@@ -29,9 +25,10 @@
                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                         <Label minHeight="-Infinity" minWidth="-Infinity" text="Filter" HBox.hgrow="NEVER"/>
                         <TextField fx:id="filterRegexField" minHeight="-Infinity" minWidth="-Infinity"
-                                   promptText="filter regex" HBox.hgrow="ALWAYS">
+                                   promptText="%colorizers.selectedRulePane.filterRegexField.prompt"
+                                   HBox.hgrow="ALWAYS">
                             <tooltip>
-                                <Tooltip text="The regex to choose the logs to format"/>
+                                <Tooltip text="%colorizers.selectedRulePane.filterRegexField.tooltip"/>
                             </tooltip>
                         </TextField>
                     </HBox>
@@ -45,29 +42,27 @@
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
                         </rowConstraints>
                         <RadioButton fx:id="matchColumnButton" minHeight="-Infinity" minWidth="-Infinity"
-                                     mnemonicParsing="false" selected="true" text="Match specific column:"
-                                     GridPane.rowIndex="1">
+                                     mnemonicParsing="false" selected="true"
+                                     text="%colorizers.selectedRulePane.matchRadioButton.column" GridPane.rowIndex="1">
                             <toggleGroup>
                                 <ToggleGroup fx:id="filterType"/>
                             </toggleGroup>
                         </RadioButton>
                         <RadioButton fx:id="matchRawButton" minHeight="-Infinity" minWidth="-Infinity"
-                                     mnemonicParsing="false" text="Match raw log line"
+                                     mnemonicParsing="false" text="%colorizers.selectedRulePane.matchRadioButton.rawlog"
                                      toggleGroup="$filterType"/>
                         <TextField fx:id="filterColumnNameField" minHeight="-Infinity" minWidth="-Infinity"
-                                   promptText="capturing group name" GridPane.columnIndex="1"
-                                   GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                                   promptText="%colorizers.selectedRulePane.filterColumnNameField.prompt"
+                                   GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                             <tooltip>
-                                <Tooltip
-                                        text="The name of the capturing group defining the column (in a columnizer)"/>
+                                <Tooltip text="%colorizers.selectedRulePane.filterColumnNameField.tooltip"/>
                             </tooltip>
                         </TextField>
                     </GridPane>
                 </VBox>
                 <Separator prefWidth="200.0"/>
                 <VBox fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0">
-                    <Label minHeight="-Infinity" minWidth="-Infinity"
-                           text="Style (check to override default)"/>
+                    <Label minHeight="-Infinity" minWidth="-Infinity" text="%colorizers.selectedRulePane.style.title"/>
                     <GridPane hgap="5.0">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
@@ -78,10 +73,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                         </rowConstraints>
                         <CheckBox fx:id="overrideTextForeground" minHeight="-Infinity" minWidth="-Infinity"
-                                  mnemonicParsing="false" text="Override text foreground"
+                                  mnemonicParsing="false" text="%colorizers.selectedRulePane.style.overrideForeground"
                                   GridPane.hgrow="NEVER"/>
                         <CheckBox fx:id="overrideTextBackground" minHeight="-Infinity" minWidth="-Infinity"
-                                  mnemonicParsing="false" text="Override text background"
+                                  mnemonicParsing="false" text="%colorizers.selectedRulePane.style.overrideBackground"
                                   GridPane.hgrow="NEVER" GridPane.rowIndex="1"/>
                         <ColorPicker fx:id="foregroundColorPicker" minHeight="-Infinity" minWidth="-Infinity"
                                      GridPane.columnIndex="1" GridPane.hgrow="NEVER"/>

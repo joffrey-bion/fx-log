@@ -2,10 +2,7 @@
 
 <?scenebuilder-stylesheet org/hildan/fxlog/themes/common.css?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.controlsfx.glyphfont.Glyph?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import org.controlsfx.glyphfont.Glyph?>
 <BorderPane prefHeight="520.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.PreferencesController">
     <padding>
@@ -17,13 +14,15 @@
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                 </padding>
-                <Label styleClass="title-subsection" text="General"/>
+                <Label styleClass="title-subsection" text="%preferences.general.title"/>
                 <VBox spacing="8.0">
-                    <CheckBox fx:id="reopenLastFile" mnemonicParsing="false" text="Re-open last file at startup"/>
-                    <CheckBox fx:id="checkForUpdates" mnemonicParsing="false" text="Check for updates at startup"/>
+                    <CheckBox fx:id="reopenLastFile" mnemonicParsing="false"
+                              text="%preferences.general.reopenLastFile"/>
+                    <CheckBox fx:id="checkForUpdates" mnemonicParsing="false"
+                              text="%preferences.general.checkForUpdates"/>
                 </VBox>
                 <Separator prefWidth="200.0"/>
-                <Label styleClass="title-subsection" text="Tailing settings"/>
+                <Label styleClass="title-subsection" text="%preferences.tailing.title"/>
                 <GridPane vgap="5.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -34,13 +33,13 @@
                         <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
                         <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
                     </rowConstraints>
-                    <CheckBox fx:id="limitNumberOfLogs" mnemonicParsing="false" text="Limit number of logs displayed to"
-                              GridPane.rowIndex="2"/>
+                    <CheckBox fx:id="limitNumberOfLogs" mnemonicParsing="false"
+                              text="%preferences.tailing.limitNumberOfLogs" GridPane.rowIndex="2"/>
                     <Spinner fx:id="maxNumberOfLogs" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
                              GridPane.rowIndex="2"/>
-                    <CheckBox fx:id="skipEmptyLogs" mnemonicParsing="false" text="Skip empty log lines"
+                    <CheckBox fx:id="skipEmptyLogs" mnemonicParsing="false" text="%preferences.tailing.skipEmptyLogs"
                               GridPane.rowIndex="1"/>
-                    <Label text="Polling period (ms)">
+                    <Label text="%preferences.tailing.pollingPeriod">
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="clock_alt">
                                 <padding>
@@ -52,12 +51,14 @@
                     <Spinner fx:id="tailingDelay" editable="true" prefWidth="100.0" GridPane.columnIndex="1"/>
                 </GridPane>
                 <Separator prefWidth="200.0"/>
-                <Label minHeight="-Infinity" minWidth="-Infinity" styleClass="title-subsection" text="Logs table"/>
+                <Label minHeight="-Infinity" minWidth="-Infinity" styleClass="title-subsection"
+                       text="%preferences.logsTable.title"/>
                 <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
-                    <CheckBox fx:id="wrapLogsText" mnemonicParsing="false" text="Wrap text within columns"/>
+                    <CheckBox fx:id="wrapLogsText" mnemonicParsing="false" text="%preferences.logsTable.wrapLogsText"/>
                     <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
                           minWidth="-Infinity" VBox.vgrow="NEVER">
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Text font">
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                               text="%preferences.logsTable.textFont">
                             <HBox.margin>
                                 <Insets right="10.0"/>
                             </HBox.margin>
@@ -72,7 +73,7 @@
                     </HBox>
                 </VBox>
                 <Separator prefWidth="200.0"/>
-                <Label styleClass="title-subsection" text="Search"/>
+                <Label styleClass="title-subsection" text="%preferences.search.title"/>
                 <GridPane vgap="5.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -85,16 +86,16 @@
                         <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
                         <RowConstraints vgrow="SOMETIMES"/>
                     </rowConstraints>
-                    <Label text="Match foreground color"/>
+                    <Label text="%preferences.search.match.foregroundColor"/>
                     <ColorPicker fx:id="searchMatchForegroundColor" GridPane.columnIndex="1"/>
-                    <Label text="Match background color" GridPane.rowIndex="1"/>
-                    <Label text="Match scrollbar mark color" GridPane.rowIndex="2"/>
+                    <Label text="%preferences.search.match.backgroundColor" GridPane.rowIndex="1"/>
+                    <Label text="%preferences.search.mark.color" GridPane.rowIndex="2"/>
                     <ColorPicker fx:id="searchMatchBackgroundColor" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     <ColorPicker fx:id="searchMatchMarkColor" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                    <Label text="Match scrollbar mark thickness" GridPane.rowIndex="3"/>
+                    <Label text="%preferences.search.mark.thickness" GridPane.rowIndex="3"/>
                     <Spinner fx:id="searchMatchMarkThickness" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
                              GridPane.rowIndex="3"/>
-                    <Label text="Match scrollbar mark alignment" GridPane.rowIndex="4"/>
+                    <Label text="%preferences.search.mark.alignment" GridPane.rowIndex="4"/>
                     <ChoiceBox fx:id="searchMatchMarkAlignment" prefWidth="150.0" GridPane.columnIndex="1"
                                GridPane.rowIndex="4"/>
                 </GridPane>

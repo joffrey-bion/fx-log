@@ -332,10 +332,10 @@ public class MainController implements Initializable {
      */
     private void configureSecondaryStages() {
         Theme theme = config.getState().getCurrentTheme();
-        colorizersStage = UIUtils.createStage("popups/colorizers.fxml", "Customize Colorizers", theme);
-        columnizersStage = UIUtils.createStage("popups/columnizers.fxml", "Customize Columnizers", theme);
-        preferencesStage = UIUtils.createStage("popups/preferences.fxml", "Preferences", theme);
-        aboutStage = UIUtils.createStage("popups/about.fxml", "About FX Log", theme);
+        colorizersStage = FXLog.createStage("popups/colorizers.fxml", "Customize Colorizers", theme);
+        columnizersStage = FXLog.createStage("popups/columnizers.fxml", "Customize Columnizers", theme);
+        preferencesStage = FXLog.createStage("popups/preferences.fxml", "Preferences", theme);
+        aboutStage = FXLog.createStage("popups/about.fxml", "About FX Log", theme);
         aboutStage.initStyle(StageStyle.UNDECORATED);
         aboutStage.focusedProperty().addListener((observable, wasFocused, nowFocused) -> {
             if (!nowFocused) {

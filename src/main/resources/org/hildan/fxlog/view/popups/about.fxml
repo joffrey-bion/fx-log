@@ -6,8 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane prefHeight="280.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="280.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65">
     <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
     </padding>
@@ -19,15 +18,15 @@
                 </padding>
                 <VBox spacing="8.0">
                     <Label styleClass="title-huge" text="FX Log ${projectVersion}"/>
-                    <Label text="Version ${projectVersion}"/>
-                    <Label text="Released on ${buildDate}"/>
-                    <Label text="Under the MIT license"/>
-                    <Label text="Powered by JavaFX 8"/>
+                    <Label text="%about.version"/>
+                    <Label text="%about.releasedOn"/>
+                    <Label text="%about.license"/>
+                    <Label text="%about.technology"/>
                 </VBox>
                 <Separator prefWidth="200.0"/>
                 <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="8.0">
-                    <Label text="Copyright (c) 2016, Joffrey Bion"/>
-                    <Label text="Contact: joffrey.bion@gmail.com"/>
+                    <Label text="%about.copyright"/>
+                    <Label text="%about.contact"/>
                 </VBox>
             </VBox>
         </ScrollPane>

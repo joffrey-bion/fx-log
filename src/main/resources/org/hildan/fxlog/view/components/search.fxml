@@ -30,7 +30,7 @@
                 <Glyph fontFamily="FontAwesome" icon="chevron_up"/>
             </graphic>
             <tooltip>
-                <Tooltip text="Previous match"/>
+                <Tooltip text="%search.previousMatch.tooltip"/>
             </tooltip>
         </Button>
         <Button fx:id="nextButton" mnemonicParsing="false" onAction="#goToNextMatch">
@@ -38,7 +38,7 @@
                 <Glyph fontFamily="FontAwesome" icon="chevron_down"/>
             </graphic>
             <tooltip>
-                <Tooltip text="Next match"/>
+                <Tooltip text="%search.nextMatch.tooltip"/>
             </tooltip>
         </Button>
         <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSearch" styleClass="flat-button">
@@ -46,15 +46,16 @@
                 <Glyph fontFamily="FontAwesome" icon="close"/>
             </graphic>
             <tooltip>
-                <Tooltip text="Close search"/>
+                <Tooltip text="%search.exit.tooltip"/>
             </tooltip>
         </Button>
     </HBox>
     <Separator/>
     <HBox alignment="CENTER_LEFT" spacing="10.0">
-        <CheckBox fx:id="matchCaseCheckBox" mnemonicParsing="false" text="Match case"/>
-        <CheckBox fx:id="regexCheckBox" mnemonicParsing="false" text="Regex"/>
+        <CheckBox fx:id="matchCaseCheckBox" mnemonicParsing="false" text="%search.checkBox.matchCase"/>
+        <CheckBox fx:id="regexCheckBox" mnemonicParsing="false" text="%search.checkBox.regex"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <ProportionLabel fx:id="matchNavigationLabel" showTotal="true" templateWithTotal="\%d of %d"/>
+        <ProportionLabel fx:id="matchNavigationLabel" showTotal="true"
+                         templateWithTotal="%search.matchNavigation.template"/>
     </HBox>
 </VBox>

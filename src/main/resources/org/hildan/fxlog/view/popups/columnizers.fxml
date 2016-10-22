@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.glyphfont.Glyph?>
-<?import org.hildan.fx.components.list.EditableListPane?>
-<?import org.hildan.fx.components.list.BaseEditableListPane?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.VBox?><?import org.controlsfx.glyphfont.Glyph?><?import org.hildan.fx.components.list.BaseEditableListPane?><?import org.hildan.fx.components.list.EditableListPane?>
 <SplitPane dividerPositions="0.25" prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.65"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.ColumnizersController">
     <padding>
         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
     </padding>
-    <BaseEditableListPane fx:id="columnizersPane" title="Columnizers">
+    <BaseEditableListPane fx:id="columnizersPane" title="%columnizers.columnizersPane.title">
         <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
@@ -22,59 +16,71 @@
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
         </padding>
         <VBox>
-            <Label text="Columns" VBox.vgrow="NEVER" styleClass="title-subsection"/>
+            <Label text="%columnizers.columnsTable.title" VBox.vgrow="NEVER" styleClass="title-subsection"/>
             <TableView fx:id="columnsTable" editable="true" maxHeight="1.7976931348623157E308"
                        maxWidth="1.7976931348623157E308">
                 <columns>
-                    <TableColumn fx:id="visibleColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="40" sortable="false" text="Show"/>
+                    <TableColumn fx:id="visibleColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="40"
+                                 sortable="false" text="%columnizers.columnsTable.showColumn.header"/>
                     <TableColumn fx:id="headerColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="100.0" sortable="false" text="Header Label"/>
+                                 prefWidth="100.0" sortable="false"
+                                 text="%columnizers.columnsTable.headerColumn.header"/>
                     <TableColumn fx:id="capturingGroupColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="105.0" sortable="false" text="Capturing group"/>
+                                 prefWidth="105.0" sortable="false"
+                                 text="%columnizers.columnsTable.capturingGroupColumn.header"/>
                     <TableColumn fx:id="descriptionColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                 prefWidth="560.0" sortable="false" text="Description"/>
+                                 prefWidth="560.0" sortable="false"
+                                 text="%columnizers.columnsTable.descriptionColumn.header"/>
                 </columns>
                 <tooltip>
-                    <Tooltip text="Double-click on a cell to edit its value. Press enter to commit your edit."/>
+                    <Tooltip text="%columnizers.columnsTable.tooltip"/>
                 </tooltip>
             </TableView>
             <HBox spacing="2.0" VBox.vgrow="NEVER">
-                <TextField fx:id="newColumnHeaderField" promptText="column header" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="newColumnGroupField" promptText="capturing group name"
-                           HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="newColumnHeaderField" promptText="%columnizers.newColumnHeaderField.prompt"
+                           HBox.hgrow="ALWAYS">
+                    <tooltip>
+                        <Tooltip text="%columnizers.newColumnHeaderField.tooltip"/>
+                    </tooltip>
+                </TextField>
+                <TextField fx:id="newColumnGroupField" promptText="%columnizers.newColumnCapturingGroupField.prompt"
+                           HBox.hgrow="ALWAYS">
+                    <tooltip>
+                        <Tooltip text="%columnizers.newColumnCapturingGroupField.tooltip"/>
+                    </tooltip>
+                </TextField>
                 <Button fx:id="addColumnButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
                         onAction="#addNewColumnDefinition" HBox.hgrow="NEVER" styleClass="button-plus">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="plus"/>
                     </graphic>
                 </Button>
-                <Button fx:id="removeColumnButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#removeSelectedColumnDefinition" styleClass="button-trash">
+                <Button fx:id="removeColumnButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                        onAction="#removeSelectedColumnDefinition" styleClass="button-trash">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="trash"/>
                     </graphic>
                 </Button>
-                <Button fx:id="moveColumnUpButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColumnUp" styleClass="button-arrow">
+                <Button fx:id="moveColumnUpButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                        onAction="#moveSelectedColumnUp" styleClass="button-arrow">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="arrow_up"/>
                     </graphic>
                     <tooltip>
-                        <Tooltip text="Move column definition up"/>
+                        <Tooltip text="%columnizers.moveColumnUpButton.tooltip"/>
                     </tooltip>
                 </Button>
-                <Button fx:id="moveColumnDownButton" minHeight="-Infinity" minWidth="-Infinity"
-                        mnemonicParsing="false" onAction="#moveSelectedColumnDown" styleClass="button-arrow">
+                <Button fx:id="moveColumnDownButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                        onAction="#moveSelectedColumnDown" styleClass="button-arrow">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="arrow_down"/>
                     </graphic>
                     <tooltip>
-                        <Tooltip text="Move column definition down"/>
+                        <Tooltip text="%columnizers.moveColumnDownButton.tooltip"/>
                     </tooltip>
                 </Button>
             </HBox>
         </VBox>
-        <EditableListPane fx:id="patternsPane" title="Log patterns"/>
+        <EditableListPane fx:id="patternsPane" title="%columnizers.patternsPane.title"/>
     </SplitPane>
 </SplitPane>
