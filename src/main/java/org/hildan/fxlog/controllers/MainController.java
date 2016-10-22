@@ -148,6 +148,9 @@ public class MainController implements Initializable {
         tailedFileName = new SimpleStringProperty();
         closeMenu.disableProperty().bind(tailingFile.not());
 
+        // show the search panel only when the search is active
+        searchPanel.setVisible(false);
+
         configureTitleBinding();
         configureNumberOfLogs();
         configureColumnizerSelector();
@@ -262,7 +265,7 @@ public class MainController implements Initializable {
 
     @FXML
     public void search() {
-        // stop tailing to be able to go from match to match
+        // stop auto-scroll to be able to go from match to match
         autoScrollActive.set(false);
         searchPanel.setVisible(true);
         searchPanelController.startSearch();

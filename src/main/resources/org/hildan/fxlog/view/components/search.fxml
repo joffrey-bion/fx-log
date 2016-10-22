@@ -5,12 +5,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 <?import org.controlsfx.glyphfont.Glyph?>
-<VBox fx:id="searchPanel" spacing="5.0" styleClass="search-background" visible="false"
-      xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.hildan.fxlog.controllers.SearchController">
+<?import org.hildan.fxlog.view.components.ProportionLabel?>
+<VBox fx:id="searchPanel" spacing="5.0" styleClass="search-background" xmlns="http://javafx.com/javafx/8.0.60"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.SearchController">
     <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
     </padding>
@@ -53,5 +54,7 @@
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <CheckBox fx:id="matchCaseCheckBox" mnemonicParsing="false" text="Match case"/>
         <CheckBox fx:id="regexCheckBox" mnemonicParsing="false" text="Regex"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <ProportionLabel fx:id="matchNavigationLabel" showTotal="true" templateWithTotal="\%d of %d"/>
     </HBox>
 </VBox>

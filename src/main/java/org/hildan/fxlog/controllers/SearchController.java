@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.Property;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,9 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
@@ -31,6 +29,7 @@ import org.hildan.fxlog.config.Config;
 import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fxlog.search.Search;
 import org.hildan.fxlog.view.UIUtils;
+import org.hildan.fxlog.view.components.ProportionLabel;
 import org.hildan.fxlog.view.scrollbarmarks.ScrollBarMarker;
 
 public class SearchController implements Initializable, ListChangeListener<LogEntry> {
@@ -55,6 +54,9 @@ public class SearchController implements Initializable, ListChangeListener<LogEn
     @FXML
     private CheckBox regexCheckBox;
 
+    @FXML
+    private ProportionLabel<Integer> matchNavigationLabel;
+
     private final Search search = new Search();
 
     private ObservableList<? extends LogEntry> logs;
@@ -69,7 +71,7 @@ public class SearchController implements Initializable, ListChangeListener<LogEn
 
     private ScrollBarMarker scrollBarMarker;
 
-    private final Property<Integer> currentMatchRowIndex = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<Integer> currentMatchRowIndex = new SimpleObjectProperty<>(null);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,6 +87,14 @@ public class SearchController implements Initializable, ListChangeListener<LogEn
         search.textProperty().bind(searchTextField.textProperty());
         search.matchCaseProperty().bind(matchCaseCheckBox.selectedProperty());
         search.regexModeProperty().bind(regexCheckBox.selectedProperty());
+
+        Binding<Integer> matchRowsCount = Bindings.createObjectBinding(matchRows::size, matchRows);
+        Binding<Integer> currentMatchRowIndexOneBased = Bindings.createObjectBinding(() -> {
+            return currentMatchRowIndex.get() == null ? 0 : currentMatchRowIndex.get() + 1;
+        }, currentMatchRowIndex);
+        matchNavigationLabel.currentCountProperty().bind(currentMatchRowIndexOneBased);
+        matchNavigationLabel.totalCountProperty().bind(matchRowsCount);
+        matchNavigationLabel.visibleProperty().bind(currentMatchRowIndex.isNotNull());
     }
 
     void configure(Config config, ObservableList<? extends LogEntry> logs, TableView<LogEntry> logsTable,
@@ -173,10 +183,10 @@ public class SearchController implements Initializable, ListChangeListener<LogEn
         matchRows.clear();
         addPotentialMatches(logs, 0);
         if (matchRows.size() > 0) {
-            currentMatchRowIndex.setValue(0);
+            currentMatchRowIndex.set(0);
             scrollToMatch(0);
         } else {
-            currentMatchRowIndex.setValue(null);
+            currentMatchRowIndex.set(null);
         }
     }
 
@@ -203,18 +213,18 @@ public class SearchController implements Initializable, ListChangeListener<LogEn
     @FXML
     void goToNextMatch() {
         moveCurrentMatch(+1);
-        scrollToMatch(currentMatchRowIndex.getValue());
+        scrollToMatch(currentMatchRowIndex.get());
     }
 
     @FXML
     void goToPreviousMatch() {
         moveCurrentMatch(-1);
-        scrollToMatch(currentMatchRowIndex.getValue());
+        scrollToMatch(currentMatchRowIndex.get());
     }
 
     private void moveCurrentMatch(int offset) {
-        int newIndex = Math.floorMod(currentMatchRowIndex.getValue() + offset, matchRows.size());
-        currentMatchRowIndex.setValue(newIndex);
+        int newIndex = Math.floorMod(currentMatchRowIndex.get() + offset, matchRows.size());
+        currentMatchRowIndex.set(newIndex);
     }
 
     private void scrollToMatch(int matchIndex) {
