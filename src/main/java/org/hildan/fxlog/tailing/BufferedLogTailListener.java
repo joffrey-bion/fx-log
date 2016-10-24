@@ -5,7 +5,7 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -30,7 +30,7 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
 
     private final BooleanProperty limitNumberOfLogs;
 
-    private final Property<Integer> maxNumberOfLogs;
+    private final ObjectProperty<Integer> maxNumberOfLogs;
 
     private volatile boolean running;
 
@@ -67,7 +67,7 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
         this.logs = logs;
         this.skipEmptyLogs = new SimpleBooleanProperty(false);
         this.limitNumberOfLogs = new SimpleBooleanProperty(false);
-        this.maxNumberOfLogs = new SimpleObjectProperty<>(0);
+        this.maxNumberOfLogs = new SimpleObjectProperty<>(Integer.MAX_VALUE);
         this.buffer = new ArrayList<>(logBufferSize);
         this.bufferMaxSize = logBufferSize;
     }
@@ -111,9 +111,9 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
             // we need to check again here because the listener may have been stopped in the meantime
             if (running) {
                 if (limitNumberOfLogs.get()) {
-                    int nbExtraLogs = logs.size() + toSendToUI.size() - maxNumberOfLogs.getValue();
+                    int nbExtraLogs = logs.size() + toSendToUI.size() - maxNumberOfLogs.get();
                     if (nbExtraLogs > 0) {
-                        logs.removeAll(logs.subList(0, nbExtraLogs));
+                        logs.subList(0, nbExtraLogs).clear();
                     }
                 }
                 logs.addAll(toSendToUI);
@@ -154,14 +154,14 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     }
 
     public Integer getMaxNumberOfLogs() {
-        return maxNumberOfLogs.getValue();
+        return maxNumberOfLogs.get();
     }
 
-    public Property<Integer> maxNumberOfLogsProperty() {
+    public ObjectProperty<Integer> maxNumberOfLogsProperty() {
         return maxNumberOfLogs;
     }
 
     public void setMaxNumberOfLogs(Integer maxNumberOfLogs) {
-        this.maxNumberOfLogs.setValue(maxNumberOfLogs);
+        this.maxNumberOfLogs.set(maxNumberOfLogs);
     }
 }

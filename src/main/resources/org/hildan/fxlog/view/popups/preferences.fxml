@@ -2,8 +2,25 @@
 
 <?scenebuilder-stylesheet org/hildan/fxlog/themes/common.css?>
 
-<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import org.controlsfx.glyphfont.Glyph?>
-<BorderPane prefHeight="520.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65"
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<BorderPane prefHeight="520.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.102"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.hildan.fxlog.controllers.PreferencesController">
     <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
@@ -29,17 +46,22 @@
                         <ColumnConstraints hgrow="SOMETIMES"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="-Infinity" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="-Infinity" vgrow="NEVER"/>
+                        <RowConstraints minHeight="-Infinity" vgrow="NEVER"/>
+                        <RowConstraints minHeight="-Infinity" vgrow="NEVER"/>
+                        <RowConstraints minHeight="-Infinity" vgrow="NEVER"/>
                     </rowConstraints>
+                    <CheckBox fx:id="skipEmptyLogs" mnemonicParsing="false" text="%preferences.tailing.skipEmptyLogs"/>
                     <CheckBox fx:id="limitNumberOfLogs" mnemonicParsing="false"
-                              text="%preferences.tailing.limitNumberOfLogs" GridPane.rowIndex="2"/>
-                    <Spinner fx:id="maxNumberOfLogs" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
-                             GridPane.rowIndex="2"/>
-                    <CheckBox fx:id="skipEmptyLogs" mnemonicParsing="false" text="%preferences.tailing.skipEmptyLogs"
+                              text="%preferences.tailing.limitNumberOfLogs"
                               GridPane.rowIndex="1"/>
-                    <Label text="%preferences.tailing.pollingPeriod">
+                    <Spinner fx:id="maxNumberOfLogs" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
+                             GridPane.rowIndex="1"/>
+
+                    <Label text="%preferences.tailing.pollingPeriod" GridPane.rowIndex="2">
+                        <tooltip>
+                            <Tooltip text="%preferences.tailing.pollingPeriod.tooltip"/>
+                        </tooltip>
                         <graphic>
                             <Glyph fontFamily="FontAwesome" icon="clock_alt">
                                 <padding>
@@ -48,7 +70,26 @@
                             </Glyph>
                         </graphic>
                     </Label>
-                    <Spinner fx:id="tailingDelay" editable="true" prefWidth="100.0" GridPane.columnIndex="1"/>
+                    <Spinner fx:id="tailingDelay" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
+                             GridPane.rowIndex="2">
+                        <tooltip>
+                            <Tooltip text="%preferences.tailing.pollingPeriod.tooltip"/>
+                        </tooltip>
+                    </Spinner>
+                    <Label text="%preferences.tailing.logBufferSize" GridPane.rowIndex="3">
+                        <tooltip>
+                            <Tooltip prefWidth="500" wrapText="true"
+                                     text="%preferences.tailing.logBufferSize.tooltip">
+                            </Tooltip>
+                        </tooltip>
+                    </Label>
+                    <Spinner fx:id="logBufferSize" editable="true" prefWidth="100.0" GridPane.columnIndex="1"
+                             GridPane.rowIndex="3">
+                        <tooltip>
+                            <Tooltip prefWidth="500" wrapText="true"
+                                     text="%preferences.tailing.logBufferSize.tooltip"/>
+                        </tooltip>
+                    </Spinner>
                 </GridPane>
                 <Separator prefWidth="200.0"/>
                 <Label minHeight="-Infinity" minWidth="-Infinity" styleClass="title-subsection"
@@ -65,7 +106,10 @@
                         </Label>
                         <TextField fx:id="logsFontField" maxHeight="1.7976931348623157E308"
                                    maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
-                        <Button mnemonicParsing="false" onAction="#chooseLogsTextFont" text="...">
+                        <Button mnemonicParsing="false" onAction="#chooseLogsTextFont">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="font"/>
+                            </graphic>
                             <HBox.margin>
                                 <Insets left="3.0"/>
                             </HBox.margin>

@@ -1,15 +1,16 @@
 package org.hildan.fxlog.config;
 
-import org.hildan.fxlog.coloring.Style;
-import org.hildan.fxlog.view.scrollbarmarks.Alignment;
-import org.jetbrains.annotations.NotNull;
-
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import org.hildan.fxlog.coloring.Style;
+import org.hildan.fxlog.view.scrollbarmarks.Alignment;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the user's preferences in terms of colors, fonts, size of things.
@@ -28,6 +29,8 @@ public class Preferences {
     private final BooleanProperty skipEmptyLogs;
 
     private final Property<Integer> tailingDelayInMillis;
+
+    private final ObjectProperty<Integer> logBufferSize;
 
     private final BooleanProperty wrapLogsText;
 
@@ -48,6 +51,7 @@ public class Preferences {
         this.maxNumberOfLogs = new SimpleObjectProperty<>(100000);
         this.skipEmptyLogs = new SimpleBooleanProperty(true);
         this.tailingDelayInMillis = new SimpleObjectProperty<>(100);
+        this.logBufferSize = new SimpleObjectProperty<>(1000);
         this.wrapLogsText = new SimpleBooleanProperty(false);
         this.logsFont = new SimpleObjectProperty<>(Font.getDefault());
         this.searchHighlightStyle = new SimpleObjectProperty<>(Style.HIGHLIGHT_SEARCH);
@@ -128,6 +132,18 @@ public class Preferences {
 
     public void setTailingDelayInMillis(Integer tailingDelayInMillis) {
         this.tailingDelayInMillis.setValue(tailingDelayInMillis);
+    }
+
+    public Integer getLogBufferSize() {
+        return logBufferSize.get();
+    }
+
+    public Property<Integer> logBufferSizeProperty() {
+        return logBufferSize;
+    }
+
+    public void setLogBufferSize(Integer logBufferSize) {
+        this.logBufferSize.set(logBufferSize);
     }
 
     public boolean getWrapLogsText() {

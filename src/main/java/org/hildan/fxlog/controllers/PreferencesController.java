@@ -5,12 +5,16 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
+import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 
 import org.controlsfx.dialog.FontSelectorDialog;
@@ -28,13 +32,17 @@ public class PreferencesController implements Initializable {
 
     private static final double MAX_THICKNESS = 20;
 
-    private static final int MIN_NUMBER_OF_LOGS = 1;
+    private static final int MIN_NB_OF_LOGS = 1;
 
-    private static final int MAX_NUMBER_OF_LOGS = Integer.MAX_VALUE;
+    private static final int MAX_NB_OF_LOGS = Integer.MAX_VALUE;
 
     private static final int MIN_TAILING_DELAY = 1;
 
     private static final int MAX_TAILING_DELAY = Integer.MAX_VALUE;
+
+    private static final int MIN_LOG_BUFFER_SIZE = 1;
+
+    private static final int MAX_LOG_BUFFER_SIZE = Integer.MAX_VALUE;
 
     private Preferences prefs;
 
@@ -55,6 +63,9 @@ public class PreferencesController implements Initializable {
 
     @FXML
     private Spinner<Integer> tailingDelay;
+
+    @FXML
+    private Spinner<Integer> logBufferSize;
 
     @FXML
     private CheckBox wrapLogsText;
@@ -99,31 +110,44 @@ public class PreferencesController implements Initializable {
         configureSearchMatchMarkAlignmentBox();
         configureLogLimitSpinner();
         configureTailingDelaySpinner();
+        configureLogBufferSizeSpinner();
         configureFontSelector();
     }
 
     private void configureSearchMatchMarkThicknessSpinner() {
-        DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(MIN_THICKNESS, MAX_THICKNESS);
-        factory.valueProperty().bindBidirectional(prefs.searchMatchMarkThicknessProperty());
-        searchMatchMarkThickness.setValueFactory(factory);
+        configureDoubleSpinner(searchMatchMarkThickness, prefs.searchMatchMarkThicknessProperty(), MIN_THICKNESS,
+                MAX_THICKNESS);
     }
 
     private void configureSearchMatchMarkAlignmentBox() {
-        searchMatchMarkAlignment.setItems(FXCollections.observableArrayList(Alignment.values()));
+        searchMatchMarkAlignment.getItems().addAll(Alignment.values());
         searchMatchMarkAlignment.valueProperty().bindBidirectional(prefs.searchMatchMarkAlignmentProperty());
     }
 
     private void configureLogLimitSpinner() {
         maxNumberOfLogs.disableProperty().bind(limitNumberOfLogs.selectedProperty().not());
-        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(MIN_NUMBER_OF_LOGS, MAX_NUMBER_OF_LOGS);
-        factory.valueProperty().bindBidirectional(prefs.maxNumberOfLogsProperty());
-        maxNumberOfLogs.setValueFactory(factory);
+        configureIntegerSpinner(maxNumberOfLogs, prefs.maxNumberOfLogsProperty(), MIN_NB_OF_LOGS, MAX_NB_OF_LOGS);
     }
 
     private void configureTailingDelaySpinner() {
-        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(MIN_TAILING_DELAY, MAX_TAILING_DELAY);
-        factory.valueProperty().bindBidirectional(prefs.tailingDelayInMillisProperty());
-        tailingDelay.setValueFactory(factory);
+        configureIntegerSpinner(tailingDelay, prefs.tailingDelayInMillisProperty(), MIN_TAILING_DELAY,
+                MAX_TAILING_DELAY);
+    }
+
+    private void configureLogBufferSizeSpinner() {
+        configureIntegerSpinner(logBufferSize, prefs.logBufferSizeProperty(), MIN_LOG_BUFFER_SIZE, MAX_LOG_BUFFER_SIZE);
+    }
+
+    private void configureIntegerSpinner(Spinner<Integer> spinner, Property<Integer> prop, int min, int max) {
+        IntegerSpinnerValueFactory factory = new IntegerSpinnerValueFactory(min, max);
+        factory.valueProperty().bindBidirectional(prop);
+        spinner.setValueFactory(factory);
+    }
+
+    private void configureDoubleSpinner(Spinner<Double> spinner, Property<Double> prop, double min, double max) {
+        DoubleSpinnerValueFactory factory = new DoubleSpinnerValueFactory(min, max);
+        factory.valueProperty().bindBidirectional(prop);
+        spinner.setValueFactory(factory);
     }
 
     private void configureFontSelector() {

@@ -119,7 +119,8 @@
                 <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0"
                       StackPane.alignment="CENTER_RIGHT">
                     <ProportionLabel fx:id="nbLogs" opacity="0.4" showTotal="true"
-                                     templateWithTotal="%misc.loadedLogsTemplate"/>
+                                     template="%misc.loadedLogsTemplate.noLimit"
+                                     templateWithTotal="%misc.loadedLogsTemplate.withLimit"/>
                     <MemoryUsageInfo opacity="0.4" showTotal="true">
                         <padding>
                             <Insets right="4"/>

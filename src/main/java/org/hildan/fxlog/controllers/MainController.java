@@ -35,7 +35,16 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -185,6 +194,7 @@ public class MainController implements Initializable {
     private void configureNumberOfLogs() {
         nbLogs.totalCountProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
         nbLogs.currentCountProperty().bind(Bindings.createObjectBinding(columnizedLogs::size, columnizedLogs));
+        nbLogs.showTotalProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
     }
 
     /**
@@ -504,7 +514,8 @@ public class MainController implements Initializable {
         }
         closeCurrentFile();
         config.getState().addToRecentFiles(file.getAbsolutePath());
-        logTailListener = new BufferedLogTailListener(columnizer.getValue(), columnizedLogs);
+        logTailListener = new BufferedLogTailListener(columnizer.getValue(), columnizedLogs,
+                config.getPreferences().getLogBufferSize());
         logTailListener.skipEmptyLogsProperty().bind(config.getPreferences().skipEmptyLogsProperty());
         logTailListener.limitNumberOfLogsProperty().bind(config.getPreferences().limitNumberOfLogsProperty());
         logTailListener.maxNumberOfLogsProperty().bind(config.getPreferences().maxNumberOfLogsProperty());
