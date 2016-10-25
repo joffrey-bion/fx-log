@@ -1,5 +1,5 @@
 checkstyle {
-    toolVersion = '6.15'
+    toolVersion = '7.1.2'
 }
 
 // Fail build on Checkstyle warnings
