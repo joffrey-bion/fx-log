@@ -33,9 +33,7 @@ Choose the logs that matter to you at any time.
 Use regular expressions to parse your raw log lines into nice columns. Built-in support is already included for
 standard server logs like Weblogic and Apache.
 
-Custom columnizer                                                   |  Select interesting columns
-:------------------------------------------------------------------:|:----------------------------------------------:
-![Customize Columnizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_columnizers.png) | ![Show/hide columns](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/hide_columns.png)
+![Customize Columnizers](https://raw.githubusercontent.com/joffrey-bion/fx-log/master/doc/screenshots/customize_columnizers.png)
 
 ### Coloration
 
