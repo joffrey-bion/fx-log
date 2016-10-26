@@ -81,7 +81,8 @@ public class DefaultConfig {
                 + " ?<(?<msgId>[^>]*?)>" //
                 + "( ?<(?<class>[^>]*?)>)?" //
                 + " ?<(?<msg>.*?)" // message start
-                + "(;jsessionid=(?<sessionid>[^>]*)>|>)?\\s*"; // optional session id or end of message
+                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + ">?\\s*"; // optional end of message
         @RegExp
         String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>\\s*"; // end of msg and optional session id
         @RegExp
@@ -113,7 +114,8 @@ public class DefaultConfig {
                 + " ?<(?<thread>[^>]*?)>" //
                 + "( ?<(?<class>[^>]*?)>)?" //
                 + " ?<(?<msg>.*?)" // message start
-                + "(;jsessionid=(?<sessionid>[^>]*)>|>)?\\s*"; // optional session id or end of message
+                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + ">?\\s*"; // optional end of message
         @RegExp
         String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>\\s*"; // end of msg and optional session id
         @RegExp
