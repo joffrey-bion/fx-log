@@ -10,7 +10,7 @@ addons:
     packages:
     - oracle-java8-installer
 
-# These files changes at every build, and should not be cached
+# These files change at every build, and should not be cached
 # https://docs.travis-ci.com/user/languages/java/#Caching
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
