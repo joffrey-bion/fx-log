@@ -55,7 +55,11 @@ public class MemoryUsageInfo extends ProportionLabel<Double> {
 
     private final LongProperty refreshPeriod = new SimpleLongProperty(1000);
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+        Thread thread = new Thread(r, "Memory Usage Tracker");
+        thread.setDaemon(true);
+        return thread;
+    });
 
     // defined as a field to avoid garbage collection
     @SuppressWarnings("FieldCanBeLocal")
