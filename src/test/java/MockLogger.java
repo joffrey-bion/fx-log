@@ -18,7 +18,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
  */
 public class MockLogger {
 
-    private static final String[] levels = {"VERBOSE", "DEBUG", "INFO", "WARN", "ERROR"};
+    private static final String[] levels = {"Verbose", "Debug", "Info", "Warn", "Error"};
 
     private static final String[] classes = {"com.amadeus.DataMap", "org.bigfoot.Toe", "java.util.Map",
             "com.fizzy.Twizzer", "org.whynot.Question", "com.enterprise.Business"};
