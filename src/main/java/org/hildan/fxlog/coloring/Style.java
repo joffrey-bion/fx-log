@@ -28,7 +28,7 @@ public class Style {
     public static final Style RED = new Style("Red", Color.web("#ff3232"));
     public static final Style ORANGE = new Style("Orange", Color.web("#e6994dff"));
     public static final Style GREEN = new Style("Green", Color.web("#10c14bff"));
-    public static final Style BLUE = new Style("Blue", Color.web("#334db3ff"));
+    public static final Style BLUE = new Style("Blue", Color.web("#5d7effff"));
     public static final Style LIGHT_GRAY = new Style("Light Gray", Color.LIGHTGRAY);
 
     public static final Style DARK_RED = new Style("Dark Red", Color.web("#aa0000ff"));
