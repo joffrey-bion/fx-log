@@ -85,40 +85,48 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     }
 
     @Override
-    public void fileRotated() {
-        buffer.clear();
-    }
-
-    @Override
     public void handle(String line) {
         if (running && !(skipEmptyLogs.get() && line.isEmpty())) {
             LogEntry log = columnizer.parse(line);
-            buffer.add(log);
-            // limit batches size
-            if (buffer.size() >= bufferMaxSize) {
-                endOfFileReached();
-            }
+            addToBuffer(log);
         }
     }
 
     @Override
     public void endOfFileReached() {
-        List<LogEntry> toSendToUI;
-        toSendToUI = new ArrayList<>(buffer);
-        buffer.clear();
         // needs to run on the main thread to avoid concurrent modifications
         Platform.runLater(() -> {
             // we need to check again here because the listener may have been stopped in the meantime
             if (running) {
-                if (limitNumberOfLogs.get()) {
-                    int nbExtraLogs = logs.size() + toSendToUI.size() - maxNumberOfLogs.get();
-                    if (nbExtraLogs > 0) {
-                        logs.subList(0, nbExtraLogs).clear();
-                    }
-                }
-                logs.addAll(toSendToUI);
+                dumpBufferIntoLogsList();
             }
         });
+    }
+
+    @Override
+    public void fileRotated() {
+        synchronized (this) {
+            buffer.clear();
+        }
+    }
+
+    private synchronized void addToBuffer(LogEntry log) {
+        buffer.add(log);
+        // limit batches size
+        if (buffer.size() >= bufferMaxSize) {
+            endOfFileReached();
+        }
+    }
+
+    private synchronized void dumpBufferIntoLogsList() {
+        if (limitNumberOfLogs.get()) {
+            int nbExtraLogs = logs.size() + buffer.size() - maxNumberOfLogs.get();
+            if (nbExtraLogs > 0) {
+                logs.subList(0, nbExtraLogs).clear();
+            }
+        }
+        logs.addAll(buffer);
+        buffer.clear();
     }
 
     @Override
