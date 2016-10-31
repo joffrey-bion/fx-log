@@ -45,3 +45,7 @@ bintray {
         }
     }
 }
+
+// we want to make sure we have no leftovers before a release upload
+// resource pre-processing for instance has to be re-done
+bintrayUpload.dependsOn(clean)
