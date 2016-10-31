@@ -36,6 +36,13 @@
  */
 package org.objectweb.proactive.core.util;
 
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * <p>
  * Originally written by Dr. Heinz Kabutz in the very excellent
@@ -49,7 +56,7 @@ package org.objectweb.proactive.core.util;
  * @since ProActive 0.9
  */
 
-public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>, java.io.Serializable {
+public class CircularArrayList<E> extends AbstractList<E> implements List<E>, java.io.Serializable {
     /**
      *
      */
@@ -86,7 +93,7 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
     }
 
     @SuppressWarnings("unchecked")
-    public CircularArrayList(java.util.Collection<E> c) {
+    public CircularArrayList(Collection<E> c) {
         size = c.size();
         tail = c.size();
         array = (E[]) new Object[c.size()];
@@ -183,30 +190,32 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
         return -1;
     }
 
+    @NotNull
     @Override
     public Object[] toArray() {
         return toArray(new Object[size]);
     }
 
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(@NotNull T[] result) {
         if (size == 0) {
-            return a;
+            return result;
         }
-        if (a.length < size) {
-            a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+        if (result.length < size) {
+            result = (T[]) java.lang.reflect.Array.newInstance(result.getClass().getComponentType(), size);
         }
         if (head < tail) {
-            System.arraycopy(array, head, a, 0, tail - head);
+            System.arraycopy(array, head, result, 0, tail - head);
         } else {
-            System.arraycopy(array, head, a, 0, array.length - head);
-            System.arraycopy(array, 0, a, array.length - head, tail);
+            System.arraycopy(array, head, result, 0, array.length - head);
+            System.arraycopy(array, 0, result, array.length - head, tail);
         }
-        if (a.length > size) {
-            a[size] = null;
+        if (result.length > size) {
+            result[size] = null;
         }
-        return a;
+        return result;
     }
 
     @Override
@@ -314,28 +323,26 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
     }
 
     @Override
-    public boolean addAll(int index, java.util.Collection<? extends E> c) {
+    public boolean addAll(int index, @NotNull Collection<? extends E> collection) {
         modCount++;
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
 
-        int numNew = c.size();
+        int numNew = collection.size();
         ensureCapacity(size + numNew + 1);
 
         // shift old data
-        int j = size;
-        while (j >= index) {
+        for (int j = size; j >= index; j--) {
             int src = this.convert(j);
             int dst = this.convert(j + numNew);
             array[dst] = array[src];
-            j--;
         }
 
         // insert new data
-        java.util.Iterator<? extends E> e = c.iterator();
+        Iterator<? extends E> it = collection.iterator();
         for (int i = 0; i < numNew; i++) {
-            array[this.convert(index + i)] = e.next();
+            array[this.convert(index + i)] = it.next();
         }
 
         // Fix tail & size
@@ -345,8 +352,8 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
     }
 
     @Override
-    public boolean addAll(java.util.Collection<? extends E> c) {
-        return this.addAll(this.size, c);
+    public boolean addAll(@NotNull Collection<? extends E> collection) {
+        return this.addAll(this.size, collection);
     }
 
     // The convert() method takes a logical index (as if head was
