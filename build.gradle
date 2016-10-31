@@ -34,6 +34,11 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
+// to allow for live recompilation of only modified sources using -t option
+compileJava {
+    options.incremental = true
+}
+
 // to inject the project version in about.fxml and .properties files
 processResources {
     ['**/*.properties', '**/about.fxml'].each {
