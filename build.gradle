@@ -9,7 +9,7 @@ apply plugin: 'checkstyle'
 apply from: 'gradle/plugins/javafx.plugin'
 
 group = 'org.hildan'
-version = '3.0.0'
+version = '3.1.0'
 sourceCompatibility = 1.8
 description = 'A JavaFX program to view log files in a beautiful way.'
 ext.labels = ['log', 'viewer']

@@ -1,5 +1,20 @@
 # Change Log
 
+## [v3.1.0](https://bintray.com/joffrey-bion/applications/fx-log/3.1.0) (2016-11-01)
+[Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v3.0.0...v3.1.0)
+
+**Implemented enhancements:**
+
+- Display current search match and total matches count [\#94](https://github.com/joffrey-bion/fx-log/issues/94)
+- Add "visible" field to columns edition table [\#90](https://github.com/joffrey-bion/fx-log/issues/90)
+- Add "duplicate" option in list of columnizers/colorizers and rules [\#88](https://github.com/joffrey-bion/fx-log/issues/88)
+- Built-in columnizers naming [\#72](https://github.com/joffrey-bion/fx-log/issues/72)
+
+**Fixed bugs:**
+
+- Freeze when loading large file [\#95](https://github.com/joffrey-bion/fx-log/issues/95)
+- Built-in weblogic columnizer does not recognize sessionId anymore [\#89](https://github.com/joffrey-bion/fx-log/issues/89)
+
 ## [v3.0.0](https://bintray.com/joffrey-bion/applications/fx-log/3.0.0) (2016-10-17)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v2.1.0...v3.0.0)
 
@@ -43,10 +58,6 @@
 - Exiting the program does not close secondary windows [\#65](https://github.com/joffrey-bion/fx-log/issues/65)
 - Regex editing is not instantly taken into account anymore [\#64](https://github.com/joffrey-bion/fx-log/issues/64)
 - View not updated when changing color rule regex [\#62](https://github.com/joffrey-bion/fx-log/issues/62)
-
-**Closed issues:**
-
-- Improve rule matching binding between colorizer and log [\#67](https://github.com/joffrey-bion/fx-log/issues/67)
 
 ## [v1.7](https://bintray.com/joffrey-bion/applications/fx-log/1.7) (2016-04-26)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.6...v1.7)
@@ -109,10 +120,6 @@
 
 - Project first import issue on Intellij [\#6](https://github.com/joffrey-bion/fx-log/issues/6)
 
-**Merged pull requests:**
-
-- Build: don't fail if no gradle.properties [\#44](https://github.com/joffrey-bion/fx-log/pull/44) ([mebubo](https://github.com/mebubo))
-
 ## [v1.4](https://bintray.com/joffrey-bion/applications/fx-log/1.4) (2016-02-19)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.3...v1.4)
 
@@ -130,10 +137,6 @@
 - Toggle "open last file" via a preference [\#12](https://github.com/joffrey-bion/fx-log/issues/12)
 - Toggle "skip empty lines" via a preference [\#11](https://github.com/joffrey-bion/fx-log/issues/11)
 - Remove blue border on the data table when its focused [\#2](https://github.com/joffrey-bion/fx-log/issues/2)
-
-**Merged pull requests:**
-
-- Modified the Generator.java util to stream mock log lines in a file on the disk [\#32](https://github.com/joffrey-bion/fx-log/pull/32) ([lwouis](https://github.com/lwouis))
 
 ## [v1.2](https://bintray.com/joffrey-bion/applications/fx-log/1.2) (2016-02-11)
 [Full Changelog](https://github.com/joffrey-bion/fx-log/compare/v1.1...v1.2)
