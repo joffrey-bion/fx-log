@@ -11,8 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
-import org.hildan.fxlog.data.LogEntry;
 import org.hildan.fx.bindings.rulesets.Matcher;
+import org.hildan.fxlog.data.LogEntry;
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,15 +24,15 @@ public class Filter implements Matcher<LogEntry> {
 
     public static final Filter MATCH_ALL = findInRawLog(".*");
 
-    public static final Filter ERROR_SEVERITY = findInColumn("severity", "[Ee]rror");
+    public static final Filter ERROR_SEVERITY = findInColumn("severity", "[Ee]rror|ERROR");
 
-    public static final Filter WARN_SEVERITY = findInColumn("severity", "[Ww]arn(ing)?");
+    public static final Filter WARN_SEVERITY = findInColumn("severity", "[Ww]arn(ing)?|WARN(ING)?");
 
-    public static final Filter INFO_SEVERITY = findInColumn("severity", "[Ii]nfo");
+    public static final Filter INFO_SEVERITY = findInColumn("severity", "[Ii]nfo|INFO");
 
-    public static final Filter DEBUG_SEVERITY = findInColumn("severity", "[Dd]ebug");
+    public static final Filter DEBUG_SEVERITY = findInColumn("severity", "[Dd]ebug|DEBUG");
 
-    public static final Filter NOTICE_SEVERITY = findInColumn("severity", "[Nn]otice");
+    public static final Filter NOTICE_SEVERITY = findInColumn("severity", "[Nn]otice|NOTICE");
 
     public static final Filter STACKTRACE_HEAD = findInColumn("msg", "(^\\s*Caused By.*)|^((\\S+\\.)+\\S*Exception.*)");
 
@@ -54,10 +55,11 @@ public class Filter implements Matcher<LogEntry> {
      *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
      *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
      *         Pattern#COMMENTS}
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
-    private Filter(String columnName, String regex, int flags) throws PatternSyntaxException {
+    private Filter(String columnName, @RegExp String regex, int flags) throws PatternSyntaxException {
         this.pattern = new SimpleObjectProperty<>(Pattern.compile(regex, flags));
         this.columnName = new SimpleStringProperty(columnName);
     }
@@ -67,6 +69,7 @@ public class Filter implements Matcher<LogEntry> {
      *
      * @param source
      *         the filter to copy
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
@@ -80,11 +83,12 @@ public class Filter implements Matcher<LogEntry> {
      *
      * @param regex
      *         the regex that the whole raw log line should match
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInRawLog(@NotNull String regex) throws PatternSyntaxException {
+    public static Filter findInRawLog(@NotNull @RegExp String regex) throws PatternSyntaxException {
         return new Filter(null, regex, 0);
     }
 
@@ -98,11 +102,12 @@ public class Filter implements Matcher<LogEntry> {
      *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
      *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
      *         Pattern#COMMENTS}
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInRawLog(@NotNull String regex, int flags) throws PatternSyntaxException {
+    public static Filter findInRawLog(@NotNull @RegExp String regex, int flags) throws PatternSyntaxException {
         return new Filter(null, regex, flags);
     }
 
@@ -113,11 +118,13 @@ public class Filter implements Matcher<LogEntry> {
      *         the capturing group name corresponding to the column to apply this filter to
      * @param regex
      *         the regex that the whole value of the given column should match
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    public static Filter findInColumn(@NotNull String columnName, @NotNull String regex) throws PatternSyntaxException {
+    public static Filter findInColumn(@NotNull String columnName, @NotNull @RegExp String regex) throws
+            PatternSyntaxException {
         return findInColumn(columnName, regex, 0);
     }
 
@@ -133,11 +140,12 @@ public class Filter implements Matcher<LogEntry> {
      *         {@link Pattern#DOTALL}, {@link Pattern#UNICODE_CASE}, {@link Pattern#CANON_EQ}, {@link
      *         Pattern#UNIX_LINES}, {@link Pattern#LITERAL}, {@link Pattern#UNICODE_CHARACTER_CLASS} and {@link
      *         Pattern#COMMENTS}
+     *
      * @throws PatternSyntaxException
      *         if the given regex is not well formed
      */
     @NotNull
-    private static Filter findInColumn(@NotNull String columnName, @NotNull String regex, int flags) throws
+    private static Filter findInColumn(@NotNull String columnName, @NotNull @RegExp String regex, int flags) throws
             PatternSyntaxException {
         return new Filter(columnName, regex, flags);
     }

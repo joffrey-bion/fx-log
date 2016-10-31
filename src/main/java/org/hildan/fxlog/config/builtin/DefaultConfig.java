@@ -38,8 +38,10 @@ public class DefaultConfig {
         config.getColorizers().add(severityBasedColorizerDark());
         config.getColorizers().add(severityBasedColorizerLight());
 
+        config.getState().setSelectedColumnizerIndex(0);
         config.getColumnizers().add(weblogicColumnizer());
         config.getColumnizers().add(weblogicEasyTraceColumnizer());
+        config.getColumnizers().add(log4jColumnizer());
         config.getColumnizers().add(accessLogColumnizer());
         config.getColumnizers().add(apacheErrorColumnizer());
         config.getColumnizers().add(amadeusInputLog());
@@ -123,6 +125,27 @@ public class DefaultConfig {
 
         ObservableList<String> regexps = FXCollections.observableArrayList(logStart, logEnd, logCenter);
         return new Columnizer("Weblogic (processed by EasyTrace)", columns, regexps);
+    }
+
+    private static Columnizer log4jColumnizer() {
+        ObservableList<ColumnDefinition> columns = FXCollections.observableArrayList();
+        columns.add(new ColumnDefinition("Date/Time", "datetime", Description.Server.DATE, Width.DATE));
+        columns.add(new ColumnDefinition("Thread ID", "thread", Description.Server.THREAD_ID));
+        columns.add(new ColumnDefinition("Severity", "severity", Description.Server.SEVERITY, Width.SEVERITY));
+        columns.add(new ColumnDefinition("Class", "class", Description.Server.CLASS, Width.CLASS));
+        columns.add(new ColumnDefinition("Message", "msg", Description.Server.MSG, Width.MSG));
+
+        @RegExp
+        String regex = "(?<datetime>\\S+)" //
+                + " \\[(?<thread>[^]]*?)]" //
+                + " (?<severity>\\S+)" //
+                + "\\s+(?<class>\\S+)" //
+                + " - (?<msg>.*)";
+        @RegExp
+        String defaultToMsg = "(?<msg>.*)";
+
+        ObservableList<String> regexps = FXCollections.observableArrayList(regex, defaultToMsg);
+        return new Columnizer("Log4j / Logback", columns, regexps);
     }
 
     private static Columnizer accessLogColumnizer() {
