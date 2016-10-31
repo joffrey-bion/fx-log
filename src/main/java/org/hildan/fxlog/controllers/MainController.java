@@ -75,6 +75,7 @@ import org.hildan.fxlog.view.StyledTableCell;
 import org.hildan.fxlog.view.UIUtils;
 import org.hildan.fxlog.view.components.ProportionLabel;
 import org.jetbrains.annotations.NotNull;
+import org.objectweb.proactive.core.util.CircularArrayList;
 
 public class MainController implements Initializable {
 
@@ -148,7 +149,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         config = Config.getInstance();
-        columnizedLogs = FXCollections.observableArrayList();
+        columnizedLogs = FXCollections.observableArrayList(new CircularArrayList<>());
         filteredLogs = new FilteredList<>(columnizedLogs);
         colorizer = new SimpleObjectProperty<>();
         columnizer = new SimpleObjectProperty<>();
@@ -362,6 +363,8 @@ public class MainController implements Initializable {
     private void configureAutoScroll() {
         autoScrollMenu.selectedProperty().bindBidirectional(autoScrollActive);
         autoScrollButton.selectedProperty().bindBidirectional(autoScrollActive);
+
+        // activate/deactivate auto-scroll when the user scrolls
         logsTable.addEventFilter(ScrollEvent.ANY, event -> {
             if (event.getDeltaY() > 0) {
                 // scrolling up, stop following tail
@@ -372,6 +375,7 @@ public class MainController implements Initializable {
                 autoScrollActive.set(true);
             }
         });
+
         autoScrollActive.addListener((obs, oldValue, newValue) -> {
             if (newValue) {
                 scrollToBottom();
@@ -392,20 +396,16 @@ public class MainController implements Initializable {
         });
 
         // keep scroll to bottom as logs are added
-        // note: this is only necessary when the scrollbar appears, because being at the scrollbar maximum already
-        // realizes the scroll-to-bottom feature naturally
         filteredLogs.addListener((Change<? extends LogEntry> c) -> {
             while (c.next() && (c.wasAdded() || c.wasRemoved()) && autoScrollActive.get()) {
-                if (UIUtils.getLastVisibleRowIndex(logsTable) < filteredLogs.size()) {
+                int firstVisibleRowIndex = UIUtils.getFirstVisibleRowIndex(logsTable);
+                // scroll bar at the top (or not visible yet)
+                if (firstVisibleRowIndex == 0) {
+                    // This is only necessary when the scrollbar appears, because being at the scrollbar maximum already
+                    // realizes the scroll-to-bottom feature naturally. Since this call is expensive and causes freezes,
+                    // we make sure to only call it when necessary
                     scrollToBottom();
                 }
-            }
-        });
-
-        // keep scroll to bottom when the filter changes
-        filteredLogs.predicateProperty().addListener((obs, before, now) -> {
-            if (autoScrollActive.get()) {
-                scrollToBottom();
             }
         });
     }

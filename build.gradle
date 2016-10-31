@@ -19,6 +19,9 @@ def mainClassName = "org.hildan.fxlog.FXLog"
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url 'http://repository.activeeon.com/content/repositories/releases/'
+    }
 }
 
 dependencies {
