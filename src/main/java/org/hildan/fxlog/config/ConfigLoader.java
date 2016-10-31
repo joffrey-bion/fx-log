@@ -68,6 +68,9 @@ class ConfigLoader {
 
     private static int readConfigVersionFrom(Reader source) throws JsonIOException, JsonSyntaxException {
         ConfigVersion configVersion = new GsonBuilder().create().fromJson(source, ConfigVersion.class);
+        if (configVersion == null) {
+            throw new JsonSyntaxException("Empty config file");
+        }
         return configVersion.version;
     }
 
