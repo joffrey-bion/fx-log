@@ -34,6 +34,8 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
 
     private volatile boolean running;
 
+    private volatile boolean clearRequested;
+
     private final List<LogEntry> buffer;
 
     private final int bufferMaxSize;
@@ -93,7 +95,8 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     }
 
     @Override
-    public void endOfFileReached() {
+    public synchronized void endOfFileReached() {
+        clearRequested = true;
         // needs to run on the main thread to avoid concurrent modifications
         Platform.runLater(() -> {
             // we need to check again here because the listener may have been stopped in the meantime
@@ -104,16 +107,14 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     }
 
     @Override
-    public void fileRotated() {
-        synchronized (this) {
-            buffer.clear();
-        }
+    public synchronized void fileRotated() {
+        buffer.clear();
     }
 
     private synchronized void addToBuffer(LogEntry log) {
         buffer.add(log);
         // limit batches size
-        if (buffer.size() >= bufferMaxSize) {
+        if (buffer.size() >= bufferMaxSize && !clearRequested) {
             endOfFileReached();
         }
     }
@@ -126,6 +127,7 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
             }
         }
         logs.addAll(buffer);
+        clearRequested = false;
         buffer.clear();
     }
 
