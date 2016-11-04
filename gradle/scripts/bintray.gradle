@@ -1,3 +1,6 @@
+// we want to make sure we have no leftovers before a release upload
+// resource pre-processing for instance has to be re-done
+bintrayUpload.dependsOn tasks.clean
 bintrayUpload.dependsOn tasks.jfxDeploy
 
 def getPropOrEnv = { String prop, String envVar, String defaultValue = null ->
@@ -46,6 +49,25 @@ bintray {
     }
 }
 
-// we want to make sure we have no leftovers before a release upload
-// resource pre-processing for instance has to be re-done
-bintrayUpload.dependsOn(clean)
+apply plugin: 'org.hildan.travis-bintray'
+
+travis {
+    bintray {
+        user = getPropOrEnv('bintrayUser', 'BINTRAY_USER')
+        repo = getPropOrEnv('bintrayRepoApps', 'BINTRAY_REPO_APPS')
+    }
+    github {
+        user = getPropOrEnv('githubUser', 'GITHUB_USER')
+    }
+    release {
+        gpgSign = true
+    }
+    labels = project.labels
+    licenses = ['MIT']
+    files = [
+            [includePattern: jar.archivePath.path, excludePattern: '', uploadPattern: 'installers/$1-setup\\.$2'],
+            [includePattern: 'build/distributions/(.*)\\.(exe|msi)', excludePattern: '', uploadPattern: 'installers/$1-setup\\.$2'],
+            [includePattern: 'build/distributions/(.*\\.(app|deb))', excludePattern: '', uploadPattern: 'installers/$1']
+    ]
+}
+

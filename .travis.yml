@@ -1,5 +1,9 @@
 language: java
 
+os:
+  - linux
+  - osx
+
 # The default JDK is 7 if unspecified, and we need 8
 jdk:
   - oraclejdk8
@@ -21,3 +25,14 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+before_deploy:
+  - ./gradlew generateBintrayDescriptor
+
+deploy:
+  provider: bintray
+  file: "bintray.json"
+  user: "joffrey-bion"
+  key:
+    secure: KTxa5QOY+FVg4m/m529DImNQc35zkBfzyeRvuzJ+R7c4rFUXr3q7wsrWHOOlpiuNPPwozcGUU7BKE47uzmy6a1ibrWiK+oCARG93qNFkFN8dsqmZhI2dDJnQUf4oREkdKInv8ePypWQhhEtR+bisPCnlPUbFe35Od6YdaV+kgzIc6uwN9exviZUpiOigJvdaOk9tawWASTZpIcDg8xF757nVqWtj59BSIHH/a4/Fd1EWIiQ+RrM5+NAkLhPjeMdt4Fc2njSua0dRc6tgAPifYn8TFxOdk1TE/cmwrBHtrpczbXoogbo7OFS4vChuxU8GQYyYChU3d0hAs9PcyZCk4pbgBiqEwL5xwV8JOB3ovmDdrI74PwCipMDE0hcr9kkMm/Iw6bcRmIfcBMAkYhlKeKgmnbGqmbVCrYSwFd0TZ1PEG26HKQxMILsNhWw6r6bIsUDtPuRJ6snjNCbVVCZLd9l8P/be4L04X9sk/uINdi1iBlGD/xGm7mR9lEeWQ1oV4mUAFQFkZIyB7e98zGzKtws5aGzY7a7Cx6Smetoqzx4OmdAX1ILz3tdSCIW/RdirjkmR+YU7FGTlIRqXX98gmZ/q/BBzQDexZ3illzleM6ssfluIMrDbnbkKkmi2h1fv57cGlBbWhPRwLSXdTnymLefvSX+KjyB6zmInRxKKQvo=
+  dry-run: true
