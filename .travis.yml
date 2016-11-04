@@ -1,12 +1,11 @@
 language: java
 
-os:
-  - linux
-  - osx
-
-# The default JDK is 7 if unspecified, and we need 8
-jdk:
-  - oraclejdk8
+matrix:
+  include:
+    - os: linux
+      jdk: oraclejdk8 # The default JDK is 7 if unspecified, and we need 8
+    - os: osx
+      osx_image: xcode8 # other OSX images can't switch to JDK8, this one has it built-in
 
 # By default, the Travis container-based mode runs jdk1.8.0_31 (which is too old for this build)
 addons:
