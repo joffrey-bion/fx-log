@@ -40,6 +40,7 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.RandomAccess;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
  * @since ProActive 0.9
  */
 
-public class CircularArrayList<E> extends AbstractList<E> implements List<E>, java.io.Serializable {
+public class CircularArrayList<E> extends AbstractList<E> implements List<E>, java.io.Serializable, RandomAccess {
     /**
      *
      */
