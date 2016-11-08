@@ -22,6 +22,7 @@ import javafx.scene.control.TableView;
 import org.hildan.fx.components.list.Named;
 import org.hildan.fxlog.data.LogEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Uses regexps to split log lines into columns.
@@ -131,44 +132,62 @@ public class Columnizer implements Named {
     }
 
     /**
-     * Parses the given input line to create a {@link LogEntry} following the rules of this Columnizer.
+     * Parses the given input log text to create a {@link LogEntry} following the rules of this Columnizer.
      * <p>
      * This method tries to match every regexp of this Columnizer in the order they were given to the constructor. The
      * column values are taken from the capturing groups of the first matched pattern. Missing capturing groups simply
      * yield empty strings.
      * <p>
-     * If no regexp is matched, a LogEntry is still returned, containing the whole input string in the first column.
+     * If no regexp is matched, null is returned.
      *
      * @param inputLogLine
      *         the raw log string to parse
-     * @return the parsed {@code LogEntry}
+     * @return the parsed {@code LogEntry}, or null if no regex of this columnizer matched the input line
      */
-    @NotNull
+    @Nullable
     public LogEntry parse(@NotNull String inputLogLine) {
         for (Pattern pattern : patterns) {
             Matcher matcher = pattern.matcher(inputLogLine);
             if (matcher.matches()) {
-                Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
-                for (ColumnDefinition columnDefinition : columnDefinitions) {
-                    String groupName = columnDefinition.getCapturingGroupName();
-                    // we take all the values we can from this pattern
-                    String value = getGroupValueOrEmptyString(matcher, groupName);
-                    columnValues.put(groupName, value);
-                }
-                return new LogEntry(columnValues, inputLogLine);
+                return createMatchingLogEntry(inputLogLine, matcher);
             }
         }
-        // no pattern matched, put empty values in all columns
+        return null;
+    }
+
+    @NotNull
+    private LogEntry createMatchingLogEntry(@NotNull String inputLogLine, @NotNull Matcher matcher) {
+        Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
+        for (ColumnDefinition columnDefinition : columnDefinitions) {
+            String groupName = columnDefinition.getCapturingGroupName();
+            String value = getGroupValueOrEmptyString(matcher, groupName);
+            columnValues.put(groupName, value);
+        }
+        return new LogEntry(columnValues, inputLogLine);
+    }
+
+    @NotNull
+    public LogEntry createDefaultLogEntry(@NotNull String inputLogLine) {
+        Map<String, String> columnValues = createEmptyColumnsMap();
+        // put the whole line in the default column as a fallback, if possible
+        if (!columnDefinitions.isEmpty()) {
+            columnValues.put(getDefaultColumnCapturingGroup(), inputLogLine);
+        }
+        return new LogEntry(columnValues, inputLogLine);
+    }
+
+    @NotNull
+    private Map<String, String> createEmptyColumnsMap() {
         Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             String groupName = columnDefinition.getCapturingGroupName();
             columnValues.put(groupName, "");
         }
-        // put the whole line in the first column as a fallback, if possible
-        if (columnDefinitions.size() > 1) {
-            columnValues.put(columnDefinitions.get(0).getCapturingGroupName(), inputLogLine);
-        }
-        return new LogEntry(columnValues, inputLogLine);
+        return columnValues;
+    }
+
+    private String getDefaultColumnCapturingGroup() {
+        return columnDefinitions.get(0).getCapturingGroupName();
     }
 
     /**

@@ -14,13 +14,14 @@ import org.apache.commons.io.input.TailerListener;
 import org.apache.commons.io.input.TailerListenerAdapter;
 import org.hildan.fxlog.columns.Columnizer;
 import org.hildan.fxlog.data.LogEntry;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link TailerListener} that columnizes logs and adds them to a list as they arrive.
  */
 public class BufferedLogTailListener extends TailerListenerAdapter {
 
-    private static final int DEFAULT_BUF_SIZE = 1000;
+    private static final int MAX_LINES_PER_LOG = 200;
 
     private final Columnizer columnizer;
 
@@ -40,18 +41,9 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
 
     private final int bufferMaxSize;
 
-    /**
-     * Creates a new BufferedLogTailListener adding to the given log list using the given columnizer, with default
-     * buffer size and timeout.
-     *
-     * @param columnizer
-     *         the columnizer to use to columnized the raw logs
-     * @param logs
-     *         the list of logs to add to
-     */
-    public BufferedLogTailListener(Columnizer columnizer, List<LogEntry> logs) {
-        this(columnizer, logs, DEFAULT_BUF_SIZE);
-    }
+    private final StringBuilder aggregatedLines;
+
+    private int nbLinesInCurrentLog;
 
     /**
      * Creates a new BufferedLogTailListener adding to the given log list using the given columnizer, with the given
@@ -72,6 +64,8 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
         this.maxNumberOfLogs = new SimpleObjectProperty<>(Integer.MAX_VALUE);
         this.buffer = new ArrayList<>(logBufferSize);
         this.bufferMaxSize = logBufferSize;
+        this.aggregatedLines = new StringBuilder();
+        this.nbLinesInCurrentLog = 0;
     }
 
     @Override
@@ -88,14 +82,59 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
 
     @Override
     public void handle(String line) {
-        if (running && !(skipEmptyLogs.get() && line.isEmpty())) {
-            LogEntry log = columnizer.parse(line);
-            addToBuffer(log);
+        if (running && !shouldSkipLog(line)) {
+            aggregateLine(line);
+            handleAggregatedLog(aggregatedLines.toString());
         }
     }
 
+    private void aggregateLine(@NotNull String line) {
+        if (nbLinesInCurrentLog > 0) {
+            aggregatedLines.append("\n");
+        }
+        aggregatedLines.append(line);
+        nbLinesInCurrentLog++;
+    }
+
+    private boolean shouldSkipLog(@NotNull String line) {
+        return skipEmptyLogs.get() && line.isEmpty() && nbLinesInCurrentLog == 0;
+    }
+
+    private void handleAggregatedLog(@NotNull String logText) {
+        LogEntry log = columnizer.parse(logText);
+        if (log != null) {
+            handleNewLog(log);
+        } else if (nbLinesInCurrentLog >= MAX_LINES_PER_LOG) {
+            System.out.println("Reached max lines for a single log:\n" + logText);
+            handleNewLog(columnizer.createDefaultLogEntry(logText));
+        }
+    }
+
+    private void handleNewLog(@NotNull LogEntry log) {
+        addToBuffer(log);
+        aggregatedLines.setLength(0);
+        nbLinesInCurrentLog = 0;
+    }
+
     @Override
-    public synchronized void endOfFileReached() {
+    public void endOfFileReached() {
+        requestBufferDumpIntoLogsList();
+    }
+
+    @Override
+    public synchronized void fileRotated() {
+        buffer.clear();
+    }
+
+    private synchronized void addToBuffer(@NotNull LogEntry log) {
+        buffer.add(log);
+        // limit batches size
+        if (buffer.size() >= bufferMaxSize && !clearRequested) {
+            requestBufferDumpIntoLogsList();
+        }
+    }
+
+    private synchronized void requestBufferDumpIntoLogsList() {
         clearRequested = true;
         // needs to run on the main thread to avoid concurrent modifications
         Platform.runLater(() -> {
@@ -104,19 +143,6 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
                 dumpBufferIntoLogsList();
             }
         });
-    }
-
-    @Override
-    public synchronized void fileRotated() {
-        buffer.clear();
-    }
-
-    private synchronized void addToBuffer(LogEntry log) {
-        buffer.add(log);
-        // limit batches size
-        if (buffer.size() >= bufferMaxSize && !clearRequested) {
-            endOfFileReached();
-        }
     }
 
     private synchronized void dumpBufferIntoLogsList() {
