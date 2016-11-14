@@ -50,6 +50,7 @@ class BintrayTravisExtension {
 
         ReleaseExtension(Project project) {
             name = project.version
+            description = project.description
         }
     }
 
@@ -62,6 +63,7 @@ class BintrayTravisExtension {
         boolean publicStats = false
 
         BintrayExtension(Project project) {
+            user = project.hasProperty("bintrayUser") ? project.bintrayUser : System.getenv("BINTRAY_USER")
             packageName = project.name
         }
     }
@@ -72,6 +74,7 @@ class BintrayTravisExtension {
         String releaseNotesFile = 'RELEASE.md'
 
         GithubExtension(Project project) {
+            user = project.hasProperty("githubUser") ? project.githubUser : System.getenv("GITHUB_USER")
             repo = project.name
         }
     }

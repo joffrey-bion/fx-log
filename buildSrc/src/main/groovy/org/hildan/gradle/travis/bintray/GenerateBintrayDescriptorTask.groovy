@@ -6,16 +6,23 @@ import org.gradle.api.tasks.TaskAction
 
 class GenerateBintrayDescriptorTask extends DefaultTask {
 
+    public static String NAME = "generateBintrayDescriptor"
+
     @TaskAction
     def generate() {
         BintrayTravisExtension extension = (BintrayTravisExtension) project[BintrayTravisExtension.NAME]
-        def bintrayDescriptor = new TreeMap<String,Object>()
-        bintrayDescriptor['package'] = createPackage extension
-        bintrayDescriptor['version'] = createVersion extension
-        bintrayDescriptor['files'] = extension.files
-        bintrayDescriptor['publish'] = extension.bintray.publish
+        def bintrayDescriptor = createDescriptor extension
         String json = JsonOutput.prettyPrint(JsonOutput.toJson(bintrayDescriptor))
         project.file(extension.outputFile).write json
+    }
+
+    static TreeMap<String, Object> createDescriptor(BintrayTravisExtension extension) {
+        def descriptor = new TreeMap<String,Object>()
+        descriptor['package'] = createPackage extension
+        descriptor['version'] = createVersion extension
+        descriptor['files'] = extension.files
+        descriptor['publish'] = extension.bintray.publish
+        return descriptor
     }
 
     static TreeMap<String, Object> createPackage(BintrayTravisExtension extension) {

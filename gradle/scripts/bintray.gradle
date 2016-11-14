@@ -53,11 +53,7 @@ apply plugin: 'org.hildan.travis-bintray'
 
 travis {
     bintray {
-        user = getPropOrEnv('bintrayUser', 'BINTRAY_USER')
         repo = getPropOrEnv('bintrayRepoApps', 'BINTRAY_REPO_APPS')
-    }
-    github {
-        user = getPropOrEnv('githubUser', 'GITHUB_USER')
     }
     release {
         gpgSign = true

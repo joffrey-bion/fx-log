@@ -9,6 +9,6 @@ class BintrayTravisPlugin implements Plugin<Project> {
     void apply(Project project) {
 //        project.pluginManager.apply('com.jfrog.bintray')
         project.extensions.create(BintrayTravisExtension.NAME, BintrayTravisExtension, project)
-        project.task('generateBintrayDescriptor', type: GenerateBintrayDescriptorTask)
+        project.task(GenerateBintrayDescriptorTask.NAME, type: GenerateBintrayDescriptorTask)
     }
 }
