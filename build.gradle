@@ -1,7 +1,3 @@
-plugins {
-    id "com.jfrog.bintray" version "1.7.1"
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'

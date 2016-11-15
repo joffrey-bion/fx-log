@@ -1,0 +1,16 @@
+plugins {
+    id "java-gradle-plugin"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+}
