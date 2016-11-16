@@ -7,12 +7,16 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
+
+import org.hildan.fxlog.data.LogEntry;
 
 /**
  * Defines a column to hold part of a log line.
@@ -126,7 +130,24 @@ public class ColumnDefinition {
         this.description = new SimpleStringProperty(description);
     }
 
-    Label createBoundHeaderLabel() {
+    TableColumn<LogEntry, String> createColumn() {
+        TableColumn<LogEntry, String> col = new TableColumn<>();
+        // we need to keep the original text to avoid breaking the table visibility menu
+        col.textProperty().bind(headerLabel);
+        col.setGraphic(createBoundHeaderLabel());
+        col.setVisible(this.isVisible());
+        col.setPrefWidth(width.get());
+        visible.bindBidirectional(col.visibleProperty());
+        width.bind(col.widthProperty());
+        col.setCellValueFactory(data -> {
+            LogEntry log = data.getValue();
+            String cellValue = log.getColumnValues().get(this.getCapturingGroupName());
+            return new ReadOnlyStringWrapper(cellValue);
+        });
+        return col;
+    }
+
+    private Label createBoundHeaderLabel() {
         Label header = new Label();
         header.textProperty().bind(headerLabel);
         header.tooltipProperty().bind(createTooltipBinding());
@@ -175,20 +196,6 @@ public class ColumnDefinition {
     }
 
     /**
-     * @return the preferred width for this column
-     */
-    double getWidth() {
-        return width.get();
-    }
-
-    /**
-     * @return the preferred width for this column (property)
-     */
-    DoubleProperty widthProperty() {
-        return width;
-    }
-
-    /**
      * @return whether this column is visible
      */
     public boolean isVisible() {
@@ -202,15 +209,7 @@ public class ColumnDefinition {
         return visible;
     }
 
-    public String getDescription() {
-        return description.get();
-    }
-
     public StringProperty descriptionProperty() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description.set(description);
     }
 }

@@ -295,7 +295,7 @@ public class MainController implements Initializable {
     }
 
     private Collection<TableColumn<LogEntry, String>> getConfiguredColumns(Columnizer columnizer) {
-        Collection<TableColumn<LogEntry, String>> columns = columnizer.getColumns();
+        Collection<TableColumn<LogEntry, String>> columns = columnizer.createColumns();
         columns.forEach(col -> col.setCellFactory(column -> {
             StyledTableCell cell = new StyledTableCell(column, searchPanelController.getSearch());
             cell.fontProperty().bind(config.getPreferences().logsFontProperty());

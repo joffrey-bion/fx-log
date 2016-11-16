@@ -1,6 +1,5 @@
 package org.hildan.fxlog.columns;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -110,25 +108,8 @@ public class Columnizer implements Named {
      * @return the columns associated to this columnizer
      */
     @NotNull
-    public List<TableColumn<LogEntry, String>> getColumns() {
-        List<TableColumn<LogEntry, String>> columns = new ArrayList<>();
-        for (ColumnDefinition columnDefinition : columnDefinitions) {
-            TableColumn<LogEntry, String> col = new TableColumn<>();
-            // we need to keep the original text to avoid breaking the table visibility menu
-            col.textProperty().bind(columnDefinition.headerLabelProperty());
-            col.setGraphic(columnDefinition.createBoundHeaderLabel());
-            col.setVisible(columnDefinition.isVisible());
-            col.setPrefWidth(columnDefinition.getWidth());
-            columnDefinition.visibleProperty().bindBidirectional(col.visibleProperty());
-            columnDefinition.widthProperty().bind(col.widthProperty());
-            col.setCellValueFactory(data -> {
-                LogEntry log = data.getValue();
-                String cellValue = log.getColumnValues().get(columnDefinition.getCapturingGroupName());
-                return new ReadOnlyStringWrapper(cellValue);
-            });
-            columns.add(col);
-        }
-        return columns;
+    public List<TableColumn<LogEntry, String>> createColumns() {
+        return columnDefinitions.stream().map(ColumnDefinition::createColumn).collect(Collectors.toList());
     }
 
     /**
