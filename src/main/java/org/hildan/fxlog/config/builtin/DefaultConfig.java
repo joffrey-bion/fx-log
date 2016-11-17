@@ -40,6 +40,7 @@ public class DefaultConfig {
 
         config.getState().setSelectedColumnizerIndex(0);
         config.getColumnizers().add(weblogicColumnizer());
+        config.getColumnizers().add(weblogicMultilineColumnizer());
         config.getColumnizers().add(weblogicEasyTraceColumnizer());
         config.getColumnizers().add(log4jColumnizer());
         config.getColumnizers().add(accessLogColumnizer());
@@ -92,6 +93,68 @@ public class DefaultConfig {
 
         ObservableList<String> regexps = FXCollections.observableArrayList(logStart, logEnd, logCenter);
         return new Columnizer("Weblogic Server Log", columns, regexps);
+    }
+
+    private static Columnizer weblogicMultilineColumnizer() {
+        ObservableList<ColumnDefinition> columns = FXCollections.observableArrayList();
+        columns.add(new ColumnDefinition("Date/Time", "datetime", Description.Server.DATE, Width.DATE));
+        columns.add(new ColumnDefinition("Severity", "severity", Description.Server.SEVERITY, Width.SEVERITY));
+        columns.add(new ColumnDefinition("Subsystem", "subsystem", Description.Server.SUBSYSTEM, false));
+        columns.add(new ColumnDefinition("Machine Name", "machine", Description.Server.MACHINE_NAME, false));
+        columns.add(new ColumnDefinition("Server Name", "server", Description.Server.SERVER_NAME, false));
+        columns.add(new ColumnDefinition("Thread ID", "thread", Description.Server.THREAD_ID, false));
+        columns.add(new ColumnDefinition("User ID", "userId", Description.Server.USER_ID, false));
+        columns.add(new ColumnDefinition("Transaction ID", "transaction", Description.Server.TRANSACTION, false));
+        columns.add(new ColumnDefinition("Diagnostic Context ID", "context", Description.Server.DIAGNOSTIC_CTX_ID,
+                false));
+        columns.add(new ColumnDefinition("Timestamp", "timestamp", Description.Server.TIMESTAMP, false));
+        columns.add(new ColumnDefinition("Message ID", "msgId", Description.Server.MSG_ID, false));
+        columns.add(new ColumnDefinition("Class", "class", Description.Server.CLASS, Width.CLASS));
+        columns.add(new ColumnDefinition("Message", "msg", Description.Server.MSG, Width.MSG));
+        columns.add(new ColumnDefinition("JSessionID", "sessionid", Description.Server.JSESSIONID,
+                Width.SESSION_ID));
+
+        @RegExp
+        String logFirstLine = "####" //
+                + "<(?<datetime>[^>]*?)>" //
+                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<subsystem>[^>]*?)>" //
+                + " ?<(?<machine>[^>]*?)>" //
+                + " ?<(?<server>[^>]*?)>" //
+                + " ?<(?<thread>[^>]*?)>" //
+                + " ?<(?<userId>.*?)>" //
+                + " ?<(?<transaction>[^>]*?)>" //
+                + " ?<(?<context>[^>]*?)>" //
+                + " ?<(?<timestamp>[^>]*?)>" //
+                + " ?<(?<msgId>[^>]*?)>" //
+                + "( ?<(?<class>[^>]*?)>)?" //
+                + " ?<(?<msg>.*?)" // message start
+                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + ">?\\s*"; // optional end of message
+        @RegExp
+        String logStart = "(?s)####" //
+                + "<(?<datetime>[^>]*?)>" //
+                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<subsystem>[^>]*?)>" //
+                + " ?<(?<machine>[^>]*?)>" //
+                + " ?<(?<server>[^>]*?)>" //
+                + " ?<(?<thread>[^>]*?)>" //
+                + " ?<(?<userId>.*?)>" //
+                + " ?<(?<transaction>[^>]*?)>" //
+                + " ?<(?<context>[^>]*?)>" //
+                + " ?<(?<timestamp>[^>]*?)>" //
+                + " ?<(?<msgId>[^>]*?)>" //
+                + "( ?<(?<class>[^>]*?)>)?";
+        @RegExp
+        String withSessionId = logStart //
+                + " ?<(?<msg>.*?)" // message start
+                + ";jsessionid=(?<sessionid>[^>]*)" // session id
+                + "(\\n(?<stacktrace>[^>]*))?>\\s*"; // optional stacktrace
+        @RegExp
+        String withoutSessionId = logStart + " ?<(?<msg>.*?)>\\s*";
+
+        ObservableList<String> regexps = FXCollections.observableArrayList(withSessionId, withoutSessionId);
+        return new Columnizer("Weblogic Server Log (multi-line)", columns, regexps, logFirstLine);
     }
 
     private static Columnizer weblogicEasyTraceColumnizer() {
