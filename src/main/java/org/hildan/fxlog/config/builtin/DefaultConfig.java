@@ -25,6 +25,12 @@ public class DefaultConfig {
     private static final Filter WEBLOGIC_HIGHLIGHT = Filter.findInColumn("msg",
             "(Successfully completed deployment.*)|(EJB Deployed EJB with JNDI name.*)");
 
+    @RegExp
+    private static final String CLASS_NAME_REGEX = "((\\w+\\.)*?\\w+)?";
+
+    @RegExp
+    private static final String JSESSIONID_REGEX = "([\\w\\-!]+)";
+
     /**
      * Generates the default config programmatically.
      *
@@ -72,22 +78,23 @@ public class DefaultConfig {
         @RegExp
         String logStart = "####" //
                 + "<(?<datetime>[^>]*?)>" //
-                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<severity>\\w*?)>" //
                 + " ?<(?<subsystem>[^>]*?)>" //
                 + " ?<(?<machine>[^>]*?)>" //
                 + " ?<(?<server>[^>]*?)>" //
                 + " ?<(?<thread>[^>]*?)>" //
-                + " ?<(?<userId>.*?)>" //
+                + " ?<(?<userId>.*?)>" // might be wrapped into <>
                 + " ?<(?<transaction>[^>]*?)>" //
                 + " ?<(?<context>[^>]*?)>" //
                 + " ?<(?<timestamp>[^>]*?)>" //
-                + " ?<(?<msgId>[^>]*?)>" //
-                + "( ?<(?<class>[^>]*?)>)?" //
+                + " ?<(?<msgId>BEA-\\d*?)>" //
+                + "( ?<(?<class>" + CLASS_NAME_REGEX + ")>)?" //
                 + " ?<(?<msg>.*?)" // message start
-                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + "(;jsessionid=(?<sessionid>" + JSESSIONID_REGEX + "))?" // optional session id
                 + ">?\\s*"; // optional end of message
         @RegExp
-        String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>[^>]*))?>\\s*"; // end of msg and optional session id
+        String logEnd = "(?<msg>.*?)(;jsessionid=(?<sessionid>" + JSESSIONID_REGEX
+                + "))?>\\s*"; // end of msg and optional session id
         @RegExp
         String logCenter = "(?<msg>.*)";
 
@@ -113,11 +120,12 @@ public class DefaultConfig {
         columns.add(new ColumnDefinition("Message", "msg", Description.Server.MSG, Width.MSG));
         columns.add(new ColumnDefinition("JSessionID", "sessionid", Description.Server.JSESSIONID,
                 Width.SESSION_ID));
+        columns.add(new ColumnDefinition("Stacktrace", "stacktrace", ""));
 
         @RegExp
         String logFirstLine = "####" //
                 + "<(?<datetime>[^>]*?)>" //
-                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<severity>\\w*?)>" //
                 + " ?<(?<subsystem>[^>]*?)>" //
                 + " ?<(?<machine>[^>]*?)>" //
                 + " ?<(?<server>[^>]*?)>" //
@@ -126,15 +134,15 @@ public class DefaultConfig {
                 + " ?<(?<transaction>[^>]*?)>" //
                 + " ?<(?<context>[^>]*?)>" //
                 + " ?<(?<timestamp>[^>]*?)>" //
-                + " ?<(?<msgId>[^>]*?)>" //
-                + "( ?<(?<class>[^>]*?)>)?" //
+                + " ?<(?<msgId>BEA-\\d*?)>" //
+                + "( ?<(?<class>" + CLASS_NAME_REGEX + ")>)?" //
                 + " ?<(?<msg>.*?)" // message start
-                + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
+                + "(;jsessionid=(?<sessionid>" + JSESSIONID_REGEX + "))?" // optional session id
                 + ">?\\s*"; // optional end of message
         @RegExp
         String logStart = "(?s)####" //
                 + "<(?<datetime>[^>]*?)>" //
-                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<severity>\\w*?)>" //
                 + " ?<(?<subsystem>[^>]*?)>" //
                 + " ?<(?<machine>[^>]*?)>" //
                 + " ?<(?<server>[^>]*?)>" //
@@ -143,15 +151,16 @@ public class DefaultConfig {
                 + " ?<(?<transaction>[^>]*?)>" //
                 + " ?<(?<context>[^>]*?)>" //
                 + " ?<(?<timestamp>[^>]*?)>" //
-                + " ?<(?<msgId>[^>]*?)>" //
-                + "( ?<(?<class>[^>]*?)>)?";
+                + " ?<(?<msgId>BEA-\\d*?)>" //
+                + "( ?<(?<class>" + CLASS_NAME_REGEX + ")>)?";
         @RegExp
         String withSessionId = logStart //
                 + " ?<(?<msg>.*?)" // message start
-                + ";jsessionid=(?<sessionid>[^>]*)" // session id
-                + "(\\n(?<stacktrace>[^>]*))?>\\s*"; // optional stacktrace
+                + ";jsessionid=(?<sessionid>" + JSESSIONID_REGEX + ")" // session id
+                + "(\\n(?<stacktrace>[^>]*))?" // optional stacktrace
+                + ">\\s*"; // end of log
         @RegExp
-        String withoutSessionId = logStart + " ?<(?<msg>.*?)>\\s*";
+        String withoutSessionId = logStart + " ?<(?<msg>.*)>\\s*";
 
         ObservableList<String> regexps = FXCollections.observableArrayList(withSessionId, withoutSessionId);
         return new Columnizer("Weblogic Server Log (multi-line)", columns, regexps, logFirstLine);
@@ -172,12 +181,12 @@ public class DefaultConfig {
 
         @RegExp
         String logStart = "<(?<datetime>[^>]*?)>" //
-                + " ?<(?<severity>[^>]*?)>" //
+                + " ?<(?<severity>\\w*?)>" //
                 + " ?<(?<subsystem>[^>]*?)>" //
                 + " ?<(?<machine>[^>]*?)>" //
                 + " ?<(?<server>[^>]*?)>" //
                 + " ?<(?<thread>[^>]*?)>" //
-                + "( ?<(?<class>[^>]*?)>)?" //
+                + "( ?<(?<class>" + CLASS_NAME_REGEX + ")>)?" //
                 + " ?<(?<msg>.*?)" // message start
                 + "(;jsessionid=(?<sessionid>[^>]*))?" // optional session id
                 + ">?\\s*"; // optional end of message
@@ -202,7 +211,7 @@ public class DefaultConfig {
         String regex = "(?<datetime>\\S+)" //
                 + " \\[(?<thread>[^]]*?)]" //
                 + " (?<severity>\\S+)" //
-                + "\\s+(?<class>\\S+)" //
+                + "\\s+(?<class>" + CLASS_NAME_REGEX + ")" //
                 + " - (?<msg>.*)";
         @RegExp
         String defaultToMsg = "(?<msg>.*)";
