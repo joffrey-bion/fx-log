@@ -40,18 +40,22 @@ task generateChangeLog(type: Exec) {
     }
 }
 
-task commitRelease << {
-    execute("git add build.gradle")
-    execute("git add CHANGELOG.md")
-    execute("git commit -m \"Version ${project.version}\"")
-    execute("git push")
+task commitRelease {
+    doLast {
+        execute("git add build.gradle")
+        execute("git add CHANGELOG.md")
+        execute("git commit -m \"Version ${project.version}\"")
+        execute("git push")
+    }
 }
 commitRelease.dependsOn(generateChangeLog)
 
-task tagRelease << {
-    execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
-    execute("git push origin v${project.version}")
-    println "Generated tag for version ${project.version}"
+task tagRelease {
+    doLast {
+        execute("git tag -a v${project.version} -m \"Version ${project.version}\"")
+        execute("git push origin v${project.version}")
+        println "Generated tag for version ${project.version}"
+    }
 }
 tagRelease.mustRunAfter(commitRelease)
 
