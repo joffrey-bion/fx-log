@@ -35,7 +35,7 @@ public class LogEntry {
      *
      * @return this log's content for each column
      */
-    public Map<String, String> getColumnValues() {
+    public Map<String, String> getSections() {
         return columnValues;
     }
 
@@ -50,8 +50,8 @@ public class LogEntry {
     public List<String> getVisibleColumnValues(List<ColumnDefinition> columnDefinitions) {
         return columnDefinitions.stream()
                 .filter(ColumnDefinition::isVisible)
-                .map(ColumnDefinition::getCapturingGroupName)
-                .map(col -> getColumnValues().get(col))
+                .flatMap(cd -> cd.getCapturingGroupNames().stream())
+                .map(col -> getSections().get(col))
                 .collect(Collectors.toList());
     }
 

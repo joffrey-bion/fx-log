@@ -126,7 +126,7 @@ public class ColumnizersController implements Initializable {
         headerColumn.setCellValueFactory(data -> data.getValue().headerLabelProperty());
 
         capturingGroupColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        capturingGroupColumn.setCellValueFactory(data -> data.getValue().capturingGroupNameProperty());
+        capturingGroupColumn.setCellValueFactory(data -> data.getValue().capturingGroupNamesProperty());
 
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setCellValueFactory(data -> data.getValue().descriptionProperty());

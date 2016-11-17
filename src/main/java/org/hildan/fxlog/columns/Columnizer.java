@@ -192,21 +192,23 @@ public class Columnizer implements Named {
 
     @NotNull
     private LogEntry createMatchingLogEntry(@NotNull String logText, @NotNull Matcher matcher) {
-        Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
+        Map<String, String> groupValues = new HashMap<>(columnDefinitions.size());
         for (ColumnDefinition columnDefinition : columnDefinitions) {
-            String groupName = columnDefinition.getCapturingGroupName();
-            String value = getGroupValueOrEmptyString(matcher, groupName);
-            columnValues.put(groupName, value);
+            for (String groupName : columnDefinition.getCapturingGroupNames()) {
+                String value = getGroupValueOrEmptyString(matcher, groupName);
+                groupValues.put(groupName, value);
+            }
         }
-        return new LogEntry(columnValues, logText);
+        return new LogEntry(groupValues, logText);
     }
 
     @NotNull
     public LogEntry createDefaultLogEntry(@NotNull String logText) {
         Map<String, String> columnValues = createEmptyColumnsMap();
         // put the whole line in the default column as a fallback, if possible
-        if (!columnDefinitions.isEmpty()) {
-            columnValues.put(getDefaultColumnCapturingGroup(), logText);
+        String defGroup = getDefaultColumnCapturingGroup();
+        if (defGroup != null) {
+            columnValues.put(defGroup, logText);
         }
         return new LogEntry(columnValues, logText);
     }
@@ -214,15 +216,18 @@ public class Columnizer implements Named {
     @NotNull
     private Map<String, String> createEmptyColumnsMap() {
         Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
-        for (ColumnDefinition columnDefinition : columnDefinitions) {
-            String groupName = columnDefinition.getCapturingGroupName();
-            columnValues.put(groupName, "");
-        }
+        columnDefinitions.stream()
+                .flatMap(c -> c.getCapturingGroupNames().stream())
+                .forEach(name -> columnValues.put(name, ""));
         return columnValues;
     }
 
+    @Nullable
     private String getDefaultColumnCapturingGroup() {
-        return columnDefinitions.get(0).getCapturingGroupName();
+        if (columnDefinitions.isEmpty() || columnDefinitions.get(0).getCapturingGroupNames().isEmpty()) {
+            return null;
+        }
+        return columnDefinitions.get(0).getCapturingGroupNames().get(0);
     }
 
     /**

@@ -117,10 +117,9 @@ public class DefaultConfig {
         columns.add(new ColumnDefinition("Timestamp", "timestamp", Description.Server.TIMESTAMP, false));
         columns.add(new ColumnDefinition("Message ID", "msgId", Description.Server.MSG_ID, false));
         columns.add(new ColumnDefinition("Class", "class", Description.Server.CLASS, Width.CLASS));
-        columns.add(new ColumnDefinition("Message", "msg", Description.Server.MSG, Width.MSG));
+        columns.add(new ColumnDefinition("Message", "msg, stacktrace", Description.Server.MSG, Width.MSG));
         columns.add(new ColumnDefinition("JSessionID", "sessionid", Description.Server.JSESSIONID,
                 Width.SESSION_ID));
-        columns.add(new ColumnDefinition("Stacktrace", "stacktrace", ""));
 
         @RegExp
         String logFirstLine = "####" //

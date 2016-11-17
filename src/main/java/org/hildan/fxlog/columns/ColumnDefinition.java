@@ -1,6 +1,7 @@
 package org.hildan.fxlog.columns;
 
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -12,6 +13,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Tooltip;
@@ -27,7 +30,7 @@ public class ColumnDefinition {
 
     private final StringProperty headerLabel;
 
-    private final StringProperty capturingGroupName;
+    private final StringProperty capturingGroupNames;
 
     private final DoubleProperty width;
 
@@ -40,11 +43,11 @@ public class ColumnDefinition {
      *
      * @param headerLabel
      *         the label of this column
-     * @param capturingGroupName
+     * @param capturingGroupNames
      *         the name of the capturing group of the regexp to put inside this column
      */
-    public ColumnDefinition(String headerLabel, String capturingGroupName) {
-        this(headerLabel, capturingGroupName, null, true, DEFAULT_WIDTH);
+    public ColumnDefinition(String headerLabel, String capturingGroupNames) {
+        this(headerLabel, capturingGroupNames, null, true, DEFAULT_WIDTH);
     }
 
     /**
@@ -52,29 +55,13 @@ public class ColumnDefinition {
      *
      * @param headerLabel
      *         the label of this column
-     * @param capturingGroupName
-     *         the name of the capturing group of the regexp to put inside this column
-     * @param description
-     *         the description of this column for the user
-     */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, String description) {
-        this(headerLabel, capturingGroupName, description, true, DEFAULT_WIDTH);
-    }
-
-    /**
-     * Creates a new ColumnDefinition for the given field.
-     *
-     * @param headerLabel
-     *         the label of this column
-     * @param capturingGroupName
+     * @param capturingGroupNames
      *         the name of the capturing group of the regexp to put inside this column
      * @param description
      *         the description of this column for the user
-     * @param visible
-     *         whether this column is initially visible before the user customizes it
      */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, String description, boolean visible) {
-        this(headerLabel, capturingGroupName, description, visible, DEFAULT_WIDTH);
+    public ColumnDefinition(String headerLabel, String capturingGroupNames, String description) {
+        this(headerLabel, capturingGroupNames, description, true, DEFAULT_WIDTH);
     }
 
     /**
@@ -82,48 +69,64 @@ public class ColumnDefinition {
      *
      * @param headerLabel
      *         the label of this column
-     * @param capturingGroupName
-     *         the name of the capturing group of the regexp to put inside this column
-     * @param initialWidth
-     *         the initial width to give this column before the user customizes it
-     */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, double initialWidth) {
-        this(headerLabel, capturingGroupName, null, true, initialWidth);
-    }
-
-    /**
-     * Creates a new ColumnDefinition for the given field.
-     *
-     * @param headerLabel
-     *         the label of this column
-     * @param capturingGroupName
-     *         the name of the capturing group of the regexp to put inside this column
-     * @param description
-     *         the description of this column for the user
-     * @param initialWidth
-     *         the initial width to give this column before the user customizes it
-     */
-    public ColumnDefinition(String headerLabel, String capturingGroupName, String description, double initialWidth) {
-        this(headerLabel, capturingGroupName, description, true, initialWidth);
-    }
-
-    /**
-     * Creates a new ColumnDefinition for the given field.
-     *
-     * @param headerLabel
-     *         the label of this column
-     * @param capturingGroupName
+     * @param capturingGroupNames
      *         the name of the capturing group of the regexp to put inside this column
      * @param description
      *         the description of this column for the user
      * @param visible
      *         whether this column is initially visible before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupNames, String description, boolean visible) {
+        this(headerLabel, capturingGroupNames, description, visible, DEFAULT_WIDTH);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupNames
+     *         the name of the capturing group of the regexp to put inside this column
      * @param initialWidth
      *         the initial width to give this column before the user customizes it
      */
-    private ColumnDefinition(String headerLabel, String capturingGroupName, String description, boolean visible, double
+    public ColumnDefinition(String headerLabel, String capturingGroupNames, double initialWidth) {
+        this(headerLabel, capturingGroupNames, null, true, initialWidth);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupNames
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
+     * @param initialWidth
+     *         the initial width to give this column before the user customizes it
+     */
+    public ColumnDefinition(String headerLabel, String capturingGroupNames, String description, double initialWidth) {
+        this(headerLabel, capturingGroupNames, description, true, initialWidth);
+    }
+
+    /**
+     * Creates a new ColumnDefinition for the given field.
+     *
+     * @param headerLabel
+     *         the label of this column
+     * @param capturingGroupNames
+     *         the name of the capturing group of the regexp to put inside this column
+     * @param description
+     *         the description of this column for the user
+     * @param visible
+     *         whether this column is initially visible before the user customizes it
+     * @param initialWidth
+     *         the initial width to give this column before the user customizes it
+     */
+    private ColumnDefinition(String headerLabel, String capturingGroupNames, String description, boolean visible, double
             initialWidth) {
-        this.capturingGroupName = new SimpleStringProperty(capturingGroupName);
+        this.capturingGroupNames = new SimpleStringProperty(capturingGroupNames);
         this.headerLabel = new SimpleStringProperty(headerLabel);
         this.visible = new SimpleBooleanProperty(visible);
         this.width = new SimpleDoubleProperty(initialWidth);
@@ -141,7 +144,9 @@ public class ColumnDefinition {
         width.bind(col.widthProperty());
         col.setCellValueFactory(data -> {
             LogEntry log = data.getValue();
-            String cellValue = log.getColumnValues().get(this.getCapturingGroupName());
+            String cellValue = getCapturingGroupNames().stream()
+                    .map(log.getSections()::get)
+                    .collect(Collectors.joining("\n"));
             return new ReadOnlyStringWrapper(cellValue);
         });
         return col;
@@ -184,15 +189,12 @@ public class ColumnDefinition {
         return headerLabel;
     }
 
-    /**
-     * @return the name of the capturing group to get the data from for this column
-     */
-    public String getCapturingGroupName() {
-        return capturingGroupName.get();
+    public ObservableList<String> getCapturingGroupNames() {
+        return FXCollections.observableArrayList(capturingGroupNames.get().split("(,\\s*|\\s+)"));
     }
 
-    public StringProperty capturingGroupNameProperty() {
-        return capturingGroupName;
+    public StringProperty capturingGroupNamesProperty() {
+        return capturingGroupNames;
     }
 
     /**

@@ -133,7 +133,8 @@ public class ColorizersController implements Initializable {
         filterSectionField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
 
         ObservableList<ObservableList<String>> columnGroupNames = new MappedList<>(config.getColumnizers(), c -> {
-            return new MappedList<>(c.getColumnDefinitions(), ColumnDefinition::getCapturingGroupName);
+            return new UnorderedMergedList<>(new MappedList<>(c.getColumnDefinitions(),
+                    ColumnDefinition::getCapturingGroupNames));
         });
         ObservableList<String> autoCompleteList = new UnorderedMergedList<>(columnGroupNames);
         new AutoCompletionTextFieldBinding<>(filterSectionField, param -> {

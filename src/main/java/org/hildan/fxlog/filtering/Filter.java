@@ -184,7 +184,7 @@ public class Filter implements Matcher<LogEntry> {
         if (columnName.get() == null) {
             return pattern.getValue().matcher(log.rawLine()).find();
         } else {
-            String columnValue = log.getColumnValues().get(columnName.get());
+            String columnValue = log.getSections().get(columnName.get());
             return columnValue != null && pattern.getValue().matcher(columnValue).find();
         }
     }
