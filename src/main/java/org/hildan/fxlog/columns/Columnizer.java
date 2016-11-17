@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -31,6 +35,10 @@ public class Columnizer implements Named {
 
     private final ObservableList<Pattern> patterns;
 
+    private final BooleanProperty supportsMultiLine;
+
+    private final ObjectProperty<Pattern> firstLinePattern;
+
     private final ObservableList<ColumnDefinition> columnDefinitions;
 
     /**
@@ -40,7 +48,26 @@ public class Columnizer implements Named {
      *         a name for this columnizer
      */
     public Columnizer(@NotNull String name) {
-        this(name, FXCollections.observableArrayList(), Collections.emptyList());
+        this(name, FXCollections.observableArrayList(), Collections.emptyList(), ".*");
+    }
+
+    /**
+     * Creates a new single-line-log Columnizer with the given definitions.
+     *
+     * @param name
+     *         a name for this columnizer
+     * @param columnDefinitions
+     *         the column definitions to use
+     * @param regexps
+     *         the regexps to try and match when parsing logs. The order matters: the first matched regexp determines
+     *         the capturing groups used to put parts of the log into the columns.
+     *
+     * @throws PatternSyntaxException
+     *         if one of the regexps' syntax is invalid
+     */
+    public Columnizer(@NotNull String name, @NotNull ObservableList<ColumnDefinition> columnDefinitions,
+                      @NotNull Collection<String> regexps) throws PatternSyntaxException {
+        this(name, columnDefinitions, regexps, null);
     }
 
     /**
@@ -53,15 +80,23 @@ public class Columnizer implements Named {
      * @param regexps
      *         the regexps to try and match when parsing logs. The order matters: the first matched regexp determines
      *         the capturing groups used to put parts of the log into the columns.
+     * @param firstLinePattern
+     *         the regex matched by the first line of every log entry. If null, the created Columnizer won't support
+     *         multi-line logs
+     *
      * @throws PatternSyntaxException
      *         if one of the regexps' syntax is invalid
      */
     public Columnizer(@NotNull String name, @NotNull ObservableList<ColumnDefinition> columnDefinitions,
-                      @NotNull Collection<String> regexps) throws PatternSyntaxException {
+                      @NotNull Collection<String> regexps, @Nullable String firstLinePattern) throws
+            PatternSyntaxException {
         this.name = new SimpleStringProperty(name);
         this.columnDefinitions = columnDefinitions;
         List<Pattern> patterns = regexps.stream().map(Pattern::compile).collect(Collectors.toList());
         this.patterns = FXCollections.observableArrayList(patterns);
+        this.supportsMultiLine = new SimpleBooleanProperty(firstLinePattern != null);
+        Pattern firstLineInitialPattern = firstLinePattern == null ? null : Pattern.compile(firstLinePattern);
+        this.firstLinePattern = new SimpleObjectProperty<>(firstLineInitialPattern);
     }
 
     /**
@@ -74,6 +109,8 @@ public class Columnizer implements Named {
         this.name = new SimpleStringProperty(source.getName());
         this.columnDefinitions = FXCollections.observableArrayList(source.columnDefinitions);
         this.patterns = FXCollections.observableArrayList(source.patterns);
+        this.supportsMultiLine = new SimpleBooleanProperty(source.supportsMultiLine.get());
+        this.firstLinePattern = new SimpleObjectProperty<>(source.firstLinePattern.get());
     }
 
     @Override
@@ -112,6 +149,22 @@ public class Columnizer implements Named {
         return columnDefinitions.stream().map(ColumnDefinition::createColumn).collect(Collectors.toList());
     }
 
+    public boolean supportsMultiLine() {
+        return supportsMultiLine.get();
+    }
+
+    /**
+     * Returns whether the given line is the beginning of a new log entry.
+     *
+     * @param logLine
+     *         the log line to test
+     *
+     * @return true if the given line is the beginning of a new log entry
+     */
+    public boolean isNewLogBeginning(@NotNull String logLine) {
+        return firstLinePattern.get().matcher(logLine).matches();
+    }
+
     /**
      * Parses the given input log text to create a {@link LogEntry} following the rules of this Columnizer.
      * <p>
@@ -121,40 +174,41 @@ public class Columnizer implements Named {
      * <p>
      * If no regexp is matched, null is returned.
      *
-     * @param inputLogLine
+     * @param logText
      *         the raw log string to parse
+     *
      * @return the parsed {@code LogEntry}, or null if no regex of this columnizer matched the input line
      */
     @Nullable
-    public LogEntry parse(@NotNull String inputLogLine) {
+    public LogEntry parse(@NotNull String logText) {
         for (Pattern pattern : patterns) {
-            Matcher matcher = pattern.matcher(inputLogLine);
+            Matcher matcher = pattern.matcher(logText);
             if (matcher.matches()) {
-                return createMatchingLogEntry(inputLogLine, matcher);
+                return createMatchingLogEntry(logText, matcher);
             }
         }
         return null;
     }
 
     @NotNull
-    private LogEntry createMatchingLogEntry(@NotNull String inputLogLine, @NotNull Matcher matcher) {
+    private LogEntry createMatchingLogEntry(@NotNull String logText, @NotNull Matcher matcher) {
         Map<String, String> columnValues = new HashMap<>(columnDefinitions.size());
         for (ColumnDefinition columnDefinition : columnDefinitions) {
             String groupName = columnDefinition.getCapturingGroupName();
             String value = getGroupValueOrEmptyString(matcher, groupName);
             columnValues.put(groupName, value);
         }
-        return new LogEntry(columnValues, inputLogLine);
+        return new LogEntry(columnValues, logText);
     }
 
     @NotNull
-    public LogEntry createDefaultLogEntry(@NotNull String inputLogLine) {
+    public LogEntry createDefaultLogEntry(@NotNull String logText) {
         Map<String, String> columnValues = createEmptyColumnsMap();
         // put the whole line in the default column as a fallback, if possible
         if (!columnDefinitions.isEmpty()) {
-            columnValues.put(getDefaultColumnCapturingGroup(), inputLogLine);
+            columnValues.put(getDefaultColumnCapturingGroup(), logText);
         }
-        return new LogEntry(columnValues, inputLogLine);
+        return new LogEntry(columnValues, logText);
     }
 
     @NotNull
@@ -179,6 +233,7 @@ public class Columnizer implements Named {
      *         the matcher to get the group value from
      * @param groupName
      *         the name of the capturing group for which to get the value
+     *
      * @return the input subsequence captured by the given capturing group during the previous match, or the empty
      * string if the group is missing
      */

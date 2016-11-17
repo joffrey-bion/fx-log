@@ -83,24 +83,19 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
     @Override
     public void handle(String line) {
         if (running && !shouldSkipLog(line)) {
+            if (nbLinesInCurrentLog > 0 && (!columnizer.supportsMultiLine() || columnizer.isNewLogBeginning(line))) {
+                handleAggregatedLog();
+            }
             aggregateLine(line);
-            handleAggregatedLog(aggregatedLines.toString());
         }
-    }
-
-    private void aggregateLine(@NotNull String line) {
-        if (nbLinesInCurrentLog > 0) {
-            aggregatedLines.append("\n");
-        }
-        aggregatedLines.append(line);
-        nbLinesInCurrentLog++;
     }
 
     private boolean shouldSkipLog(@NotNull String line) {
         return skipEmptyLogs.get() && line.isEmpty() && nbLinesInCurrentLog == 0;
     }
 
-    private void handleAggregatedLog(@NotNull String logText) {
+    private void handleAggregatedLog() {
+        String logText = aggregatedLines.toString();
         LogEntry log = columnizer.parse(logText);
         if (log != null) {
             handleNewLog(log);
@@ -116,8 +111,19 @@ public class BufferedLogTailListener extends TailerListenerAdapter {
         nbLinesInCurrentLog = 0;
     }
 
+    private void aggregateLine(@NotNull String line) {
+        if (nbLinesInCurrentLog > 0) {
+            aggregatedLines.append("\n");
+        }
+        aggregatedLines.append(line);
+        nbLinesInCurrentLog++;
+    }
+
     @Override
     public void endOfFileReached() {
+        if (nbLinesInCurrentLog > 0) {
+            handleAggregatedLog();
+        }
         requestBufferDumpIntoLogsList();
     }
 
