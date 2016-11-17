@@ -18,10 +18,15 @@ import javafx.beans.value.ObservableObjectValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 
-import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import org.hildan.fx.bindings.lists.MappedList;
 import org.hildan.fx.bindings.lists.UnorderedMergedList;
 import org.hildan.fx.components.list.BaseEditableListPane;
@@ -34,6 +39,8 @@ import org.hildan.fxlog.themes.Css;
 import org.hildan.fxlog.view.UIUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 
 /**
  * Controller associated to the colorizers customization view.
@@ -67,7 +74,7 @@ public class ColorizersController implements Initializable {
     private RadioButton matchColumnButton;
 
     @FXML
-    private TextField filterColumnNameField;
+    private TextField filterSectionField;
 
     @FXML
     private CheckBox overrideTextForeground;
@@ -123,13 +130,13 @@ public class ColorizersController implements Initializable {
             bindRuleToUI(newRule);
         });
 
-        filterColumnNameField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
+        filterSectionField.disableProperty().bind(filterType.selectedToggleProperty().isEqualTo(matchRawButton));
 
         ObservableList<ObservableList<String>> columnGroupNames = new MappedList<>(config.getColumnizers(), c -> {
             return new MappedList<>(c.getColumnDefinitions(), ColumnDefinition::getCapturingGroupName);
         });
         ObservableList<String> autoCompleteList = new UnorderedMergedList<>(columnGroupNames);
-        new AutoCompletionTextFieldBinding<>(filterColumnNameField, param -> {
+        new AutoCompletionTextFieldBinding<>(filterSectionField, param -> {
             return autoCompleteList.stream().filter(s -> s.contains(param.getUserText())).collect(Collectors.toSet());
         });
     }
@@ -159,7 +166,7 @@ public class ColorizersController implements Initializable {
             foregroundColorPicker.setValue(null);
             filterType.selectToggle(matchRawButton);
             filterRegexField.setText("");
-            filterColumnNameField.setText("");
+            filterSectionField.setText("");
             return;
         }
 
@@ -167,19 +174,19 @@ public class ColorizersController implements Initializable {
         boolean isRawFilter = ruleFilter.getColumnName() == null;
         filterType.selectToggle(isRawFilter ? matchRawButton : matchColumnButton);
         filterRegexField.setText(ruleFilter.getPattern().pattern());
-        filterColumnNameField.setText(isRawFilter ? "" : rule.getMatcher().getColumnName());
+        filterSectionField.setText(isRawFilter ? "" : rule.getMatcher().getColumnName());
         ruleFilter.patternProperty().bind(filterRegexFieldPatternBinding);
 
         Callable<String> getColumnName = () -> {
             if (filterType.getSelectedToggle() == matchRawButton) {
                 return null;
             } else {
-                return filterColumnNameField.getText();
+                return filterSectionField.getText();
             }
         };
 
         StringBinding filterColumnBinding =
-                Bindings.createStringBinding(getColumnName, filterColumnNameField.textProperty(),
+                Bindings.createStringBinding(getColumnName, filterSectionField.textProperty(),
                         filterType.selectedToggleProperty());
         ruleFilter.columnNameProperty().bind(filterColumnBinding);
 

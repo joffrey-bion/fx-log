@@ -51,7 +51,7 @@
                         <RadioButton fx:id="matchRawButton" minHeight="-Infinity" minWidth="-Infinity"
                                      mnemonicParsing="false" text="%colorizers.selectedRulePane.matchRadioButton.rawlog"
                                      toggleGroup="$filterType"/>
-                        <TextField fx:id="filterColumnNameField" minHeight="-Infinity" minWidth="-Infinity"
+                        <TextField fx:id="filterSectionField" minHeight="-Infinity" minWidth="-Infinity"
                                    promptText="%colorizers.selectedRulePane.filterColumnNameField.prompt"
                                    GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                             <tooltip>
