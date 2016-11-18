@@ -2,6 +2,7 @@ package org.hildan.fxlog.config.builtin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.text.Font;
 
 import org.hildan.fxlog.coloring.Colorizer;
 import org.hildan.fxlog.coloring.Style;
@@ -39,14 +40,16 @@ public class DefaultConfig {
     public static Config generate() {
         Config config = new Config();
 
+        config.getPreferences().setLogsFont(Font.font("SansSerif", 14.0));
+
         config.getState().setCurrentTheme(Theme.DARK);
         config.getState().setSelectedColorizerIndex(0);
         config.getColorizers().add(severityBasedColorizerDark());
         config.getColorizers().add(severityBasedColorizerLight());
 
         config.getState().setSelectedColumnizerIndex(0);
-        config.getColumnizers().add(weblogicColumnizer());
         config.getColumnizers().add(weblogicMultilineColumnizer());
+        config.getColumnizers().add(weblogicColumnizer());
         config.getColumnizers().add(weblogicEasyTraceColumnizer());
         config.getColumnizers().add(log4jColumnizer());
         config.getColumnizers().add(accessLogColumnizer());
