@@ -20,7 +20,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import org.hildan.fxlog.themes.Css;
@@ -68,6 +70,8 @@ public class EditableListPane<T> extends BorderPane {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("editable_list_pane.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+        // for proper loading in SceneBuilder (https://bugs.openjdk.java.net/browse/JDK-8094907)
+        fxmlLoader.setClassLoader(getClass().getClassLoader());
 
         try {
             fxmlLoader.load();
