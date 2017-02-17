@@ -17,6 +17,7 @@ public class ValidatingTextFieldListCell<T> extends TextFieldListCell<T> {
         this.validator = validator;
     }
 
+    @Override
     public void commitEdit(T item) {
         if (!isEditing()) {
             return;

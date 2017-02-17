@@ -25,8 +25,9 @@ dependencies {
     compile 'org.fxmisc.easybind:easybind:1.0.3'
     compile 'commons-io:commons-io:2.5'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'org.hildan.fxgson:fx-gson:2.0.0'
+    compile 'org.hildan.fxgson:fx-gson:2.0.1'
     compile 'org.jetbrains:annotations:15.0'
+    compile 'ch.qos.logback:logback-classic:1.0.13'
     testCompile 'junit:junit:4.+'
 }
 
