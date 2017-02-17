@@ -11,12 +11,16 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import org.fxmisc.easybind.EasyBind;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A binding that computes the result of the first rule of a rule set that matches an observable input. It stays
  * up-do-date despite any change to the input and the rule set's internals.
  */
 class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> extends ObjectBinding<U> {
+
+    private static final Logger logger = LoggerFactory.getLogger(FirstMatchBinding.class);
 
     private final RuleReBinder ruleReBinder = new RuleReBinder();
 
@@ -45,9 +49,9 @@ class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> ext
 
         RuleSet<T, U, M, R> currentRuleSet = ruleSet.getValue();
         bindRulesList(currentRuleSet);
-        ruleSet.addListener((obs, oldColorizer, newColorizer) -> {
-            unbindRulesList(oldColorizer);
-            bindRulesList(newColorizer);
+        ruleSet.addListener((obs, oldRuleSet, newRuleSet) -> {
+            unbindRulesList(oldRuleSet);
+            bindRulesList(newRuleSet);
             invalidate();
         });
 
@@ -57,7 +61,6 @@ class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> ext
     private void bindRulesList(RuleSet<T, U, M, R> ruleSet) {
         if (ruleSet != null) {
             ObservableList<R> rules = ruleSet.getRules();
-            bind(rules);
             rules.forEach(this::bindRule);
             rules.addListener(ruleReBinder);
         }
@@ -66,7 +69,6 @@ class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> ext
     private void unbindRulesList(RuleSet<T, U, M, R> ruleSet) {
         if (ruleSet != null) {
             ObservableList<? extends Rule<T, U, M>> rules = ruleSet.getRules();
-            unbind(rules);
             rules.removeListener(ruleReBinder);
             rules.forEach(this::unbindRule);
         }
@@ -93,7 +95,14 @@ class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> ext
         }
         return ruleSet.getRules()
                       .stream()
-                      .filter(r -> ruleMatchBindings.get(r).getValue())
+                      .filter(r -> {
+                          Binding<Boolean> binding = ruleMatchBindings.get(r);
+                          if (binding == null) {
+                              logger.error("No boolean binding for rule " + r);
+                              return false;
+                          }
+                          return binding.getValue();
+                      })
                       .findFirst()
                       .map(Rule::getResult)
                       .orElse(defaultResult);
@@ -111,6 +120,7 @@ class FirstMatchBinding<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> ext
                     change.getRemoved().forEach(FirstMatchBinding.this::unbindRule);
                 }
             }
+            FirstMatchBinding.this.invalidate();
         }
     }
 }

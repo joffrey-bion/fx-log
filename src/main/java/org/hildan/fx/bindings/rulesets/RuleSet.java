@@ -7,6 +7,18 @@ import javafx.collections.ObservableList;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A rule set whose observable output stays up-to-date when the input changes or when its rules change.
+ *
+ * @param <T>
+ *         input type of this ruleset
+ * @param <U>
+ *         output type of this ruleset
+ * @param <M>
+ *         concrete matcher type of the rules
+ * @param <R>
+ *         concrete rule type used in this ruleset
+ */
 public class RuleSet<T, U, M extends Matcher<T>, R extends Rule<T, U, M>> {
 
     private final ObservableList<R> rules;
