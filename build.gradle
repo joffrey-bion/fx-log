@@ -35,6 +35,11 @@ compileJava {
     options.incremental = true
 }
 
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '7.6'
+}
+
 // to inject the project version in about.fxml and .properties files
 processResources {
     ['**/*.properties', '**/about.fxml'].each {
@@ -78,6 +83,5 @@ javafx {
 
 apply from: 'gradle/scripts/bintray.gradle'
 apply from: 'gradle/scripts/release.gradle'
-apply from: 'gradle/scripts/checkstyle.gradle'
 
 release.dependsOn(bintrayUpload)
