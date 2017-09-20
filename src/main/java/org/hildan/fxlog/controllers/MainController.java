@@ -421,11 +421,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editColorizers() {
-        if (!colorizersStage.isShowing()) {
-            colorizersStage.showAndWait();
-        } else {
-            colorizersStage.toFront();
-        }
+        showOrMoveToFront(colorizersStage);
     }
 
     /**
@@ -433,11 +429,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editColumnizers() {
-        if (!columnizersStage.isShowing()) {
-            columnizersStage.showAndWait();
-        } else {
-            columnizersStage.toFront();
-        }
+        showOrMoveToFront(columnizersStage);
     }
 
     /**
@@ -445,11 +437,7 @@ public class MainController implements Initializable {
      */
     @FXML
     public void editPreferences() {
-        if (!preferencesStage.isShowing()) {
-            preferencesStage.showAndWait();
-        } else {
-            preferencesStage.toFront();
-        }
+        showOrMoveToFront(preferencesStage);
     }
 
     /**
@@ -457,10 +445,14 @@ public class MainController implements Initializable {
      */
     @FXML
     public void about() {
-        if (!aboutStage.isShowing()) {
-            aboutStage.showAndWait();
+        showOrMoveToFront(aboutStage);
+    }
+
+    private static void showOrMoveToFront(Stage stage) {
+        if (!stage.isShowing()) {
+            stage.showAndWait();
         } else {
-            aboutStage.toFront();
+            stage.toFront();
         }
     }
 
