@@ -2,14 +2,13 @@
 
 [![Download](https://api.bintray.com/packages/joffrey-bion/applications/fx-log/images/download.svg)](https://bintray.com/joffrey-bion/applications/fx-log/_latestVersion)
 [![Build Status](https://travis-ci.org/joffrey-bion/fx-log.svg?branch=master)](https://travis-ci.org/joffrey-bion/fx-log)
-[![Dependency Status](https://www.versioneye.com/user/projects/56c99d2d18b27104252dcc77/badge.svg)](https://www.versioneye.com/user/projects/56c99d2d18b27104252dcc77)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
 
 A clean and free log viewer.
 
 ## Download
 
-You can find the executable Jar in the
+You can find the Windows installer or executable Jar (for linux) in the
 [FX Log bintray repository](https://bintray.com/joffrey-bion/applications/fx-log/).
 
 ## What does it look like?
