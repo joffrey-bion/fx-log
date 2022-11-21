@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/joffrey-bion/fx-log.svg?branch=master)](https://travis-ci.org/joffrey-bion/fx-log)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-log/blob/master/LICENSE)
 
-A clean and free log viewer.
+A simple and free log viewer.
 
 ## Download
 
